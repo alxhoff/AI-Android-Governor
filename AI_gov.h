@@ -10,6 +10,26 @@
 
 #define TASK_NAME_LEN 15
 
+extern static struct AI_gov_cur_HW AI_governor_HW_info;
+
+struct cpufreq_AI_governor_cpuinfo {
+	struct timer_list cpu_timer;
+	struct timer_list cpu_slack_timer;
+	spinlock_t load_lock; /* protects the next 4 fields */
+	u64 time_in_idle;
+	u64 time_in_idle_timestamp;
+	u64 cputime_speedadj;
+	u64 cputime_speedadj_timestamp;
+	struct cpufreq_policy *policy;
+	struct cpufreq_frequency_table *freq_table;
+	unsigned int target_freq;
+	unsigned int floor_freq;
+	u64 floor_validate_time;
+	u64 hispeed_validate_time;
+	struct rw_semaphore enable_sem;
+	int governor_enabled;
+};
+
 struct cpufreq_AI_governor_tunables {
 	int usage_count;
 	/* Hi speed to bump to from lo speed when load burst (default max) */
@@ -63,22 +83,34 @@ struct cpufreq_AI_governor_tunables {
 	unsigned int *policy;
 };
 
-struct cpufreq_AI_governor_cpuinfo {
-	struct timer_list cpu_timer;
-	struct timer_list cpu_slack_timer;
-	spinlock_t load_lock; /* protects the next 4 fields */
-	u64 time_in_idle;
-	u64 time_in_idle_timestamp;
-	u64 cputime_speedadj;
-	u64 cputime_speedadj_timestamp;
-	struct cpufreq_policy *policy;
-	struct cpufreq_frequency_table *freq_table;
-	unsigned int target_freq;
-	unsigned int floor_freq;
-	u64 floor_validate_time;
-	u64 hispeed_validate_time;
-	struct rw_semaphore enable_sem;
-	int governor_enabled;
+struct AI_gov_freq_table{
+	uint32_t LITTLE_MIN;
+	uint32_t LITTLE_MAX;
+	uint8_t num_freq_steps_LITTLE;
+	uint32_t *freq_steps_LITTLE[];
+
+	#ifdef CPU_IS_BIG_LITTLE
+	uint32_t BIG_MIN;
+	uint32_t BIG_MAX;
+	uint8_t num_freq_steps_BIG;
+	uint32_t *freq_steps_LITTLE[];
+	#endif
+}
+
+struct AI_gov_cur_HW {
+	bool is_big_little;
+
+	uint32_t little_freq;
+
+	struct AI_gov_freq_table freq_table;
+
+#ifdef CPU_IS_BIG_LITTLE
+	bool big_state
+
+	uint32_t big_freq;
+#endif /* Enable or disable second core frequency */
+
+	void* stats;
 };
 
 
