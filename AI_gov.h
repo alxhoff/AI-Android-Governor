@@ -8,9 +8,35 @@
 #ifndef CPUFREQ_ALEXTEST_H_
 #define CPUFREQ_ALEXTEST_H_
 
+#include <linux/timer.h>
+#include <linux/rwsem.h>
+
+#include "AI_gov_hardware.h"
+#include "AI_gov_phases.h"
+
 #define TASK_NAME_LEN 15
 
-extern static struct AI_gov_cur_HW AI_governor_HW_info;
+//#define CPU_IS_BIG_LITTLE	1
+
+
+extern struct AI_gov_info AI_gov;
+
+struct AI_gov_profile{
+	unsigned int min_freq;
+	unsigned int max_freq;
+
+	unsigned int desired_frame_rate;
+	float current_frame_rate;
+};
+
+struct AI_gov_info{
+	//AI
+	struct AI_gov_cur_HW hardware;
+
+	struct AI_gov_profile profile;
+	phase_state phase;
+	phase_state prev_phase;
+};
 
 struct cpufreq_AI_governor_cpuinfo {
 	struct timer_list cpu_timer;
@@ -28,6 +54,7 @@ struct cpufreq_AI_governor_cpuinfo {
 	u64 hispeed_validate_time;
 	struct rw_semaphore enable_sem;
 	int governor_enabled;
+
 };
 
 struct cpufreq_AI_governor_tunables {
@@ -83,35 +110,14 @@ struct cpufreq_AI_governor_tunables {
 	unsigned int *policy;
 };
 
-struct AI_gov_freq_table{
-	uint32_t LITTLE_MIN;
-	uint32_t LITTLE_MAX;
-	uint8_t num_freq_steps_LITTLE;
-	uint32_t *freq_steps_LITTLE[];
+#ifndef FAST_RESCHEDULE
+#define FAST_RESCHEDULE (2 * USEC_PER_MSEC)
+#endif
 
-	#ifdef CPU_IS_BIG_LITTLE
-	uint32_t BIG_MIN;
-	uint32_t BIG_MAX;
-	uint8_t num_freq_steps_BIG;
-	uint32_t *freq_steps_LITTLE[];
-	#endif
-}
+void AI_phase_change(void);
+//static int AI_touch_nb_callback(void);
 
-struct AI_gov_cur_HW {
-	bool is_big_little;
-
-	uint32_t little_freq;
-
-	struct AI_gov_freq_table freq_table;
-
-#ifdef CPU_IS_BIG_LITTLE
-	bool big_state
-
-	uint32_t big_freq;
-#endif /* Enable or disable second core frequency */
-
-	void* stats;
-};
+void cpufreq_AI_governor_timer_resched(unsigned long expires);
 
 
 #endif /* CPUFREQ_ALEXTEST_H_ */

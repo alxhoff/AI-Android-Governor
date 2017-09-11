@@ -5,63 +5,70 @@
  *      Author: alxhoff
  */
 
+#include <linux/fs.h>
+#include <linux/cpumask.h>
+#include <linux/kernel.h>
 
 #include "AI_gov_ioctl.h"
+#include "AI_gov.h"
 
 static dev_t dev;
 static struct cdev c_dev;
 static struct class *cl;
 
-int AI_governor_open(struct inode *i, struct file *f)
+int AI_gov_open(struct inode *i, struct file *f)
 {
 	return 0;
 }
 
-int AI_governor_close(struct inode *i, struct file *f)
+int AI_gov_close(struct inode *i, struct file *f)
 {
 	return 0;
 }
 
-long AI_governor_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 {
-	AI_governor g;
+	struct AI_gov_info g;
 
-	switch(cmd){
-	case GOVERNOR_GET_VARIABLES:
-		memcpy(&g, &AI_gov, sizeof(AI_governor));
-		if(copy_to_user((AI_governor *)arg, &g, sizeof(AI_governor)))
-				return -EACCES;
-		break;
-	case GOVERNOR_CLR_VARIABLES:
-		//check against hardware min freq (TODO)
-		//default values (TODO)
-		AI_gov.profile.min_freq = 1000;
-		AI_gov.profile.max_freq = 1500;
-		AI_gov.profile.desired_frame_rate = 60;
-		AI_gov.profile.current_frame_rate = 0;
-		AI_gov.phase = 0;
-		break;
-	case GOVERNOR_SET_VARIABLES:
-		if(copy_from_user(&g, (AI_governor *)arg, sizeof(AI_governor)))
-			return -EACCES;
-		AI_gov.profile.min_freq = g.profile.min_freq;
-		AI_gov.profile.max_freq = g.profile.max_freq;
-		AI_gov.profile.desired_frame_rate = g.profile.desired_frame_rate;
-		AI_gov.profile.current_frame_rate = g.profile.current_frame_rate;
-		AI_gov.phase = g.phase;
-		break;
-	case GOVERNOR_OTHER_FUNCT:
-		AI_gov.profile.min_freq = 1;
-		AI_gov.profile.max_freq = 2;
-		AI_gov.profile.desired_frame_rate = 3;
-		AI_gov.profile.current_frame_rate = 4;
-		AI_gov.phase = 5;
-		break;
-	default:
-		return -EINVAL;
-		break;
-
-	}
+//	switch(cmd){
+//	case GOVERNOR_GET_VARIABLES:
+//		memcpy(&g, &AI_gov, sizeof(AI_gov_info));
+//		if(copy_to_user((AI_gov_info *)arg, &g, sizeof(AI_gov_info)))
+//				return -EACCES;
+//		break;
+//	case GOVERNOR_CLR_VARIABLES:{
+//		//check against hardware min freq (TODO)
+//		//default values (TODO)
+//		AI_gov.profile.min_freq = 1000;
+//		AI_gov.profile.max_freq = 1500;
+//		AI_gov.profile.desired_frame_rate = 60;
+//		AI_gov.profile.current_frame_rate = 0;
+//		AI_gov.phase = 0;
+//	}
+//		break;
+//	case GOVERNOR_SET_VARIABLES:{
+//		if(copy_from_user(&g, (AI_gov_info *)arg, sizeof(AI_gov_info)))
+//			return -EACCES;
+//		AI_gov.profile.min_freq = g.profile.min_freq;
+//		AI_gov.profile.max_freq = g.profile.max_freq;
+//		AI_gov.profile.desired_frame_rate = g.profile.desired_frame_rate;
+//		AI_gov.profile.current_frame_rate = g.profile.current_frame_rate;
+//		AI_gov.phase = g.phase;
+//	}
+//		break;
+//	case GOVERNOR_OTHER_FUNCT:{
+//		AI_gov.profile.min_freq = 1;
+//		AI_gov.profile.max_freq = 2;
+//		AI_gov.profile.desired_frame_rate = 3;
+//		AI_gov.profile.current_frame_rate = 4;
+//		AI_gov.phase = 5;
+//	}
+//		break;
+//	default:
+//		return -EINVAL;
+//		break;
+//
+//	}
 	return 0;
 }
 
@@ -86,7 +93,7 @@ char *device_node(struct device *dev, umode_t *mode)
 	return NULL;
 }
 
-int AI_governor_ioctl_init(void)
+int AI_gov_ioctl_init(void)
 {
 	int ret;
 	struct device *dev_ret;
@@ -122,7 +129,7 @@ int AI_governor_ioctl_init(void)
 	return 0;
 }
 
-void AI_governor_ioctl_exit(void)
+void AI_gov_ioctl_exit(void)
 {
 	device_destroy(cl, dev);
 	class_destroy(cl);

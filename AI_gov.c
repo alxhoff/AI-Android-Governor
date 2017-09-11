@@ -36,14 +36,21 @@
 #endif
 #include "cpu_load_metric.h"
 
-#include "AI_governor_kernel_write.h"
 #include "AI_gov_hardware.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_sched.h"
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
+#include "AI_gov_kernel_write.h"
+#include "AI_gov_power_manager.h"
+#include "AI_gov_task_handling.h"
+#include "AI_touch_notifier.h"
+#include "AI_gov_task_handling.h"
 
+
+#ifndef AID_SYSTEM
 #define AID_SYSTEM	(1000)
+#endif
 
 #define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
 
@@ -60,9 +67,9 @@ static bool gov_started = 0;
 
 struct cpufreq_AI_governor_tunables *common_tunables_AI;
 static struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
+struct AI_gov_info AI_gov = {{0}};
 
 //HARDWARE
-static struct AI_gov_cur_HW AI_governor_HW_info;
 
 //TIMER
 void cpufreq_AI_governor_timer_resched(unsigned long expires)
@@ -140,7 +147,7 @@ static void cpufreq_AI_governor_timer_start(
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
 }
 
-static ssize_t show_browsing_phase(
+static ssize_t show_phase_state(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
 	int phase = AI_phases_getBrowsingPhase();
 	switch (phase) {
@@ -162,51 +169,8 @@ static ssize_t show_browsing_phase(
 	}
 }
 
-void cpufreq_AI_governor_timer(unsigned long data)
-{
-	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, data);
-	struct cpufreq_AI_governor_tunables *tunables =
-			pcpu->policy->governor_data;
 
-	//KERNEL_DEBUG_MSG(" [GOVERNOR] Timer expired\n");
-
-	if (!down_read_trylock(&pcpu->enable_sem))
-		return;
-	if (!pcpu->governor_enabled)
-		goto exit;
-
-	//KERNEL_DEBUG_MSG(" [GOVERNOR] Timer expired\n");
-	wake_up_process(tunables->speedchange_task);
-
-	cpufreq_AI_governor_timer_resched(tunables->timer_rate);
-	exit: up_read(&pcpu->enable_sem);
-	return;
-}
-
-static void cpufreq_AI_governor_timer_start(
-		struct cpufreq_AI_governor_tunables *tunables, int cpu)
-{
-	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, cpu);
-	unsigned long expires = jiffies + usecs_to_jiffies(tunables->timer_rate);
-
-	KERNEL_DEBUG_MSG(
-			" [GOVERNOR] AI_Governor: enter timer start, cpu: %d \n", cpu);
-
-	if (!tunables->speedchange_task) {
-		KERNEL_DEBUG_MSG(
-				" [GOVERNOR] AI_Governor: No tunables->speedchange task \n");
-		return;
-	}
-
-	pcpu->cpu_timer.expires = expires;
-	add_timer_on(&pcpu->cpu_timer, cpu);
-
-	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
-}
-
-AI_governor AI_gov = {{0}};
-
-void AI_phase_change()
+void AI_phase_change(void)
 {
 	AI_gov.prev_phase = AI_gov.phase;
 
@@ -215,16 +179,15 @@ void AI_phase_change()
 
 void AI_coordinator(void)
 {
-
 	//phase change
 	if (AI_gov.prev_phase!=AI_gov.phase)
 		AI_phase_change();
 
 	//get cpu freq
-	uint32_t big_freq = AI_governor_HW_info.big_freq;
+	uint32_t little_freq = AI_gov.hardware.little_freq;
 
 #ifdef CPU_IS_BIG_LITTLE
-	uint32_t little_freq = AI_governor_HW_info.little_freq;
+	uint32_t big_freq = AI_gov.hardware.big_freq;
 #endif
 
 	switch(AI_gov.phase){
@@ -367,7 +330,7 @@ static struct attribute_group *get_sysfs_attr(void) {
 
 static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
-	unsigned long flags;
+	unsigned long flags, init = 0;
 
 	while(kthread_should_stop()){
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -408,7 +371,7 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 	return 0;
 }
 
-extern uint8_t shutdownCpu;
+extern uint8_t AI_shutdownCpu;
 
 #ifdef CONFIG_ANDROID
 static void change_sysfs_owner(struct cpufreq_policy *policy)
@@ -462,9 +425,11 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 	return NOTIFY_OK;
 }
 
-static int AI_touch_nb_callback() {
+static int AI_touch_nb_callback(void)
+{
 	AI_phases_touch_nb();
 	cpufreq_AI_governor_timer_resched(FAST_RESCHEDULE);
+	return 0;
 }
 
 static struct notifier_block AI_touch_nb = { .notifier_call =
@@ -575,12 +540,16 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			mutex_unlock(&gov_lock_AI);
 
 			if (AI_sched_getManagedCores() == 0)
-				AI_governor_ioctl_exit();
+				AI_gov_ioctl_exit();
 		}
 		break;
 	case CPUFREQ_GOV_LIMITS:
 		break;
 	case CPUFREQ_GOV_POLICY_INIT:
+
+		//HARDWARE INIT
+		
+
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
 			tunables->usage_count++;
 			policy->governor_data = common_tunables_AI;
@@ -643,7 +612,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			policy->governor_data = tunables;
 
 			//initialize char device and phases
-			if ((error_ret = AI_governor_ioctl_init()) < 0)
+			if ((error_ret = AI_gov_ioctl_init()) < 0)
 				KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: "
 						"Error initializing char device! Code: %d\n", error_ret);
 
@@ -653,7 +622,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		break;
 	case CPUFREQ_GOV_POLICY_EXIT:
 
-		if(policy->cpu == L0){}
+		if(policy->cpu == L0){
 			//CHECK FOR VALID CPU SOMEHOW
 			KERNEL_DEBUG_MSG("Entering exit routine, usage count: %d\n",
 								tunables->usage_count);

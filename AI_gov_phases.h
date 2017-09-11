@@ -15,4 +15,7 @@ typedef enum{
 	load
 } phase_state;
 
+phase_state AI_phases_getBrowsingPhase(void);
+int AI_phases_touch_nb(void);
+
 #endif /* AI_GOV_PHASES_H_ */

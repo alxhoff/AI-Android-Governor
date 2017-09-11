@@ -5,18 +5,38 @@
  *      Author: alxhoff
  */
 
+#include <linux/cpu.h>
+#include <linux/sched.h>
+#include <linux/cpufreq.h>
+#include <linux/kernel_stat.h>
+#include <linux/percpu-defs.h>
+#include <linux/netdevice.h>
+
+#include <linux/tick.h>
+#include <linux/time.h>
+#include <asm/cputime.h>
+#include "cpu_load_metric.h"
+
+#include "AI_gov_sched.h"
+#include "AI_gov.h"
+#include "AI_gov_hardware.h"
+#include "AI_gov_kernel_write.h"
+
+
 static struct AI_cores {
-	uint8_t LITTLEC0 :1;
-	uint8_t LITTLEC1 :1;
-	uint8_t LITTLEC2 :1;
-	uint8_t LITTLEC3 :1;
+	uint8_t LC0 :1;
+	uint8_t LC1 :1;
+	uint8_t LC2 :1;
+	uint8_t LC3 :1;
 #ifdef CPU_IS_BIG_LITTLE
-	uint8_t BIGC0 :1;
-	uint8_t BIGC1 :1;
-	uint8_t BIGC2 :1;
-	uint8_t BIGC3 :1;
+	uint8_t BC0 :1;
+	uint8_t BC1 :1;
+	uint8_t BC2 :1;
+	uint8_t BC3 :1;
 #endif
 } _managedCores = { 0 };
+
+#define managedCores (*((uint8_t *)&_managedCores));
 
 #define AI_SCHED_WORKLOAD_HISTORY_SIZE_TOTAL 3
 #define AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG 10
@@ -30,7 +50,7 @@ static DEFINE_MUTEX(hotplugMutex);
 // workload margin for load idle phase
 #define LOAD_PHASE_MARGIN 200
 
-//AI_governor_HW_info
+//AI_gov.hardware
 
 static unsigned int AI_total_workload_BIG[AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG] = {0};
 static unsigned int AI_total_workload_LITTLE[AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG] = {0};
@@ -42,30 +62,21 @@ static bool AI_critical_workload_LITTLE[AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG] =
 
 extern DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
 
-static cpumask_t speedchange_cpumask_AI;
-static spinlock_t speedchange_cpumask_lock_AI;
-static struct mutex gov_lock_AI;
-
-static bool gov_started = 0;
-
-/* For cases where we have single governor instance for system */
-struct cpufreq_AI_governor_tunables *common_tunables_AI = NULL;
-static struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
-
-
 unsigned int AI_sched_get_smoothed_workload(enum AI_CPU cpu) {
 	// we cannot divide in kernel space, so we simply shift two positions what is divide by 4
+#ifdef CPU_IS_BIG_LITTLE
 	if (cpu == BIG)
 		return (AI_total_workload_BIG[3] + AI_total_workload_BIG[2]
 				+ AI_total_workload_BIG[1] + AI_total_workload_BIG[0]) >> 2;
-	if (cpu == LITTLE)
-		return (AI_total_workload_LITTLE[3] + AI_total_workload_LITTLE[2]
-				+ AI_total_workload_LITTLE[1] + AI_total_workload_LITTLE[0]) >> 2;
 	if (cpu == BIG_AND_LITTLE)
 		return (AI_total_workload_BIG[3] + AI_total_workload_BIG[2]
 				+ AI_total_workload_BIG[1] + AI_total_workload_BIG[0]
 				+ AI_total_workload_LITTLE[3] + AI_total_workload_LITTLE[2]
 				+ AI_total_workload_LITTLE[1] + AI_total_workload_LITTLE[0]) >> 4;
+#endif
+	if (cpu == LITTLE)
+			return (AI_total_workload_LITTLE[3] + AI_total_workload_LITTLE[2]
+					+ AI_total_workload_LITTLE[1] + AI_total_workload_LITTLE[0]) >> 2;
 	return 0;
 }
 
@@ -141,7 +152,7 @@ void AI_sched_update_workload_interactive(int workload, uint8_t core) {
 	pcpu_tmp = &per_cpu(cpuinfo, core);
 	spin_lock_irqsave(&pcpu_tmp->load_lock, flags);
 	// workload for
-	if (core < BIGC0) {
+	if (core <= LC0) {
 		LITTLE_tmp_workload += (unsigned int) workload;
 		LITTLE_critical |= (workload > CRITICAL_WORKLOAD_MARGIN_LITTLE);
 		LITTLE_counter++;
@@ -151,7 +162,9 @@ void AI_sched_update_workload_interactive(int workload, uint8_t core) {
 			LITTLE_tmp_workload = 0;
 			LITTLE_counter = 0;
 		}
-	} else {
+	}
+#ifdef CPU_IS_BIG_LITTLE
+	else {
 		BIG_tmp_workload += (unsigned int) workload;
 		BIG_critical |= (workload > CRITICAL_WORKLOAD_MARGIN_BIG);
 		BIG_counter++;
@@ -163,6 +176,7 @@ void AI_sched_update_workload_interactive(int workload, uint8_t core) {
 			BIG_counter = 0;
 		}
 	}
+#endif
 	spin_unlock_irqrestore(&pcpu_tmp->load_lock, flags);
 }
 
@@ -200,78 +214,78 @@ void AI_sched_update_workload(void) {
 		//				}
 		spin_unlock_irqrestore(&pcpu_tmp->load_lock, flags);
 	};
-
-	total_workload_BIG = workload[BIGC0] + workload[BIGC1] + workload[BIGC2]
-			+ workload[BIGC3];
-	total_workload_LITTLE = workload[LITTLEC0] + workload[LITTLEC1] + workload[LITTLEC2]
-			+ workload[LITTLEC3];
-	critical_workload_BIG = (workload[BIGC0] > CRITICAL_WORKLOAD_MARGIN_BIG)
-			|| (workload[BIGC1] > CRITICAL_WORKLOAD_MARGIN_BIG)
-			|| (workload[BIGC2] > CRITICAL_WORKLOAD_MARGIN_BIG)
-			|| (workload[BIGC3] > CRITICAL_WORKLOAD_MARGIN_BIG);
-	critical_workload_LITTLE = (workload[LITTLEC0] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
-			|| (workload[LITTLEC1] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
-			|| (workload[LITTLEC2] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
-			|| (workload[LITTLEC3] > CRITICAL_WORKLOAD_MARGIN_LITTLE);
-
+#ifdef CPU_IS_BIG_LITTLE
+	total_workload_BIG = workload[BC0] + workload[BC1] + workload[BC2]
+			+ workload[BC3];
+	critical_workload_BIG = (workload[BC0] > CRITICAL_WORKLOAD_MARGIN_BIG)
+				|| (workload[BC1] > CRITICAL_WORKLOAD_MARGIN_BIG)
+				|| (workload[BC2] > CRITICAL_WORKLOAD_MARGIN_BIG)
+				|| (workload[BC3] > CRITICAL_WORKLOAD_MARGIN_BIG);
 	AI_sched_updateWorkLoadHistory(total_workload_BIG, critical_workload_BIG,
-			BIG);
+				BIG);
+#endif
+	total_workload_LITTLE = workload[LC0] + workload[LC1] + workload[LC2]
+			+ workload[LC3];
+
+	critical_workload_LITTLE = (workload[LC0] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
+			|| (workload[LC1] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
+			|| (workload[LC2] > CRITICAL_WORKLOAD_MARGIN_LITTLE)
+			|| (workload[LC3] > CRITICAL_WORKLOAD_MARGIN_LITTLE);
+
 	AI_sched_updateWorkLoadHistory(total_workload_LITTLE, critical_workload_LITTLE, LITTLE);
 }
-
+//TODO FREQ TABLE FROM CPUINFO POLICY?
 #ifdef CPU_IS_BIG_LITTLE
 bool AI_sched_get_BIG_state(void) {
-	return AI_governor_HW_info.big_state;
+	return AI_gov.hardware.big_state;
 }
 
 void AI_sched_set_BIG_state(bool state)
 {
-	AI_governor_HW_info.big_state = state;
+	AI_gov.hardware.big_state = state;
 }
 
 uint32_t AI_sched_get_BIG_freq(void) {
-	if (AI_governor_HW_info.big_state) {
-		if (AI_governor_HW_info.big_freq == 0)
-			AI_governor_HW_info.big_freq = AI_governor_HW_info.freq_table.BIG_MIN;
-		return AI_governor_HW_info.freq_table.BIG_MIN;
+	if (AI_gov.hardware.big_state) {
+		if (AI_gov.hardware.big_freq == 0)
+			AI_gov.hardware.big_freq = AI_gov.hardware.freq_table->BIG_MIN;
+		return AI_gov.hardware.freq_table->BIG_MIN;
 	} else
 		return 0;
 }
 
-
-
 void AI_sched_set_BIG_freq(uint32_t frequency) {
-	AI_governor_HW_info.big_freq = frequency;
+	AI_gov.hardware.big_freq = frequency;
 }
 
 uint32_t AI_sched_get_BIG_min_freq(void)
 {
-	return AI_governor_HW_info.freq_table.BIG_MIN;
+	return AI_gov.hardware.freq_table->BIG_MIN;
 }
 
 uint32_t AI_sched_get_BIG_max_freq(void)
 {
-	return AI_governor_HW_info.freq_table.BIG_MAX;
+	return AI_gov.hardware.freq_table->BIG_MAX;
 }
 
 #endif
 
 uint32_t AI_sched_get_LITTLE_freq(void) {
-	return AI_governor_HW_info.little_freq;
+	return AI_gov.hardware.little_freq;
 }
 
 uint32_t AI_sched_get_LITTLE_min_freq(void)
 {
-	return AI_governor_HW_info.freq_table.LITTLE_MIN;
+	return AI_gov.hardware.freq_table->LITTLE_MIN;
 }
 
 uint32_t AI_sched_get_LITTLE_max_freq(void)
 {
-	return AI_governor_HW_info.freq_table.LITTLE_MAX;
+	return AI_gov.hardware.freq_table->LITTLE_MAX;
 }
 
 void AI_sched_set_LITTLE_freq(uint32_t frequency) {
-	AI_governor_HW_info.little_freq = frequency;
+	AI_gov.hardware.little_freq = frequency;
 }
 
 // int AI_sched_assignFrequency(unsigned int frequency, enum AI_CPU cpu) {
@@ -290,9 +304,9 @@ void AI_sched_set_LITTLE_freq(uint32_t frequency) {
 // 	}
 
 // 	// cpufreq_cpu_get needs core, NOT CPU. Get the first core on cpu by default
-// 	core = (cpu == LITTLE) ? L0 : B0;
+// 	core = (cpu == LITTLE) ? LC0 : BC0;
 // #else
-// 	core = L0;
+// 	core = LC0;
 // #endif	
 // 	policy = cpufreq_cpu_get(core);
 
@@ -329,7 +343,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 
 #ifdef CPU_IS_BIG_LITTLE
 	//check big core is online
-	if(!AI_governor_HW_info.big_state){
+	if(!AI_gov.hardware.big_state){
 		//TODO FIX ERROR MESSAGE
 		KERNEL_ERROR_MSG( "[SCHED] AI_Governor: BIG down, no freq change possible: %d\n", frequency);
 		return retval;
@@ -337,7 +351,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 
 	//big little enabled and big is online
 	//get policy
-	core = B0;
+	core = BC0;
 	policy = cpufreq_cpu_get(core);
 
 	//TODO ERROR CHECK SOMEHOW
@@ -349,25 +363,25 @@ int AI_sched_assignFrequency(unsigned int frequency)
 	}
 
 	if(retval == 0)
-		AI_governor_HW_info.big_freq = frequency;
+		AI_gov.hardware.big_freq = frequency;
 
-	cpufreq_put_policy(policy);
+	cpufreq_cpu_put(policy);
 #endif
 
 	//now set little freq
 
-	core = L0;
+	core = LC0;
 	policy = cpufreq_cpu_get(core);
 
 	if( (retval = cpufreq_driver_target(policy, 1400000, CPUFREQ_RELATION_H)) != 0){
 			KERNEL_ERROR_MSG( "[SCHED] AI_Governor: Error setting frequency"
-							" for cores %x\n", cpu);
+							" for cores\n" );
 		}
 
 	if(retval == 0)
-			AI_governor_HW_info.litte_freq = frequency;
+		AI_gov.hardware.little_freq = frequency;
 
-	cpufreq_put_policy(policy);
+	cpufreq_cpu_put(policy);
 
 	return retval;
 }
@@ -419,14 +433,14 @@ int AI_sched_pushGroupToCpu(struct task_struct *task, enum AI_CPU cpu) {
 		task = current;
 
 	list_for_each_entry_safe( groupTask, buffer,
-			&(sched_groupLeader(task)->thread_group), thread_group ) {
+			&(sched_AI_groupLeader(task)->thread_group), thread_group ) {
 		int errorCode = 0;
 		if ((errorCode = AI_sched_pushToCpu(groupTask, cpu)))
 			return errorCode;
 		++count;
 	}
 
-	return AI_sched_pushToCpu(sched_groupLeader(task), cpu);
+	return AI_sched_pushToCpu(sched_AI_groupLeader(task), cpu);
 }
 
 cputime64_t AI_sched_getCurrentIdleTime(enum AI_CORE core) {
@@ -480,10 +494,11 @@ unsigned long AI_sched_getCurrentNetworkTx(void) {
 	return retval;
 }
 
-uint8_t shutdownCpu = CPU_NONE;
+uint8_t AI_shutdownCpu = CPU_NONE;
 
 
-int AI_sched_disableCpu(enum AI_CPU cpu) {
+int AI_sched_disableCpu(enum AI_CPU cpu)
+{
 	int retval = -EINVAL;
 #ifdef CPU_IS_BIG_LITTLE
 
@@ -519,7 +534,7 @@ int AI_sched_disableCpu(enum AI_CPU cpu) {
 		for (i = B3; i > L3; i--) {
 			if (((cpu & (0x01 << i)) > 0) && cpu_online(i)) {
 				//KERNEL_DEBUG_MSG( "[SCHED] AI_Governor: Try shutdown %d\n", i);
-				shutdownCpu |= (0x01 << i);
+				AI_shutdownCpu |= (0x01 << i);
 				retval += cpu_down(i);
 				if (retval > 0) {
 					KERNEL_ERROR_MSG( "[SCHED] AI_Governor: Failed shutting down"
@@ -539,7 +554,8 @@ int AI_sched_disableCpu(enum AI_CPU cpu) {
 }
 
 
-int AI_sched_enableCpu(enum AI_CPU cpu) {
+int AI_sched_enableCpu(enum AI_CPU cpu)
+{
 	int retval = 0;
 #ifdef CPU_IS_BIG_LITTLE
 	uint8_t i = 0;
@@ -583,26 +599,29 @@ int AI_sched_enableCpu(enum AI_CPU cpu) {
 }
 
 int AI_sched_coreManaged(enum AI_CORE core) {
-	return (managedCores & (0x0F << (core / 4))) > 0;
+	//TODO GET TO COMPILE
+//	return (managedCores & (0x0F << (core / 4))) > 0;
+	return 0;
 }
 
 int AI_sched_cpuManaged(enum AI_CPU cpu) {
-	return !((managedCores & cpu) ^ cpu);
+//	return !((managedCores & cpu) ^ cpu);
+	return 0;
 }
 
 void AI_sched_addCoresToManaged(uint8_t cpus_bitmask) {
-	managedCores |= cpus_bitmask;
+//	managedCores |= cpus_bitmask;
 }
 
 void AI_sched_removeCoresFromManaged(uint8_t cpus_bitmask) {
-	managedCores &= ~(cpus_bitmask);
+//	managedCores &= ~(cpus_bitmask);
 }
 
 uint8_t AI_sched_getManagedCores(void) {
 	return managedCores;
 }
 
-struct task_struct *sched_groupLeader(struct task_struct *task) {
+struct task_struct *sched_AI_groupLeader(struct task_struct *task) {
 	return (task != NULL) ? task->group_leader : NULL;
 }
 

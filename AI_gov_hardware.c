@@ -5,9 +5,13 @@
  *      Author: alxhoff
  */
 
-signed int AI_gov_hardware_init(AI_gov_cur_HW* hardware, AI_gov_freq_table* freq_table, uint32_t little_freq,
+#include <linux/slab.h>
+
+#include "AI_gov_hardware.h"
+
+signed int AI_gov_hardware_init(struct AI_gov_cur_HW* hardware, struct AI_gov_freq_table* freq_table, uint32_t little_freq
 #ifdef CPU_IS_BIG_LITTLE
-							uint32_t big_freq, bool big_state
+							,uint32_t big_freq, bool big_state
 #endif	
 	)
 {
@@ -27,10 +31,10 @@ signed int AI_gov_hardware_init(AI_gov_cur_HW* hardware, AI_gov_freq_table* freq
 	return 0;
 }
 
-signed int AI_gov_change_freq_table(AI_gov_cur_HW* hardware, AI_gov_freq_table* freq_table )
+signed int AI_gov_change_freq_table(struct AI_gov_cur_HW* hardware, struct AI_gov_freq_table* freq_table )
 {
 	if(hardware->has_table == TRUE)
-		free(hardware->freq_table);
+		kfree(hardware->freq_table);
 	else
 		return -1;
 
