@@ -18,10 +18,9 @@
 #include "cpu_load_metric.h"
 
 #include "AI_gov_sched.h"
-#include "AI_gov.h"
+#include "test_flags.h"
 #include "AI_gov_hardware.h"
 #include "AI_gov_kernel_write.h"
-
 
 static struct AI_cores {
 	uint8_t LC0 :1;
@@ -90,7 +89,7 @@ bool AI_sched_criticalWorkloadPhase(uint8_t history_length, enum AI_CPU cpu) {
 			}
 	}
 #ifdef CPU_IS_BIG_LITTLE
-	else if (cpu == _BIG) {
+	else if (cpu == BIG) {
 		for (i = 0; i < history_length; i++) {
 			ret &= AI_critical_workload_BIG[i];
 		}
@@ -237,55 +236,55 @@ void AI_sched_update_workload(void) {
 //TODO FREQ TABLE FROM CPUINFO POLICY?
 #ifdef CPU_IS_BIG_LITTLE
 bool AI_sched_get_BIG_state(void) {
-	return AI_gov.hardware.big_state;
+	return AI_gov.hardware->big_state;
 }
 
 void AI_sched_set_BIG_state(bool state)
 {
-	AI_gov.hardware.big_state = state;
+	AI_gov.hardware->big_state = state;
 }
 
 uint32_t AI_sched_get_BIG_freq(void) {
-	if (AI_gov.hardware.big_state) {
-		if (AI_gov.hardware.big_freq == 0)
-			AI_gov.hardware.big_freq = AI_gov.hardware.freq_table->BIG_MIN;
-		return AI_gov.hardware.freq_table->BIG_MIN;
+	if (AI_gov.hardware->big_state) {
+		if (AI_gov.hardware->big_freq == 0)
+			AI_gov.hardware->big_freq = AI_gov.hardware->freq_table->BIG_MIN;
+		return AI_gov.hardware->freq_table->BIG_MIN;
 	} else
 		return 0;
 }
 
 void AI_sched_set_BIG_freq(uint32_t frequency) {
-	AI_gov.hardware.big_freq = frequency;
+	AI_gov.hardware->big_freq = frequency;
 }
 
 uint32_t AI_sched_get_BIG_min_freq(void)
 {
-	return AI_gov.hardware.freq_table->BIG_MIN;
+	return AI_gov.hardware->freq_table->BIG_MIN;
 }
 
 uint32_t AI_sched_get_BIG_max_freq(void)
 {
-	return AI_gov.hardware.freq_table->BIG_MAX;
+	return AI_gov.hardware->freq_table->BIG_MAX;
 }
 
 #endif
 
 uint32_t AI_sched_get_LITTLE_freq(void) {
-	return AI_gov.hardware.little_freq;
+	return AI_gov.hardware->little_freq;
 }
 
 uint32_t AI_sched_get_LITTLE_min_freq(void)
 {
-	return AI_gov.hardware.freq_table->LITTLE_MIN;
+	return AI_gov.hardware->freq_table->LITTLE_MIN;
 }
 
 uint32_t AI_sched_get_LITTLE_max_freq(void)
 {
-	return AI_gov.hardware.freq_table->LITTLE_MAX;
+	return AI_gov.hardware->freq_table->LITTLE_MAX;
 }
 
 void AI_sched_set_LITTLE_freq(uint32_t frequency) {
-	AI_gov.hardware.little_freq = frequency;
+	AI_gov.hardware->little_freq = frequency;
 }
 
 // int AI_sched_assignFrequency(unsigned int frequency, enum AI_CPU cpu) {
@@ -343,7 +342,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 
 #ifdef CPU_IS_BIG_LITTLE
 	//check big core is online
-	if(!AI_gov.hardware.big_state){
+	if(!AI_gov.hardware->big_state){
 		//TODO FIX ERROR MESSAGE
 		KERNEL_ERROR_MSG( "[SCHED] AI_Governor: BIG down, no freq change possible: %d\n", frequency);
 		return retval;
@@ -359,11 +358,11 @@ int AI_sched_assignFrequency(unsigned int frequency)
 	//TODO deal with freq
 	if( (retval = cpufreq_driver_target(policy, frequency, CPUFREQ_RELATION_H)) != 0){
 		KERNEL_ERROR_MSG( "[SCHED] AI_Governor: Error setting frequency"
-						" for cores %x\n", cpu);
+						" for cores \n");
 	}
 
 	if(retval == 0)
-		AI_gov.hardware.big_freq = frequency;
+		AI_gov.hardware->big_freq = frequency;
 
 	cpufreq_cpu_put(policy);
 #endif
@@ -379,7 +378,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 		}
 
 	if(retval == 0)
-		AI_gov.hardware.little_freq = frequency;
+		AI_gov.hardware->little_freq = frequency;
 
 	cpufreq_cpu_put(policy);
 
@@ -396,7 +395,7 @@ int AI_sched_setAffinity(struct task_struct *task, enum AI_CORE core) {
 	}
 
 
-	if (AI_sched_get_BIG_state() == 0 && core > L3)
+	if (AI_sched_get_BIG_state() == 0 && core > LC3)
 		return -EINVAL;
 
 	if (!cpu_online(core)) {
@@ -522,16 +521,16 @@ int AI_sched_disableCpu(enum AI_CPU cpu)
 
 	// we have to reduce the frequency to the minimum before turning off A15
 	// otherwise frequency of CPU will not go down
-	AI_sched_assignFrequency(AI_sched_get_BIG_min_freq(), BIG);
+	AI_sched_assignFrequency(AI_sched_get_BIG_min_freq());
 	mutex_lock(&hotplugMutex);
-	tmp_state = A15_state;
-	A15_state = false;
-	A15_freq = 0;
+	tmp_state = AI_sched_get_BIG_state();
+	AI_sched_set_BIG_state(false);
+	AI_sched_set_BIG_freq(0);
 	#ifdef CONFIG_HOTPLUG_CPU
 	// Dominik did some shutdown_counter thingy, what's that?
 	// make absolutely sure that we access the CPUs only once
 	if (cpu == BIG && tmp_state) {
-		for (i = B3; i > L3; i--) {
+		for (i = BC3; i > LC3; i--) {
 			if (((cpu & (0x01 << i)) > 0) && cpu_online(i)) {
 				//KERNEL_DEBUG_MSG( "[SCHED] AI_Governor: Try shutdown %d\n", i);
 				AI_shutdownCpu |= (0x01 << i);
@@ -664,7 +663,7 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 
 	// check whether A15 is online - if not, do not access or update load
 	#ifdef CPU_IS_BIG_LITTLE
-	if (!AI_sched_get_BIG_state() && cpu > L3) {
+	if (!AI_sched_get_BIG_state() && cpu > LC3) {
 		return 0;
 	}
 	#endif

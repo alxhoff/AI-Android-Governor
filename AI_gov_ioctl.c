@@ -10,11 +10,17 @@
 #include <linux/kernel.h>
 
 #include "AI_gov_ioctl.h"
-#include "AI_gov.h"
+#include "test_flags.h"
+#include "AI_gov_kernel_write.h"
+
 
 static dev_t dev;
 static struct cdev c_dev;
 static struct class *cl;
+
+const unsigned AI_baseminor = 0, AI_minorCount = 1;
+
+static uint8_t initialized = 0;
 
 int AI_gov_open(struct inode *i, struct file *f)
 {
@@ -98,41 +104,69 @@ int AI_gov_ioctl_init(void)
 	int ret;
 	struct device *dev_ret;
 
+	if (initialized > 0) {
+		return ret;
+	}
+
 	//register char dev numbers, call with zero to get dynamic number allocated
-	if((ret = alloc_chrdev_region(&dev, FIRST_MINOR, MINOR_CNT, "AI_governor_ioctl")))
+	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0)
+		KERNEL_ERROR_MSG(
+						"[IOCTL] AI_Governor: Error allocating char device region. "
+						"Aborting!\n");
 		return ret;
 
 	//init cdev struct with file operations
 	cdev_init(&c_dev, &AI_governor_fops);
 
 	//add char device to system
-	if((ret = cdev_add(&c_dev, dev, MINOR_CNT)) < 0)
+	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0)
+		KERNEL_ERROR_MSG(
+						"[IOCTL] AI_Governor: Error adding char device. Aborting!\n");
 		return ret;
 
-	if (IS_ERR(cl = class_create(THIS_MODULE, "char")))
+	if (IS_ERR(cl = class_create(THIS_MODULE, "AI_governor_ioctl")))
 	{
 		cdev_del(&c_dev);
-		unregister_chrdev_region(dev, MINOR_CNT);
+		unregister_chrdev_region(dev, AI_minorCount);
+		KERNEL_ERROR_MSG(
+						"[IOCTL] AI_Governor: Error initializing char device."
+						" Aborting!\n");
 		return PTR_ERR(cl);
 	}
 
 	//permissions again
 	cl->devnode = device_node;
 
-	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AIgov")))
+	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AI_governor_ioctl")))
 	{
 		class_destroy(cl);
 		cdev_del(&c_dev);
-		unregister_chrdev_region(dev, MINOR_CNT);
+		unregister_chrdev_region(dev, AI_minorCount);
+		KERNEL_ERROR_MSG(
+						"[IOCTL] AI_Governor: Error initializing char device."
+						" Aborting!\n");
 		return PTR_ERR(dev_ret);
 	}
+
+	AI_phases_init();
+
+	initialized = 1;
+
+	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Char device initialized! \n");
+	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Device name: %s\n",
+			dev_name(dev_ret));
+
 	return 0;
 }
 
-void AI_gov_ioctl_exit(void)
+int AI_gov_ioctl_exit(void)
 {
+	initialized = 0;
 	device_destroy(cl, dev);
 	class_destroy(cl);
 	cdev_del(&c_dev);
-	unregister_chrdev_region(dev, MINOR_CNT);
+	unregister_chrdev_region(dev, AI_minorCount);
+
+	KERNEL_ERROR_MSG("[IOCTL] AI_Governor: IOCTL closed\n");
+	return 0;
 }

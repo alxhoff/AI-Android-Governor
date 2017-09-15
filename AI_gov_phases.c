@@ -14,7 +14,6 @@ phase_state AI_phases_getBrowsingPhase(void)
 	return AI_gov.phase;
 }
 
-
 int AI_phases_touch_nb(void)
 {
 //	//KERNEL_LOGGG_MSG("[PHASES] Touch notifier callback.\n");
@@ -49,4 +48,9 @@ int AI_phases_touch_nb(void)
 //	AI_overhead_add_log_entry(AI_OVERHEAD_TOUCH_START, ts, 0);
 //#endif
 //	return ret;
+}
+
+void AI_phases_init(void)
+{
+	//TODO
 }

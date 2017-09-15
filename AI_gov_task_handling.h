@@ -8,6 +8,8 @@
 #ifndef AI_GOV_TASK_HANDLING_H_
 #define AI_GOV_TASK_HANDLING_H_
 
+#include "AI_gov.h"
+
 void AI_tasks_init_ring_buffer(ring_buffer_t * ring_buffer, unsigned int size);
 
 #endif /* AI_GOV_TASK_HANDLING_H_ */

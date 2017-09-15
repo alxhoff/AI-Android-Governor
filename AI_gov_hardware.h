@@ -10,6 +10,8 @@
 
 #include <linux/types.h>
 
+#include "test_flags.h"
+
 #ifndef TRUE
 #define TRUE	1
 #endif
@@ -22,13 +24,13 @@ struct AI_gov_freq_table{
 	uint32_t LITTLE_MIN;
 	uint32_t LITTLE_MAX;
 	uint8_t num_freq_steps_LITTLE;
-	uint32_t *freq_steps_LITTLE[];
+	uint32_t *freq_steps_LITTLE;
 
 	#ifdef CPU_IS_BIG_LITTLE
 	uint32_t BIG_MIN;
 	uint32_t BIG_MAX;
 	uint8_t num_freq_steps_BIG;
-	uint32_t *freq_steps_LITTLE[];
+	uint32_t *freq_steps_BIG;
 	#endif
 };
 

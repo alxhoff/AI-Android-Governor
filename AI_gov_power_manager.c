@@ -26,7 +26,7 @@
 #endif
 
 #include "AI_gov_power_manager.h"
-#include "AI_gov.h"
+#include "test_flags.h"
 #include "AI_gov_task_handling.h"
 
 #define NUMBER_CPUS 8

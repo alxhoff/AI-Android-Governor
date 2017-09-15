@@ -8,6 +8,8 @@
 #ifndef AI_GOV_KERNEL_WRITE_H_
 #define AI_GOV_KERNEL_WRITE_H_
 
+#include "test_flags.h"
+
 #define KERNEL_DEBUG_MSG(...) \
             do { printk(KERN_INFO __VA_ARGS__); } while (0)
 

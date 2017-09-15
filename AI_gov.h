@@ -5,8 +5,8 @@
  *      Author: alxhoff
  */
 
-#ifndef CPUFREQ_ALEXTEST_H_
-#define CPUFREQ_ALEXTEST_H_
+#ifndef AI_GOV_H_
+#define AI_GOV_H_
 
 #include <linux/timer.h>
 #include <linux/rwsem.h>
@@ -16,8 +16,12 @@
 
 #define TASK_NAME_LEN 15
 
-//#define CPU_IS_BIG_LITTLE	1
-
+//typedef enum{
+//	response,
+//	animation,
+//	idle,
+//	load
+//} phase_state;
 
 extern struct AI_gov_info AI_gov;
 
@@ -30,10 +34,10 @@ struct AI_gov_profile{
 };
 
 struct AI_gov_info{
-	//AI
-	struct AI_gov_cur_HW hardware;
+	struct AI_gov_cur_HW* hardware;
 
-	struct AI_gov_profile profile;
+	struct AI_gov_profile* profile;
+
 	phase_state phase;
 	phase_state prev_phase;
 };
@@ -59,12 +63,6 @@ struct cpufreq_AI_governor_cpuinfo {
 
 struct cpufreq_AI_governor_tunables {
 	int usage_count;
-	/* Hi speed to bump to from lo speed when load burst (default max) */
-	unsigned int hispeed_freq;
-	/* Go to hi speed when CPU load at or above this value. */
-#define DEFAULT_GO_HISPEED_LOAD 99
-	unsigned long go_hispeed_load;
-	/* Target load. Lower values result in higher CPU speeds. */
 	spinlock_t target_loads_lock;
 	unsigned int *target_loads;
 	int ntarget_loads;
@@ -78,25 +76,6 @@ struct cpufreq_AI_governor_tunables {
 	 * The sample rate of the timer used to increase frequency
 	 */
 	unsigned long timer_rate;
-	/*
-	 * Wait this long before raising speed above hispeed, by default a
-	 * single timer interval.
-	 */
-	spinlock_t above_hispeed_delay_lock;
-	unsigned int *above_hispeed_delay;
-	int nabove_hispeed_delay;
-	/* Non-zero means indefinite speed boost active */
-	int boost_val;
-	/* Duration of a boot pulse in usecs */
-	int boostpulse_duration_val;
-	/* End time of boost pulse in ktime converted to usecs */
-	u64 boostpulse_endtime;
-	/*
-	 * Max additional time to wait in idle, beyond timer_rate, at speeds
-	 * above minimum before wakeup to reduce speed, or -1 if unnecessary.
-	 */
-#define DEFAULT_TIMER_SLACK (4 * DEFAULT_TIMER_RATE)
-	int timer_slack_val;
 	bool io_is_busy;
 
 #define PHASE_NAME_LEN 15
@@ -114,10 +93,12 @@ struct cpufreq_AI_governor_tunables {
 #define FAST_RESCHEDULE (2 * USEC_PER_MSEC)
 #endif
 
+static struct kobject *AI_get_governor_parent_kobj(struct cpufreq_policy *policy);
+
 void AI_phase_change(void);
 //static int AI_touch_nb_callback(void);
 
 void cpufreq_AI_governor_timer_resched(unsigned long expires);
 
 
-#endif /* CPUFREQ_ALEXTEST_H_ */
+#endif /* AI_GOV_H_ */

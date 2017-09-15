@@ -8,6 +8,8 @@
 #ifndef AI_GOV_POWER_MANAGER_H_
 #define AI_GOV_POWER_MANAGER_H_
 
+#include "AI_gov.h"
+
 void AI_pm_init_wma_buffers(void);
 
 
