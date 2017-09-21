@@ -51,6 +51,8 @@ struct AI_gov_cur_HW {
 	uint32_t big_freq;
 #endif /* Enable or disable second core frequency */
 
+	struct kobject*		kobj;
+
 	void* stats;
 };
 
