@@ -51,8 +51,11 @@ static ssize_t store_io_is_busy(
 
 static ssize_t show_phase_state(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	int phase = AI_phases_getBrowsingPhase();
+	phase_state phase = AI_phases_getBrowsingPhase();
 	switch (phase) {
+	case AI_phase_init:
+		return sprintf(buf, "%s\n", "INIT");
+		break;
 	case AI_phase_response:
 		return sprintf(buf, "%s\n", "CHILLIN");
 		break;
@@ -77,19 +80,22 @@ static ssize_t store_phase_state(
 
 	int ret;
 
-		int phase = (int)AI_gov->phase;
+	int phase = (int)AI_gov->phase;
 
-		ret= kstrtoint(buf, 10, &phase);
+	ret= kstrtoint(buf, 10, &phase);
 
-		if(ret < 0) return ret;
+	if(ret < 0) return ret;
 
-		return count;
+	return count;
 }
 
 static ssize_t show_prev_phase(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	int phase = AI_phases_getPrevBrowsingPhase();
+	phase_state phase = AI_phases_getPrevBrowsingPhase();
 	switch (phase) {
+	case AI_phase_init:
+		return sprintf(buf, "%s\n", "INIT");
+		break;
 	case AI_phase_response:
 		return sprintf(buf, "%s\n", "RESPONSE");
 		break;
@@ -126,49 +132,51 @@ static ssize_t store_prev_phase(
 //PROFILE
 
 static ssize_t show_min_freq(
-		struct AI_gov_profile* profile, const char *buf)
+		struct AI_gov_info* gov, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", AI_gov->profile->min_freq);
 }
 
 static ssize_t store_min_freq(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
+		struct AI_gov_info* gov, const char *buf, size_t count)
 {
 	return 0;
 }
 
 static ssize_t show_max_freq(
-		struct AI_gov_profile* profile, const char *buf)
+		struct AI_gov_info* gov, const char *buf)
 {
+	return sprintf(buf, "%lu\n", gov->profile->max_freq);
 	return 0;
 }
 
 static ssize_t store_max_freq(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
+		struct AI_gov_info* gov, const char *buf, size_t count)
 {
 	return 0;
 }
 
 static ssize_t show_desired_frame_rate(
-		struct AI_gov_profile* profile, const char *buf)
+		struct AI_gov_info* gov, const char *buf)
 {
+	return sprintf(buf, "%lu\n", gov->profile->desired_frame_rate);
 	return 0;
 }
 
 static ssize_t store_desired_frame_rate(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
+		struct AI_gov_info* gov, const char *buf, size_t count)
 {
 	return 0;
 }
 
 static ssize_t show_current_frame_rate(
-		struct AI_gov_profile* profile, const char *buf)
+		struct AI_gov_info* gov, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", gov->profile->current_frame_rate);
 }
 
 static ssize_t store_current_frame_rate(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
+		struct AI_gov_info* gov, const char *buf, size_t count)
 {
 	return 0;
 }
@@ -303,7 +311,7 @@ show_store_gov_pol_sys(prev_phase)
 static ssize_t show_##file_name##_gov_sys				\
 (struct kobject *kobj, struct attribute *attr, char *buf)		\
 {									\
-	return show_##file_name(AI_gov->profile, buf);			\
+	return show_##file_name(AI_gov, buf);			\
 }									\
 
 //STORE
@@ -421,6 +429,7 @@ static struct attribute *AI_governor_attributes_gov_sys[] = {
 		&timer_rate_gov_sys.attr,
 		&io_is_busy_gov_sys.attr,
 		&phase_state_gov_sys.attr,
+		&prev_phase_gov_sys.attr,
 		NULL,
 };
 
@@ -446,6 +455,7 @@ static struct attribute *AI_gov_attrs_profile[] = {
 
 struct attribute_group AI_gov_attrs_grp_profile = {
 		.attrs = AI_gov_attrs_profile,
+		.name = NULL,
 };
 
 const char *AI_governor_sysfs_profile[] = {
@@ -468,6 +478,7 @@ static struct attribute *AI_gov_attrs_hardware[] = {
 
 struct attribute_group AI_gov_attrs_grp_hardware = {
 		.attrs = AI_gov_attrs_hardware,
+		.name = NULL,
 };
 
 const char *AI_governor_sysfs_hardware[] = {

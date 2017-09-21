@@ -17,7 +17,7 @@ struct AI_gov_profile{
 	struct kobject*		kobj;
 
 	unsigned int desired_frame_rate;
-	float current_frame_rate;
+	unsigned int current_frame_rate;
 };
 
 struct AI_gov_info{

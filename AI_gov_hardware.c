@@ -60,15 +60,15 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	//TEST VALUES
 
-//	profile->current_frame_rate = 30;
-//	profile->desired_frame_rate = 60;
-//	profile->max_freq = 1400000000;
-//	profile->min_freq = 1000000000;
-//
-//	hardware->big_freq = 1200000000;
-//	hardware->big_state = true;
-//	hardware->cpu_count = 8;
-//	hardware->little_freq = 900000000;
+	(*in)->profile->current_frame_rate = 30;
+	(*in)->profile->desired_frame_rate = 60;
+	(*in)->profile->max_freq = 1400000000;
+	(*in)->profile->min_freq = 1000000000;
+
+	(*in)->hardware->big_freq = 1200000000;
+	(*in)->hardware->big_state = true;
+	(*in)->hardware->cpu_count = 8;
+	(*in)->hardware->little_freq = 900000000;
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: struct init'd\n");
 	return 0;
 }

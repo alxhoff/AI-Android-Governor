@@ -71,7 +71,7 @@ static struct mutex gov_lock_AI;
 static bool gov_started = 0;
 
 struct cpufreq_AI_governor_tunables *common_tunables_AI;
-static struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
+struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
 struct AI_gov_info* AI_gov;
 
 //HARDWARE
