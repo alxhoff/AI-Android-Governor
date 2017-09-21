@@ -75,13 +75,20 @@ static ssize_t store_phase_state(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf,
 		size_t count) {
 
-	AI_gov->phase = buf;
-	return count;
+	int ret;
+
+		int phase = (int)AI_gov->phase;
+
+		ret= kstrtoint(buf, 10, &phase);
+
+		if(ret < 0) return ret;
+
+		return count;
 }
 
 static ssize_t show_prev_phase(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	int phase = AI_phases_getBrowsingPhase();
+	int phase = AI_phases_getPrevBrowsingPhase();
 	switch (phase) {
 	case AI_phase_response:
 		return sprintf(buf, "%s\n", "RESPONSE");
@@ -107,7 +114,9 @@ static ssize_t store_prev_phase(
 
 	int ret;
 
-	ret= kstrtoint(buf, 10, &AI_gov->phase);
+	int phase = (int)AI_gov->prev_phase;
+
+	ret= kstrtoint(buf, 10, &phase);
 
 	if(ret < 0) return ret;
 
@@ -116,116 +125,116 @@ static ssize_t store_prev_phase(
 
 //PROFILE
 
-static ssize_t store_min_freq(
+static ssize_t show_min_freq(
 		struct AI_gov_profile* profile, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_min_freq(
 		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
-	;
+	return 0;
+}
+
+static ssize_t show_max_freq(
+		struct AI_gov_profile* profile, const char *buf)
+{
+	return 0;
 }
 
 static ssize_t store_max_freq(
-		struct AI_gov_profile* profile, const char *buf)
-{
-	;
-}
-
-static ssize_t store_max_freq(
 		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
-static ssize_t store_desired_frame_rate(
+static ssize_t show_desired_frame_rate(
 		struct AI_gov_profile* profile, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_desired_frame_rate(
 		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
-static ssize_t store_current_frame_rate(
+static ssize_t show_current_frame_rate(
 		struct AI_gov_profile* profile, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_current_frame_rate(
 		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
 //HARDWARE
 
-static ssize_t store_is_big_little(
+static ssize_t show_is_big_little(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_is_big_little(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	;
+	return 0;
+}
+
+static ssize_t show_cpu_count(
+		struct AI_gov_cur_HW* hardware, const char *buf)
+{
+	return 0;
 }
 
 static ssize_t store_cpu_count(
-		struct AI_gov_cur_HW* hardware, const char *buf)
-{
-	;
-}
-
-static ssize_t store_cpu_count(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
-static ssize_t store_little_freq(
+static ssize_t show_little_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_little_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
 #ifdef CPU_IS_BIG_LITTLE
 
-static ssize_t store_big_state(
+static ssize_t show_big_state(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_big_state(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
-static ssize_t store_big_freq(
+static ssize_t show_big_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	;
+	return 0;
 }
 
 static ssize_t store_big_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	;
+	return 0;
 }
 
 #endif
@@ -436,7 +445,7 @@ static struct attribute *AI_gov_attrs_profile[] = {
 };
 
 struct attribute_group AI_gov_attrs_grp_profile = {
-		.attrs = AI_gov_profile_attrs,
+		.attrs = AI_gov_attrs_profile,
 };
 
 const char *AI_governor_sysfs_profile[] = {
@@ -458,7 +467,7 @@ static struct attribute *AI_gov_attrs_hardware[] = {
 };
 
 struct attribute_group AI_gov_attrs_grp_hardware = {
-		.attrs = AI_gov_profile_attrs,
+		.attrs = AI_gov_attrs_hardware,
 };
 
 const char *AI_governor_sysfs_hardware[] = {
@@ -506,7 +515,7 @@ signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov)
 	if(!AI_gov->profile->kobj) return -ENOMEM;
 
 	ret = sysfs_create_group(AI_gov->profile->kobj,
-			&AI_gov_attr_grp_profile);
+			&AI_gov_attrs_grp_profile);
 
 	if (ret) {
 		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
@@ -522,7 +531,7 @@ signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov)
 	if(!AI_gov->hardware->kobj) return -ENOMEM;
 
 	ret = sysfs_create_group(AI_gov->hardware->kobj,
-			&AI_gov_attr_grp_hardware);
+			&AI_gov_attrs_grp_hardware);
 
 	if (ret) {
 		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "

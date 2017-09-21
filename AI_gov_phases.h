@@ -19,6 +19,7 @@ typedef enum{
 } phase_state;
 
 phase_state AI_phases_getBrowsingPhase(void);
+phase_state AI_phases_getPrevBrowsingPhase(void);
 int AI_phases_touch_nb(void);
 void AI_phases_init(void);
 

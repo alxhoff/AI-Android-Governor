@@ -14,6 +14,11 @@ phase_state AI_phases_getBrowsingPhase(void)
 	return AI_gov->phase;
 }
 
+phase_state AI_phases_getPrevBrowsingPhase(void)
+{
+	return AI_gov->prev_phase;
+}
+
 int AI_phases_touch_nb(void)
 {
 //	//KERNEL_LOGGG_MSG("[PHASES] Touch notifier callback.\n");
