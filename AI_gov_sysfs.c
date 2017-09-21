@@ -24,8 +24,7 @@ static ssize_t store_timer_rate(
 	unsigned long val;
 
 	ret = strict_strtoul(buf, 0, &val);
-	if (ret < 0)
-		return ret;
+	if (ret < 0) return ret;
 	tunables->timer_rate = val;
 	return count;
 }
@@ -134,39 +133,57 @@ static ssize_t store_prev_phase(
 static ssize_t show_min_freq(
 		struct AI_gov_info* gov, const char *buf)
 {
-	return sprintf(buf, "%u\n", AI_gov->profile->min_freq);
+	return sprintf(buf, "%lu\n", AI_gov->profile->min_freq);
 }
 
 static ssize_t store_min_freq(
 		struct AI_gov_info* gov, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned long val;
+
+	ret = kstrtoul(buf, 0, &val);
+	if (ret < 0)
+		return ret;
+	gov->profile->min_freq = val;
+	return count;
 }
 
 static ssize_t show_max_freq(
 		struct AI_gov_info* gov, const char *buf)
 {
 	return sprintf(buf, "%lu\n", gov->profile->max_freq);
-	return 0;
 }
 
 static ssize_t store_max_freq(
 		struct AI_gov_info* gov, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned long val;
+
+	ret = strict_strtoul(buf, 0, &val);
+	if (ret < 0) return ret;
+	gov->profile->max_freq = val;
+	return count;
 }
 
 static ssize_t show_desired_frame_rate(
 		struct AI_gov_info* gov, const char *buf)
 {
 	return sprintf(buf, "%lu\n", gov->profile->desired_frame_rate);
-	return 0;
 }
 
 static ssize_t store_desired_frame_rate(
 		struct AI_gov_info* gov, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned int val;
+
+	ret = kstrtoint(buf, 0, &val);
+	if (ret < 0)
+		return ret;
+	gov->profile->desired_frame_rate = val;
+	return count;
 }
 
 static ssize_t show_current_frame_rate(
@@ -178,7 +195,14 @@ static ssize_t show_current_frame_rate(
 static ssize_t store_current_frame_rate(
 		struct AI_gov_info* gov, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned int val;
+
+	ret = kstrtoint(buf, 0, &val);
+	if (ret < 0)
+		return ret;
+	gov->profile->current_frame_rate = val;
+	return count;
 }
 
 //HARDWARE
@@ -320,7 +344,7 @@ static ssize_t store_##file_name##_gov_sys				\
 (struct kobject *kobj, struct attribute *attr, const char *buf,		\
 	size_t count)							\
 {									\
-	return store_##file_name(AI_gov->profile, buf, count);		\
+	return store_##file_name(AI_gov, buf, count);		\
 }									\
 
 #define show_store_gov_profile(file_name)				\

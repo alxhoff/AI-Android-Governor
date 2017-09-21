@@ -11,8 +11,8 @@
 #include "AI_gov_phases.h"
 
 struct AI_gov_profile{
-	unsigned int min_freq;
-	unsigned int max_freq;
+	unsigned long min_freq;
+	unsigned long max_freq;
 
 	struct kobject*		kobj;
 
