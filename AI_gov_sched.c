@@ -49,7 +49,7 @@ static DEFINE_MUTEX(hotplugMutex);
 // workload margin for load idle phase
 #define LOAD_PHASE_MARGIN 200
 
-//AI_gov.hardware
+//AI_gov->hardware
 
 static unsigned int AI_total_workload_BIG[AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG] = {0};
 static unsigned int AI_total_workload_LITTLE[AI_SCHED_WORKLOAD_HISTORY_SIZE_LONG] = {0};
@@ -200,11 +200,11 @@ void AI_sched_update_workload(void) {
 		} else
 			workload[i] = 0;
 		total_workload += workload[i];
-#ifdef TASK_LOGGER
-		if (AI_log_is_logging()) {
-			log_struct.workload[log_struct.global_index][i] = workload[i];
-		}
-#endif
+//#ifdef TASK_LOGGER
+//		if (AI_log_is_logging()) {
+//			log_struct.workload[log_struct.global_index][i] = workload[i];
+//		}
+//#endif
 		//		AI_tasks_add_data_to_ringbuffer(&(workload_history_cpus[i]), workload[i]);
 		//		prediction[i] = wma(workload_history_cpus[i], SIZE_WORKLOAD_HISTORY);
 		//				if (prediction[i] > 95) {
@@ -236,55 +236,55 @@ void AI_sched_update_workload(void) {
 //TODO FREQ TABLE FROM CPUINFO POLICY?
 #ifdef CPU_IS_BIG_LITTLE
 bool AI_sched_get_BIG_state(void) {
-	return AI_gov.hardware->big_state;
+	return AI_gov->hardware->big_state;
 }
 
 void AI_sched_set_BIG_state(bool state)
 {
-	AI_gov.hardware->big_state = state;
+	AI_gov->hardware->big_state = state;
 }
 
 uint32_t AI_sched_get_BIG_freq(void) {
-	if (AI_gov.hardware->big_state) {
-		if (AI_gov.hardware->big_freq == 0)
-			AI_gov.hardware->big_freq = AI_gov.hardware->freq_table->BIG_MIN;
-		return AI_gov.hardware->freq_table->BIG_MIN;
+	if (AI_gov->hardware->big_state) {
+		if (AI_gov->hardware->big_freq == 0)
+			AI_gov->hardware->big_freq = AI_gov->hardware->freq_table->BIG_MIN;
+		return AI_gov->hardware->freq_table->BIG_MIN;
 	} else
 		return 0;
 }
 
 void AI_sched_set_BIG_freq(uint32_t frequency) {
-	AI_gov.hardware->big_freq = frequency;
+	AI_gov->hardware->big_freq = frequency;
 }
 
 uint32_t AI_sched_get_BIG_min_freq(void)
 {
-	return AI_gov.hardware->freq_table->BIG_MIN;
+	return AI_gov->hardware->freq_table->BIG_MIN;
 }
 
 uint32_t AI_sched_get_BIG_max_freq(void)
 {
-	return AI_gov.hardware->freq_table->BIG_MAX;
+	return AI_gov->hardware->freq_table->BIG_MAX;
 }
 
 #endif
 
 uint32_t AI_sched_get_LITTLE_freq(void) {
-	return AI_gov.hardware->little_freq;
+	return AI_gov->hardware->little_freq;
 }
 
 uint32_t AI_sched_get_LITTLE_min_freq(void)
 {
-	return AI_gov.hardware->freq_table->LITTLE_MIN;
+	return AI_gov->hardware->freq_table->LITTLE_MIN;
 }
 
 uint32_t AI_sched_get_LITTLE_max_freq(void)
 {
-	return AI_gov.hardware->freq_table->LITTLE_MAX;
+	return AI_gov->hardware->freq_table->LITTLE_MAX;
 }
 
 void AI_sched_set_LITTLE_freq(uint32_t frequency) {
-	AI_gov.hardware->little_freq = frequency;
+	AI_gov->hardware->little_freq = frequency;
 }
 
 // int AI_sched_assignFrequency(unsigned int frequency, enum AI_CPU cpu) {
@@ -342,7 +342,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 
 #ifdef CPU_IS_BIG_LITTLE
 	//check big core is online
-	if(!AI_gov.hardware->big_state){
+	if(!AI_gov->hardware->big_state){
 		//TODO FIX ERROR MESSAGE
 		KERNEL_ERROR_MSG( "[SCHED] AI_Governor: BIG down, no freq change possible: %d\n", frequency);
 		return retval;
@@ -362,7 +362,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 	}
 
 	if(retval == 0)
-		AI_gov.hardware->big_freq = frequency;
+		AI_gov->hardware->big_freq = frequency;
 
 	cpufreq_cpu_put(policy);
 #endif
@@ -378,7 +378,7 @@ int AI_sched_assignFrequency(unsigned int frequency)
 		}
 
 	if(retval == 0)
-		AI_gov.hardware->little_freq = frequency;
+		AI_gov->hardware->little_freq = frequency;
 
 	cpufreq_cpu_put(policy);
 

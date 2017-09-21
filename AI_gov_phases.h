@@ -11,10 +11,11 @@
 #include "test_flags.h"
 
 typedef enum{
-	response,
-	animation,
-	idle,
-	load
+	AI_phase_init,
+	AI_phase_response,
+	AI_phase_animation,
+	AI_phase_idle,
+	AI_phase_load
 } phase_state;
 
 phase_state AI_phases_getBrowsingPhase(void);

@@ -11,7 +11,7 @@
 
 phase_state AI_phases_getBrowsingPhase(void)
 {
-	return AI_gov.phase;
+	return AI_gov->phase;
 }
 
 int AI_phases_touch_nb(void)

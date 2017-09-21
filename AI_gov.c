@@ -36,16 +36,20 @@
 #endif
 #include "cpu_load_metric.h"
 
+#include <linux/cpufreq.h>
+
 #include "AI_gov_hardware.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_sched.h"
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
+#include "AI_gov_types.h"
 #include "AI_gov_kernel_write.h"
 #include "AI_gov_power_manager.h"
 #include "AI_gov_task_handling.h"
 #include "AI_touch_notifier.h"
 #include "AI_gov_task_handling.h"
+#include "AI_gov_sysfs.h"
 
 
 #ifndef AID_SYSTEM
@@ -58,6 +62,7 @@
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
 static DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
+static DEFINE_PER_CPU(struct cpufreq_frequency_table *, cpufreq_show_table);
 
 static cpumask_t speedchange_cpumask_AI;
 static spinlock_t speedchange_cpumask_lock_AI;
@@ -67,7 +72,7 @@ static bool gov_started = 0;
 
 struct cpufreq_AI_governor_tunables *common_tunables_AI;
 static struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
-struct AI_gov_info AI_gov = {{0}};
+struct AI_gov_info* AI_gov;
 
 //HARDWARE
 
@@ -147,33 +152,12 @@ static void cpufreq_AI_governor_timer_start(
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
 }
 
-static ssize_t show_phase_state(
-		//shows up in /sys/devices/system/cpu/cpufreq/AI_governor
-		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	int phase = AI_phases_getBrowsingPhase();
-	switch (phase) {
-	case response:
-		return sprintf(buf, "%s\n", "CHILLIN");
-		break;
-	case animation:
-		return sprintf(buf, "%s\n", "ANIMATION");
-		break;
-	case idle:
-		return sprintf(buf, "%s\n", "IDLE");
-		break;
-	case load:
-		return sprintf(buf, "%s\n", "LOAD");
-		break;
-	default:
-		return sprintf(buf, "%s\n", "INVALID");
-		break;
-	}
-}
+
 
 
 void AI_phase_change(void)
 {
-	AI_gov.prev_phase = AI_gov.phase;
+	AI_gov->prev_phase = AI_gov->phase;
 
 	//do stuff
 }
@@ -181,154 +165,160 @@ void AI_phase_change(void)
 void AI_coordinator(void)
 {
 	//phase change
-	if (AI_gov.prev_phase!=AI_gov.phase)
+	if (AI_gov->prev_phase!=AI_gov->phase)
 		AI_phase_change();
 
 	//get cpu freq
-	uint32_t little_freq = AI_gov.hardware->little_freq;
+	uint32_t little_freq = AI_gov->hardware->little_freq;
 
 #ifdef CPU_IS_BIG_LITTLE
-	uint32_t big_freq = AI_gov.hardware->big_freq;
+	uint32_t big_freq = AI_gov->hardware->big_freq;
 #endif
 
-	switch(AI_gov.phase){
-	case response:
+	switch(AI_gov->phase){
+	case AI_phase_response:
 		break;
-	case animation:
+	case AI_phase_animation:
 		break;
-	case idle:
+	case AI_phase_idle:
 		break;
-	case load:
+	case AI_phase_load:
 		break;
 	}
 }
 
-static ssize_t store_phase_state(
-		struct cpufreq_AI_governor_tunables *tunables, char *buf,
-		size_t count) {
-
-	tunables->phase_state = buf;
-	return count;
-}
-
-static ssize_t show_timer_rate(
-		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	return sprintf(buf, "%lu\n", tunables->timer_rate);
-}
-
-static ssize_t store_timer_rate(
-		struct cpufreq_AI_governor_tunables *tunables, const char *buf,
-		size_t count) {
-	int ret;
-	unsigned long val;
-
-	ret = strict_strtoul(buf, 0, &val);
-	if (ret < 0)
-		return ret;
-	tunables->timer_rate = val;
-	return count;
-}
-
-static ssize_t show_io_is_busy(
-		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
-	return sprintf(buf, "%u\n", tunables->io_is_busy);
-}
-
-static ssize_t store_io_is_busy(
-		struct cpufreq_AI_governor_tunables *tunables, const char *buf,
-		size_t count)
-{
-	int ret;
-	unsigned long val;
-
-	ret = kstrtoul(buf, 0, &val);
-	if (ret < 0)
-		return ret;
-	tunables->io_is_busy = val;
-	return count;
-}
-
-/*
- * Create show/store routines
- * - sys: One governor instance for complete SYSTEM
- * - pol: One governor instance per struct cpufreq_policy
- */
-#define show_gov_pol_sys(file_name)					\
-static ssize_t show_##file_name##_gov_sys				\
-(struct kobject *kobj, struct attribute *attr, char *buf)		\
-{									\
-	return show_##file_name(common_tunables_AI, buf);			\
-}									\
-									\
-static ssize_t show_##file_name##_gov_pol				\
-(struct cpufreq_policy *policy, char *buf)				\
-{									\
-	return show_##file_name(policy->governor_data, buf);		\
-}
-
-#define store_gov_pol_sys(file_name)					\
-static ssize_t store_##file_name##_gov_sys				\
-(struct kobject *kobj, struct attribute *attr, const char *buf,		\
-	size_t count)							\
-{									\
-	return store_##file_name(common_tunables_AI, buf, count);		\
-}									\
-									\
-static ssize_t store_##file_name##_gov_pol				\
-(struct cpufreq_policy *policy, const char *buf, size_t count)		\
-{									\
-	return store_##file_name(policy->governor_data, buf, count);	\
-}
-
-#define show_store_gov_pol_sys(file_name)				\
-show_gov_pol_sys(file_name);						\
-store_gov_pol_sys(file_name)
-
-show_store_gov_pol_sys(timer_rate)
-;
-show_store_gov_pol_sys(io_is_busy)
-;
-show_store_gov_pol_sys(phase_state)
-;
-#define gov_sys_attr_rw(_name)						\
-static struct global_attr _name##_gov_sys =				\
-__ATTR(_name, 0644, show_##_name##_gov_sys, store_##_name##_gov_sys)
-#define gov_pol_attr_rw(_name)						\
-static struct freq_attr _name##_gov_pol =				\
-__ATTR(_name, 0644, show_##_name##_gov_pol, store_##_name##_gov_pol)
-#define gov_sys_pol_attr_rw(_name)					\
-gov_sys_attr_rw(_name); \
-gov_pol_attr_rw(_name);
-gov_sys_pol_attr_rw(timer_rate)
-;
-gov_sys_pol_attr_rw(io_is_busy)
-;
-gov_sys_pol_attr_rw(phase_state)
-;
-
-/* One Governor instance for entire system */
-static struct attribute *AI_governor_attributes_gov_sys[] = {
-		&timer_rate_gov_sys.attr, &io_is_busy_gov_sys.attr,
-		&phase_state_gov_sys.attr, NULL, };
-
-static struct attribute_group AI_governor_attr_group_gov_sys = { .attrs =
-		AI_governor_attributes_gov_sys, .name = "AI_governor", };
-
-static const char *AI_governor_sysfs[] = {
-	"timer_rate",
-	"io_is_busy",
-	"phase_state",
-};
-
-// we want to manage all cores so it is ok to return the global object
-static struct kobject *AI_get_governor_parent_kobj(struct cpufreq_policy *policy)
-{
-	return cpufreq_global_kobject;
-}
-
-static struct attribute_group *AI_get_sysfs_attr(void) {
-	return &AI_governor_attr_group_gov_sys;
-}
+//static ssize_t store_phase_state(
+//		struct cpufreq_AI_governor_tunables *tunables, char *buf,
+//		size_t count) {
+//
+//	tunables->phase_state = buf;
+//	return count;
+//}
+//
+//static ssize_t show_timer_rate(
+//		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
+//	return sprintf(buf, "%lu\n", tunables->timer_rate);
+//}
+//
+//static ssize_t store_timer_rate(
+//		struct cpufreq_AI_governor_tunables *tunables, const char *buf,
+//		size_t count) {
+//	int ret;
+//	unsigned long val;
+//
+//	ret = strict_strtoul(buf, 0, &val);
+//	if (ret < 0)
+//		return ret;
+//	tunables->timer_rate = val;
+//	return count;
+//}
+//
+//static ssize_t show_io_is_busy(
+//		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
+//	return sprintf(buf, "%u\n", tunables->io_is_busy);
+//}
+//
+//static ssize_t store_io_is_busy(
+//		struct cpufreq_AI_governor_tunables *tunables, const char *buf,
+//		size_t count)
+//{
+//	int ret;
+//	unsigned long val;
+//
+//	ret = kstrtoul(buf, 0, &val);
+//	if (ret < 0)
+//		return ret;
+//	tunables->io_is_busy = val;
+//	return count;
+//}
+//
+///*
+// * Create show/store routines
+// * - sys: One governor instance for complete SYSTEM
+// * - pol: One governor instance per struct cpufreq_policy
+// */
+//#define show_gov_pol_sys(file_name)					\
+//static ssize_t show_##file_name##_gov_sys				\
+//(struct kobject *kobj, struct attribute *attr, char *buf)		\
+//{									\
+//	return show_##file_name(common_tunables_AI, buf);			\
+//}									\
+//									\
+//static ssize_t show_##file_name##_gov_pol				\
+//(struct cpufreq_policy *policy, char *buf)				\
+//{									\
+//	return show_##file_name(policy->governor_data, buf);		\
+//}
+//
+//#define store_gov_pol_sys(file_name)					\
+//static ssize_t store_##file_name##_gov_sys				\
+//(struct kobject *kobj, struct attribute *attr, const char *buf,		\
+//	size_t count)							\
+//{									\
+//	return store_##file_name(common_tunables_AI, buf, count);		\
+//}									\
+//									\
+//static ssize_t store_##file_name##_gov_pol				\
+//(struct cpufreq_policy *policy, const char *buf, size_t count)		\
+//{									\
+//	return store_##file_name(policy->governor_data, buf, count);	\
+//}
+//
+//#define show_store_gov_pol_sys(file_name)				\
+//show_gov_pol_sys(file_name);						\
+//store_gov_pol_sys(file_name)
+//
+//show_store_gov_pol_sys(timer_rate)
+//;
+//show_store_gov_pol_sys(io_is_busy)
+//;
+//show_store_gov_pol_sys(phase_state)
+//;
+//#define gov_sys_attr_rw(_name)						\
+//static struct global_attr _name##_gov_sys =				\
+//__ATTR(_name, 0644, show_##_name##_gov_sys, store_##_name##_gov_sys)
+//#define gov_pol_attr_rw(_name)						\
+//static struct freq_attr _name##_gov_pol =				\
+//__ATTR(_name, 0644, show_##_name##_gov_pol, store_##_name##_gov_pol)
+//#define gov_sys_pol_attr_rw(_name)					\
+//gov_sys_attr_rw(_name); \
+//gov_pol_attr_rw(_name);
+//gov_sys_pol_attr_rw(timer_rate)
+//;
+//gov_sys_pol_attr_rw(io_is_busy)
+//;
+//gov_sys_pol_attr_rw(phase_state)
+//;
+//
+///* One Governor instance for entire system */
+//static struct attribute *AI_governor_attributes_gov_sys[] = {
+//		&timer_rate_gov_sys.attr, &io_is_busy_gov_sys.attr,
+//		&phase_state_gov_sys.attr, NULL, };
+//
+////static struct attribute *AI_governor_attributes_gov_sys[] = {
+////		&timer_rate_gov_sys.attr, &io_is_busy_gov_sys.attr,
+////		&phase_state_gov_sys.attr, NULL, };
+//
+//static struct attribute_group AI_governor_attr_group_gov_sys = { .attrs =
+//		AI_governor_attributes_gov_sys, .name = "AI_governor", };
+//
+////statuc stuct attribute_group AI_governor_profile_attr_group = { .attrs =
+////
+////};
+//
+//static const char *AI_governor_sysfs[] = {
+//	"timer_rate",
+//	"io_is_busy",
+//	"phase_state",
+//
+//};
+//
+//// we want to manage all cores so it is ok to return the global object
+//
+//
+//static struct attribute_group *AI_get_sysfs_attr(void) {
+//	return &AI_governor_attr_group_gov_sys;
+//}
 
 static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
@@ -378,24 +368,25 @@ extern uint8_t AI_shutdownCpu;
 #ifdef CONFIG_ANDROID
 static void change_sysfs_owner(struct cpufreq_policy *policy)
 {
-	char buf[NAME_MAX];
-	mm_segment_t oldfs;
-	int i;
-	char *path = kobject_get_path(AI_get_governor_parent_kobj(policy),
-			GFP_KERNEL);
-
-	oldfs = get_fs();
-	set_fs(get_ds());
-
-	for (i = 0; i < ARRAY_SIZE(AI_governor_sysfs); i++) {
-		snprintf(buf, sizeof(buf), "/sys%s/AI_governor/%s", path,
-				AI_governor_sysfs[i]);
-		sys_chown(buf, AID_SYSTEM, AID_SYSTEM);
-		KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: path is: %s\ for cpu %d\n", buf, policy->cpu);
-	}
-
-	set_fs(oldfs);
-	kfree(path);
+	//TODO FIX THIS
+//	char buf[NAME_MAX];
+//	mm_segment_t oldfs;
+//	int i;
+//	char *path = kobject_get_path(AI_get_governor_parent_kobj(policy),
+//			GFP_KERNEL);
+//
+//	oldfs = get_fs();
+//	set_fs(get_ds());
+//
+//	for (i = 0; i < ARRAY_SIZE(AI_governor_sysfs); i++) {
+//		snprintf(buf, sizeof(buf), "/sys%s/AI_governor/%s", path,
+//				AI_governor_sysfs[i]);
+//		sys_chown(buf, AID_SYSTEM, AID_SYSTEM);
+//		KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: path is: %s\ for cpu %d\n", buf, policy->cpu);
+//	}
+//
+//	set_fs(oldfs);
+//	kfree(path);
 }
 #else
 static inline void change_sysfs_owner(struct cpufreq_policy *policy) {
@@ -475,6 +466,48 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 
 		//TODO Conditional regarding hardware
 		if(tunables && gov_started == 0){
+
+			////HARDWARE INIT
+			//populate AI_gov_freq_table
+
+//			if (!AI_freq_table) {
+//				KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table kzalloc\n");
+//				return -ENOMEM;
+//			}
+			//AI_gov->hardware->freq_table = &AI_freq_table;
+
+//			AI_gov->phase = init;
+//			AI_gov->prev_phase = init;
+//			AI_gov->profile = NULL;
+
+//			unsigned int cpu = policy->cpu;
+//			ssize_t freq_step_count = 0;
+			//struct cpu_frequency_table *freq_table;
+
+//			if (!per_cpu(cpufreq_show_table, cpu))
+//					return -ENODEV;
+
+//			AI_freq_table = per_cpu(cpufreq_show_table, cpu);
+
+//			int i = 0;
+//			for(i = 0; (freq_table[i].frequency != CPUFREQ_TABLE_END); i++){
+//				if(freq_table[i].frequency == CPUFREQ_ENTRY_INVALID)
+//					continue;
+//				if(i == 0)
+//					AI_gov->hardware->freq_table->LITTLE_MIN = freq_table[i].frequency;
+//				freq_step_count++;
+//			}
+//			freq_step_count++;
+//			AI_gov->hardware->freq_table->LITTLE_MAX = freq_table[i].frequency;
+//			AI_gov->hardware->freq_table->freq_steps_LITTLE = freq_step_count;
+//
+//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
+//									"LITTLE MIN: %d\n", AI_gov->hardware->freq_table->LITTLE_MIN);
+//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
+//											"LITTLE MAX: %d\n", AI_gov->hardware->freq_table->LITTLE_MAX);
+//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
+//												"LITTLE STEP COUNT: %d\n",
+//												AI_gov->hardware->freq_table->freq_steps_LITTLE);
 
 			//create task
 			snprintf(speedchange_task_name, TASK_NAME_LEN,
@@ -556,8 +589,11 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		break;
 	case CPUFREQ_GOV_POLICY_INIT:
 
-		//HARDWARE INIT
-
+		//AI_GOV
+		rc = AI_gov_init(&AI_gov);
+		if(rc)
+			KERNEL_DEBUG_MSG(
+						"[GOVERNOR] AI_Governor: init failed\n");
 
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
 			tunables->usage_count++;
@@ -601,15 +637,14 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			// create sysfs entry
 			// the location is /sys/devices/system/cpu/cpufreq/AI_governor
 			// speculation: it is in the common folder because we use the governor for all CPUs
-			rc = sysfs_create_group(AI_get_governor_parent_kobj(policy),
-					AI_get_sysfs_attr());
-			if (rc) {
-				KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
-						"Error initializing sysfs! Code: %d\n", rc);
-				kfree(tunables);
-				return rc;
-			}
+
+
+
+			//create AI-governor kobject
+
+			rc = AI_gov_sysfs_init(AI_gov);
 			change_sysfs_owner(policy);
+
 
 	//		if (!policy->governor->initialized) {
 	//			AI_touch_register_notify(&AI_touch_nb);
@@ -645,9 +680,10 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 ////					//unregister_hotcpu_notifier(&cpufreq_notifier_block);
 ////					//				idle_notifier_unregister(&cpufreq_interactive_idle_nb);
 //				}
-////
-				sysfs_remove_group(AI_get_governor_parent_kobj(policy),
-						AI_get_sysfs_attr());
+
+				//TODO ADD DEINIT
+//				sysfs_remove_group(AI_get_governor_parent_kobj(policy),
+//						AI_get_sysfs_attr());
 //				KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 7\n");
 //
 				tuned_parameters_AI = kzalloc(sizeof(*tunables), GFP_KERNEL);

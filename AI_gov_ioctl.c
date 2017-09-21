@@ -109,11 +109,12 @@ int AI_gov_ioctl_init(void)
 	}
 
 	//register char dev numbers, call with zero to get dynamic number allocated
-	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0)
+	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0){
 		KERNEL_ERROR_MSG(
 						"[IOCTL] AI_Governor: Error allocating char device region. "
 						"Aborting!\n");
 		return ret;
+	}
 
 	//init cdev struct with file operations
 	cdev_init(&c_dev, &AI_governor_fops);

@@ -11,6 +11,7 @@
 #include <linux/types.h>
 
 #include "test_flags.h"
+#include "AI_gov_types.h"
 
 #ifndef TRUE
 #define TRUE	1
@@ -52,5 +53,7 @@ struct AI_gov_cur_HW {
 
 	void* stats;
 };
+
+signed int AI_gov_init(struct AI_gov_info** in);
 
 #endif /* AI_GOV_HARDWARE_H_ */
