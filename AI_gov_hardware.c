@@ -58,6 +58,12 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	(*in)->phase = AI_phase_init;
 
+#ifdef CPU_IS_BIG_LITTLE
+	(*in)->hardware->is_big_little = true;
+#else
+	(*in)->hardware->is_big_little = false;
+#endif
+
 	//TEST VALUES
 
 	(*in)->profile->current_frame_rate = 30;

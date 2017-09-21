@@ -131,13 +131,13 @@ static ssize_t store_prev_phase(
 //PROFILE
 
 static ssize_t show_min_freq(
-		struct AI_gov_info* gov, const char *buf)
+		struct AI_gov_profile* profile, const char *buf)
 {
-	return sprintf(buf, "%lu\n", AI_gov->profile->min_freq);
+	return sprintf(buf, "%lu\n", profile->min_freq);
 }
 
 static ssize_t store_min_freq(
-		struct AI_gov_info* gov, const char *buf, size_t count)
+		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
 	int ret;
 	unsigned long val;
@@ -145,36 +145,36 @@ static ssize_t store_min_freq(
 	ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
-	gov->profile->min_freq = val;
+	profile->min_freq = val;
 	return count;
 }
 
 static ssize_t show_max_freq(
-		struct AI_gov_info* gov, const char *buf)
+		struct AI_gov_profile* profile, const char *buf)
 {
-	return sprintf(buf, "%lu\n", gov->profile->max_freq);
+	return sprintf(buf, "%lu\n", profile->max_freq);
 }
 
 static ssize_t store_max_freq(
-		struct AI_gov_info* gov, const char *buf, size_t count)
+		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
 	int ret;
 	unsigned long val;
 
 	ret = strict_strtoul(buf, 0, &val);
 	if (ret < 0) return ret;
-	gov->profile->max_freq = val;
+	profile->max_freq = val;
 	return count;
 }
 
 static ssize_t show_desired_frame_rate(
-		struct AI_gov_info* gov, const char *buf)
+		struct AI_gov_profile* profile, const char *buf)
 {
-	return sprintf(buf, "%lu\n", gov->profile->desired_frame_rate);
+	return sprintf(buf, "%lu\n", profile->desired_frame_rate);
 }
 
 static ssize_t store_desired_frame_rate(
-		struct AI_gov_info* gov, const char *buf, size_t count)
+		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
 	int ret;
 	unsigned int val;
@@ -182,18 +182,18 @@ static ssize_t store_desired_frame_rate(
 	ret = kstrtoint(buf, 0, &val);
 	if (ret < 0)
 		return ret;
-	gov->profile->desired_frame_rate = val;
+	profile->desired_frame_rate = val;
 	return count;
 }
 
 static ssize_t show_current_frame_rate(
-		struct AI_gov_info* gov, const char *buf)
+		struct AI_gov_profile* profile, const char *buf)
 {
-	return sprintf(buf, "%u\n", gov->profile->current_frame_rate);
+	return sprintf(buf, "%u\n", profile->current_frame_rate);
 }
 
 static ssize_t store_current_frame_rate(
-		struct AI_gov_info* gov, const char *buf, size_t count)
+		struct AI_gov_profile* profile, const char *buf, size_t count)
 {
 	int ret;
 	unsigned int val;
@@ -201,7 +201,7 @@ static ssize_t store_current_frame_rate(
 	ret = kstrtoint(buf, 0, &val);
 	if (ret < 0)
 		return ret;
-	gov->profile->current_frame_rate = val;
+	profile->current_frame_rate = val;
 	return count;
 }
 
@@ -210,37 +210,53 @@ static ssize_t store_current_frame_rate(
 static ssize_t show_is_big_little(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", hardware->is_big_little);
 }
 
 static ssize_t store_is_big_little(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	return 0;
+	int val, ret;
+
+	ret = kstrtoint(buf, 10, &val);
+	if (ret < 0) return ret;
+	hardware->is_big_little = val;
+	return count;
 }
 
 static ssize_t show_cpu_count(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", hardware->cpu_count);
 }
 
 static ssize_t store_cpu_count(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	return 0;
+	int val, ret;
+
+	ret = kstrtoint(buf, 10, &val);
+	if (ret < 0) return ret;
+	hardware->cpu_count = val;
+	return count;
 }
 
 static ssize_t show_little_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", hardware->little_freq);
 }
 
 static ssize_t store_little_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned long val;
+
+	ret = kstrtoul(buf, 0, &val);
+	if (ret < 0) return ret;
+	hardware->little_freq = val;
+	return count;
 }
 
 #ifdef CPU_IS_BIG_LITTLE
@@ -248,25 +264,36 @@ static ssize_t store_little_freq(
 static ssize_t show_big_state(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", hardware->big_state);
 }
 
 static ssize_t store_big_state(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	return 0;
+	int val, ret;
+
+	ret = kstrtoint(buf, 10, &val);
+	if (ret < 0) return ret;
+	hardware->big_state = val;
+	return count;
 }
 
 static ssize_t show_big_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf)
 {
-	return 0;
+	return sprintf(buf, "%u\n", hardware->big_freq);
 }
 
 static ssize_t store_big_freq(
 		struct AI_gov_cur_HW* hardware, const char *buf, size_t count)
 {
-	return 0;
+	int ret;
+	unsigned long val;
+
+	ret = kstrtoul(buf, 0, &val);
+	if (ret < 0) return ret;
+	hardware->big_freq = val;
+	return count;
 }
 
 #endif
@@ -335,7 +362,7 @@ show_store_gov_pol_sys(prev_phase)
 static ssize_t show_##file_name##_gov_sys				\
 (struct kobject *kobj, struct attribute *attr, char *buf)		\
 {									\
-	return show_##file_name(AI_gov, buf);			\
+	return show_##file_name(AI_gov->profile, buf);			\
 }									\
 
 //STORE
@@ -344,7 +371,7 @@ static ssize_t store_##file_name##_gov_sys				\
 (struct kobject *kobj, struct attribute *attr, const char *buf,		\
 	size_t count)							\
 {									\
-	return store_##file_name(AI_gov, buf, count);		\
+	return store_##file_name(AI_gov->profile, buf, count);		\
 }									\
 
 #define show_store_gov_profile(file_name)				\
@@ -581,30 +608,30 @@ signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov)
 static ssize_t phase_show(struct kobject *kobj, struct kobj_attribute *attr,
                                          char *buf)
 {
-	int var = 0;
+	int val = 0;
 
 	if(strcmp(attr->attr.name, "phase") == 0){
-		var = (int)AI_gov->phase;
+		val = (int)AI_gov->phase;
 	}else if(strcmp(attr->attr.name, "prev_phase") == 0){
-		var = AI_gov->prev_phase;
+		val = AI_gov->prev_phase;
 	}
 
-	return sprintf(buf, "%d\n", var);
+	return sprintf(buf, "%d\n", val);
 }
 
 static ssize_t phase_store(struct kobject *kobj, struct kobj_attribute *attr,
                          const char *buf, size_t count)
 {
 
-        int var, ret;
-        ret = kstrtoint(buf, 10, &var);
+        int val, ret;
+        ret = kstrtoint(buf, 10, &val);
         if(ret<0)
         	return ret;
 
         if(strcmp(attr->attr.name, "phase") == 0){
-			  AI_gov->phase = var;
+			  AI_gov->phase = val;
 		}else if(strcmp(attr->attr.name, "prev_phase") == 0){
-			  AI_gov->prev_phase = var;
+			  AI_gov->prev_phase = val;
 		}
 
         return count;
