@@ -27,6 +27,7 @@
 extern struct cpufreq_AI_governor_tunables *common_tunables_AI;
 extern struct cpufreq_AI_governor_tunables *tuned_parameters_AI;
 extern struct AI_gov_info* AI_gov;
+extern struct phase_profiles* AI_gov_profiles;
 
 #ifndef FAST_RESCHEDULE
 #define FAST_RESCHEDULE (2 * USEC_PER_MSEC)

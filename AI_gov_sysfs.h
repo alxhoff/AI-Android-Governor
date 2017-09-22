@@ -25,7 +25,7 @@ extern const char *AI_governor_sysfs[];
 
 static ssize_t show_phase_state(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf);
-signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov);
+signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov, struct phase_profiles* AI_gov_profiles);
 static struct attribute_group *AI_get_sysfs_attr(void);
 struct kobject *AI_get_governor_parent_kobj(struct cpufreq_policy *policy);
 

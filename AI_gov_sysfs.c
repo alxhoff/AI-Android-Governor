@@ -8,6 +8,7 @@
 #include <linux/slab.h>
 
 #include "AI_gov_sysfs.h"
+#include "AI_gov_phases.h"
 #include "AI_gov_kernel_write.h"
 
 //ACCESSER FUNCTIONS
@@ -561,7 +562,7 @@ static struct attribute_group *AI_get_sysfs_attr(void)
 }
 
 
-signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov)
+signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov, struct phase_profiles* AI_gov_profiles)
 {
 	int ret = 0;
 

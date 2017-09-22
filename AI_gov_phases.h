@@ -101,6 +101,7 @@ struct phase_exit_attributes{
 
 };
 
+unsigned char AI_phases_init_profiles(struct phase_profiles** profiles);
 unsigned char AI_phases_getBrowsingPhase(void);
 unsigned char AI_phases_getPrevBrowsingPhase(void);
 int AI_phases_touch_nb(void);

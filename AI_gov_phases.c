@@ -208,6 +208,7 @@ unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 	GET_ATTRIBUTES(framerate)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
 	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	if(GET_ATTRIBUTES(framerate)->timestamp_history == NULL) return -ENOMEM;
 
 	//priority
 	GET_ATTRIBUTES(priority)->maximum_priority = MAXIMUM_PRIORITY;
@@ -220,11 +221,13 @@ unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 	//response
 	GET_ATTRIBUTES(response)->user_input_importance = DEFAULT_USER_IMPORTANCE;
 
+	return 0;
 }
 
 unsigned char AI_phases_init_profiles(struct phase_profiles** profiles)
 {
 	(*profiles) = kmalloc(sizeof(struct phase_profiles), GFP_KERNEL);
+	if((*profiles) == NULL) return -ENOMEM;
 
 	attach_phase(init);
 	attach_phase(framerate);
@@ -236,6 +239,8 @@ unsigned char AI_phases_init_profiles(struct phase_profiles** profiles)
 	attach_phase(exit);
 
 	AI_phases_set_defaults((*profiles));
+
+	return 0;
 }
 
 unsigned char AI_phases_getBrowsingPhase(void)
