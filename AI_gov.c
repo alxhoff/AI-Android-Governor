@@ -176,14 +176,20 @@ void AI_coordinator(void)
 #endif
 
 	switch(AI_gov->phase){
+	case AI_phase_init:
+		break;
+	case AI_phase_framerate:
+		break;
+	case AI_phase_priority:
+		break;
+	case AI_phase_time:
+		break;
+	case AI_phase_powersave:
+		break;
+	case AI_phase_performance:
+			break;
 	case AI_phase_response:
-		break;
-	case AI_phase_animation:
-		break;
-	case AI_phase_idle:
-		break;
-	case AI_phase_load:
-		break;
+			break;
 	}
 }
 

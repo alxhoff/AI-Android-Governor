@@ -10,6 +10,52 @@
 
 #include "AI_gov_phases.h"
 
+typedef enum{
+	AI_phase_init,
+	AI_phase_framerate,
+	AI_phase_priority,
+	AI_phase_time,
+	AI_phase_powersave,
+	AI_phase_performance,
+	AI_phase_response
+} phase_state;
+
+struct AI_gov_freq_table{
+	uint32_t LITTLE_MIN;
+	uint32_t LITTLE_MAX;
+	uint8_t num_freq_steps_LITTLE;
+	uint32_t *freq_steps_LITTLE;
+
+	#ifdef CPU_IS_BIG_LITTLE
+	uint32_t BIG_MIN;
+	uint32_t BIG_MAX;
+	uint8_t num_freq_steps_BIG;
+	uint32_t *freq_steps_BIG;
+	#endif
+};
+
+struct AI_gov_cur_HW {
+	bool is_big_little;
+
+	uint8_t cpu_count;
+
+	uint32_t little_freq;
+
+	bool has_table;
+	struct AI_gov_freq_table* freq_table;
+
+#ifdef CPU_IS_BIG_LITTLE
+	bool big_state;
+
+	uint32_t big_freq;
+#endif /* Enable or disable second core frequency */
+
+	struct kobject*		kobj;
+
+	void* stats;
+};
+
+
 struct AI_gov_profile{
 	unsigned long min_freq;
 	unsigned long max_freq;
@@ -24,6 +70,10 @@ struct AI_gov_info{
 	struct AI_gov_cur_HW* hardware;
 
 	struct AI_gov_profile* profile;
+
+	struct phase_profile* current_profile;
+
+	struct phase_profiles* phase_profiles;
 
 	phase_state phase;
 	phase_state prev_phase;

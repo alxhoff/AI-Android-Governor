@@ -52,25 +52,31 @@ static ssize_t show_phase_state(
 		struct cpufreq_AI_governor_tunables *tunables, char *buf) {
 	phase_state phase = AI_phases_getBrowsingPhase();
 	switch (phase) {
-	case AI_phase_init:
-		return sprintf(buf, "%s\n", "INIT");
-		break;
-	case AI_phase_response:
-		return sprintf(buf, "%s\n", "CHILLIN");
-		break;
-	case AI_phase_animation:
-		return sprintf(buf, "%s\n", "ANIMATION");
-		break;
-	case AI_phase_idle:
-		return sprintf(buf, "%s\n", "IDLE");
-		break;
-	case AI_phase_load:
-		return sprintf(buf, "%s\n", "LOAD");
-		break;
-	default:
-		return sprintf(buf, "%s\n", "INVALID");
-		break;
-	}
+		case AI_phase_init:
+			return sprintf(buf, "%s\n", "INIT");
+			break;
+		case AI_phase_framerate:
+			return sprintf(buf, "%s\n", "FRAMERATE");
+			break;
+		case AI_phase_priority:
+			return sprintf(buf, "%s\n", "PRIORITY");
+			break;
+		case AI_phase_time:
+			return sprintf(buf, "%s\n", "TIME");
+			break;
+		case AI_phase_powersave:
+			return sprintf(buf, "%s\n", "POWERSAVE");
+			break;
+		case AI_phase_performance:
+				return sprintf(buf, "%s\n", "PERFORMANCE");
+				break;
+		case AI_phase_response:
+				return sprintf(buf, "%s\n", "RESPONSE");
+				break;
+		default:
+			return sprintf(buf, "%s\n", "INVALID");
+			break;
+		}
 }
 
 static ssize_t store_phase_state(
@@ -95,18 +101,24 @@ static ssize_t show_prev_phase(
 	case AI_phase_init:
 		return sprintf(buf, "%s\n", "INIT");
 		break;
+	case AI_phase_framerate:
+		return sprintf(buf, "%s\n", "FRAMERATE");
+		break;
+	case AI_phase_priority:
+		return sprintf(buf, "%s\n", "PRIORITY");
+		break;
+	case AI_phase_time:
+		return sprintf(buf, "%s\n", "TIME");
+		break;
+	case AI_phase_powersave:
+		return sprintf(buf, "%s\n", "POWERSAVE");
+		break;
+	case AI_phase_performance:
+			return sprintf(buf, "%s\n", "PERFORMANCE");
+			break;
 	case AI_phase_response:
-		return sprintf(buf, "%s\n", "RESPONSE");
-		break;
-	case AI_phase_animation:
-		return sprintf(buf, "%s\n", "ANIMATION");
-		break;
-	case AI_phase_idle:
-		return sprintf(buf, "%s\n", "IDLE");
-		break;
-	case AI_phase_load:
-		return sprintf(buf, "%s\n", "LOAD");
-		break;
+			return sprintf(buf, "%s\n", "RESPONSE");
+			break;
 	default:
 		return sprintf(buf, "%s\n", "INVALID");
 		break;

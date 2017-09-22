@@ -159,7 +159,7 @@ int AI_gov_ioctl_init(void)
 		return PTR_ERR(dev_ret);
 	}
 
-	AI_phases_init();
+	//AI_phases_init();
 
 	initialized = 1;
 

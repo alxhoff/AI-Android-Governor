@@ -46,7 +46,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table malloc\n");
 
-	(*in)->profile =
+	(*in)->current_profile =
 			(struct AI_gov_profile*)kmalloc(sizeof(struct AI_gov_profile), GFP_KERNEL);
 
 	if ((*in)->profile == NULL) {
@@ -66,10 +66,6 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	//TEST VALUES
 
-	(*in)->profile->current_frame_rate = 30;
-	(*in)->profile->desired_frame_rate = 60;
-	(*in)->profile->max_freq = 1400000000;
-	(*in)->profile->min_freq = 1000000000;
 
 	(*in)->hardware->big_freq = 1200000000;
 	(*in)->hardware->big_state = true;
