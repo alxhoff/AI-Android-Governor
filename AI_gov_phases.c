@@ -188,25 +188,6 @@ unsigned int run_exit_phase(void* attributes)
 
 init_phase_struct(exit);
 
-unsigned char AI_phases_init_profiles(struct phase_profiles** profiles)
-{
-	(*profiles) = kmalloc(sizeof(struct phase_profiles), GFP_KERNEL);
-
-	attach_phase(init);
-	attach_phase(framerate);
-	attach_phase(priority);
-	attach_phase(time);
-	attach_phase(powersave);
-	attach_phase(performance);
-	attach_phase(response);
-	attach_phase(exit);
-
-
-
-}
-
-
-
 unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 {
 //	profiles->init->phase_name = kmalloc(strlen(PHASE_NAME_INIT) + 1, GFP_KERNEL);
@@ -222,12 +203,39 @@ unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 	set_phase_name_string(exit);
 
 	//framerate
-//	((struct phase_framerate_attributes*)profiles->framerate->profile_attributes)->desired_framerate
-//				= FRAMERATE_DESIRED_FRAMERATE;
 	GET_ATTRIBUTES(framerate)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
-	(*GET_ATTRIBUTES(framerate)->timestamp_history) =
+	//THIS LINE IS PROBABLY WRONG VVVVV
+	GET_ATTRIBUTES(framerate)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
+	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+	//priority
+	GET_ATTRIBUTES(priority)->maximum_priority = MAXIMUM_PRIORITY;
+	GET_ATTRIBUTES(priority)->minimum_priority = MINIMUM_PRIORITY;
+	GET_ATTRIBUTES(priority)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
+
+	//time
+	GET_ATTRIBUTES(time)->alarm_mode = DEFAULT_TIME_MODE;
+
+	//response
+	GET_ATTRIBUTES(response)->user_input_importance = DEFAULT_USER_IMPORTANCE;
+
+}
+
+unsigned char AI_phases_init_profiles(struct phase_profiles** profiles)
+{
+	(*profiles) = kmalloc(sizeof(struct phase_profiles), GFP_KERNEL);
+
+	attach_phase(init);
+	attach_phase(framerate);
+	attach_phase(priority);
+	attach_phase(time);
+	attach_phase(powersave);
+	attach_phase(performance);
+	attach_phase(response);
+	attach_phase(exit);
+
+	AI_phases_set_defaults((*profiles));
 }
 
 unsigned char AI_phases_getBrowsingPhase(void)

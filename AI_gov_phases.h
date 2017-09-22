@@ -90,6 +90,7 @@ struct phase_performance_attributes{
 
 //RESPONSE
 #define phase_name_string_response		"response"
+#define DEFAULT_USER_IMPORTANCE			1
 struct phase_response_attributes{
 	int user_input_importance;
 };
