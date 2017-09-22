@@ -25,10 +25,12 @@ static struct class *cl;
 
 extern struct file_operations AI_governor_fops;
 
-#define GOVERNOR_GET_VARIABLES _IOR('g', 1, AI_governor*)
-#define GOVERNOR_CLR_VARIABLES _IO('g', 2)
-#define GOVERNOR_SET_VARIABLES _IOW('g', 3, AI_governor*)
-#define GOVERNOR_OTHER_FUNCT _IO('g', 4)
+#define GOVERNOR_GET_PROFILE _IOR('g', 1, struct AI_gov_profile*)
+#define GOVERNOR_SET_PROFILE _IOW('g', 2, struct AI_gov_profile*)
+#define GOVERNOR_CLR_PROFILE _IO('g', 3)
+
+#define GOVERNOR_SET_PHASE _IOW('g', 4, phase_state*)
+#define GOVERNOR_GET_PHASE _IOR('g', 5, phase_state*)
 
 int AI_gov_open(struct inode *i, struct file *f);
 int AI_gov_close(struct inode *i, struct file *f);

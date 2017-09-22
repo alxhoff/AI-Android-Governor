@@ -12,6 +12,7 @@
 #include "AI_gov_ioctl.h"
 #include "test_flags.h"
 #include "AI_gov_kernel_write.h"
+#include "AI_gov_types.h"
 
 
 static dev_t dev;
@@ -32,49 +33,58 @@ int AI_gov_close(struct inode *i, struct file *f)
 	return 0;
 }
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
+#else
 long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+#endif
 {
-	struct AI_gov_info g;
 
-//	switch(cmd){
-//	case GOVERNOR_GET_VARIABLES:
-//		memcpy(&g, &AI_gov, sizeof(AI_gov_info));
-//		if(copy_to_user((AI_gov_info *)arg, &g, sizeof(AI_gov_info)))
-//				return -EACCES;
-//		break;
-//	case GOVERNOR_CLR_VARIABLES:{
-//		//check against hardware min freq (TODO)
-//		//default values (TODO)
-//		AI_gov.profile.min_freq = 1000;
-//		AI_gov.profile.max_freq = 1500;
-//		AI_gov.profile.desired_frame_rate = 60;
-//		AI_gov.profile.current_frame_rate = 0;
-//		AI_gov.phase = 0;
-//	}
-//		break;
-//	case GOVERNOR_SET_VARIABLES:{
-//		if(copy_from_user(&g, (AI_gov_info *)arg, sizeof(AI_gov_info)))
-//			return -EACCES;
-//		AI_gov.profile.min_freq = g.profile.min_freq;
-//		AI_gov.profile.max_freq = g.profile.max_freq;
-//		AI_gov.profile.desired_frame_rate = g.profile.desired_frame_rate;
-//		AI_gov.profile.current_frame_rate = g.profile.current_frame_rate;
-//		AI_gov.phase = g.phase;
-//	}
-//		break;
-//	case GOVERNOR_OTHER_FUNCT:{
-//		AI_gov.profile.min_freq = 1;
-//		AI_gov.profile.max_freq = 2;
-//		AI_gov.profile.desired_frame_rate = 3;
-//		AI_gov.profile.current_frame_rate = 4;
-//		AI_gov.phase = 5;
-//	}
-//		break;
-//	default:
-//		return -EINVAL;
-//		break;
-//
-//	}
+	switch(cmd){
+	case GOVERNOR_GET_PROFILE:{
+		struct AI_gov_profile g;
+		memcpy(&g, AI_gov->profile, sizeof(struct AI_gov_profile));
+		if(copy_to_user(
+				(struct AI_gov_profile *)arg, &g, sizeof(struct AI_gov_profile)))
+				return -EACCES;
+	}
+		break;
+	case GOVERNOR_SET_PROFILE:{
+		struct AI_gov_profile g;
+		if(copy_from_user(&g, (struct AI_gov_profile*)arg, sizeof(struct AI_gov_profile)))
+					return -EACCES;
+		memcpy(AI_gov->profile, &g, sizeof(struct AI_gov_profile));
+	}
+		break;
+	case GOVERNOR_CLR_PROFILE:{
+		//TODO set to appropriate values, cpu freq table etc
+		AI_gov->profile->current_frame_rate = 0;
+		AI_gov->profile->desired_frame_rate = 0;
+		AI_gov->profile->max_freq = 0;
+		AI_gov->profile->min_freq = 0;
+	}
+		break;
+	case GOVERNOR_SET_PHASE:{
+		phase_state g;
+		if(copy_from_user(&g, (phase_state*)arg, sizeof(phase_state)))
+			return -EACCES;
+		AI_gov->prev_phase = AI_gov->phase;
+		AI_gov->phase = g;
+	}
+		break;
+	case GOVERNOR_GET_PHASE:{
+		phase_state g;
+		g = AI_gov->phase;
+		if(copy_to_user(
+				(phase_state *)arg, &g, sizeof(phase_state)))
+				return -EACCES;
+	}
+		break;
+	default:
+		return -EINVAL;
+		break;
+
+	}
 	return 0;
 }
 
