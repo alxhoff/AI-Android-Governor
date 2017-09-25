@@ -471,6 +471,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 						"[GOVERNOR] AI_Governor: init failed\n");
 		//init phases
 		rc = AI_phases_init_profiles();
+
 		if(rc)
 			KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_Governor: profile init failed\n");

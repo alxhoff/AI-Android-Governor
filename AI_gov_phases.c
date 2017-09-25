@@ -11,36 +11,37 @@
 #include "AI_gov.h"
 #include "AI_gov_phases.h"
 
-#define init_phase_struct(phase_name)	\
-	static unsigned int phase_##phase_name##_enter(void* attributes){ \
-		return enter_##phase_name##_phase(attributes); \
+#define PHASE_NAME(NAME)	#NAME
+
+#define init_phase_struct(SET_PHASE)	\
+	unsigned int enter_##SET_PHASE##_phase(void* attributes); \
+	unsigned int exit_##SET_PHASE##_phase(void* attributes); \
+	unsigned int run_##SET_PHASE##_phase(void* attributes); \
+	static unsigned int phase_##SET_PHASE##_enter(void* attributes){ \
+		return enter_##SET_PHASE##_phase(attributes); \
 	} \
-	static unsigned int phase_##phase_name##_exit(void* attributes){ \
-		return exit_##phase_name##_phase(attributes); \
+	static unsigned int phase_##SET_PHASE##_exit(void* attributes){ \
+		return exit_##SET_PHASE##_phase(attributes); \
 	} \
-	static unsigned int phase_##phase_name##_run(void* attributes){ \
-		return run_##phase_name##_phase(attributes); \
+	static unsigned int phase_##SET_PHASE##_run(void* attributes){ \
+		return run_##SET_PHASE##_phase(attributes); \
 	} \
-	struct phase_profile* init_##phase_name##_profile(){ \
+	struct phase_profile* init_##SET_PHASE##_profile(){ \
 		struct phase_profile* init =  \
 				kmalloc(sizeof(struct phase_profile), GFP_KERNEL); \
 		init->profile_attributes = \
-				kmalloc(sizeof(struct phase_##phase_name##_attributes), GFP_KERNEL); \
-		init->enter = &phase_##phase_name##_enter; \
-		init->exit = &phase_##phase_name##_exit; \
-		init->run = &phase_##phase_name##_run; \
+				kmalloc(sizeof(struct phase_##SET_PHASE##_attributes), GFP_KERNEL); \
+		init->phase_name = \
+			kmalloc(strlen(phase_name_string_##SET_PHASE ) + 1, GFP_KERNEL); \
+		strcpy(init->phase_name, PHASE_NAME(SET_PHASE) ); \
+		init->enter = &phase_##SET_PHASE##_enter; \
+		init->exit = &phase_##SET_PHASE##_exit; \
+		init->run = &phase_##SET_PHASE##_run; \
 		return init; \
 	}\
 
-
-#define set_phase_name_string(phase_string) \
-		profiles->phase_string->phase_name = \
-			kmalloc(strlen(phase_name_string_##phase_string ) + 1, GFP_KERNEL); \
-		if(profiles->phase_string->phase_name != NULL) \
-			strcpy(profiles->phase_string->phase_name, phase_name_string_##phase_string);
-
-#define GET_ATTRIBUTES(phase) \
-		((struct phase_##phase##_attributes*)profiles->phase->profile_attributes)
+#define GET_ATTRIBUTES(phase, defaults) \
+		((struct phase_##phase##_attributes*)defaults->profile_attributes)
 
 //enum and attribute names
 #define FOR_EACH_PHASE(PHASE)		\
@@ -81,7 +82,33 @@ unsigned int run_init_phase(void* attributes)
 
 }
 
-init_phase_struct(init);
+//init_phase_struct(init);
+//	unsigned int enter_init_phase(void* attributes); \
+//	unsigned int exit_init_phase(void* attributes); \
+//	unsigned int run_init_phase(void* attributes); \
+//
+//	static unsigned int phase_init_enter(void* attributes){ \
+//		return enter_init_phase(attributes); \
+//	} \
+//	static unsigned int phase_init_exit(void* attributes){ \
+//		return exit_init_phase(attributes); \
+//	} \
+//	static unsigned int phase_init_run(void* attributes){ \
+//		return run_init_phase(attributes); \
+//	} \
+////	struct phase_profile* init_init_profile(){ \
+////	struct phase_profile* init =  \
+////			kmalloc(sizeof(struct phase_profile), GFP_KERNEL); \
+////	init->profile_attributes = \
+////			kmalloc(sizeof(struct phase_init_attributes), GFP_KERNEL); \
+////	init->phase_name = \
+////		kmalloc(strlen(phase_name_string_init ) + 1, GFP_KERNEL); \
+////	strcpy(init->phase_name, PHASE_NAME(phase_string) ); \
+////	init->enter = &phase_init_enter; \
+////	init->exit = &phase_init_exit; \
+////	init->run = &phase_init_run; \
+////	return init; \
+
 
 //FRAMERATE
 unsigned int enter_framerate_phase(void* attributes)
@@ -99,7 +126,7 @@ unsigned int run_framerate_phase(void* attributes)
 
 }
 
-init_phase_struct(framerate);
+//init_phase_struct(framerate);
 
 //PRIORITY
 unsigned int enter_priority_phase(void* attributes)
@@ -117,9 +144,9 @@ unsigned int run_priority_phase(void* attributes)
 
 }
 
-init_phase_struct(priority);
+//init_phase_struct(priority);
 
-//TIME
+////TIME
 unsigned int enter_time_phase(void* attributes)
 {
 
@@ -135,9 +162,9 @@ unsigned int run_time_phase(void* attributes)
 
 }
 
-init_phase_struct(time);
+//init_phase_struct(time);
 
-//POWERSAVE
+////POWERSAVE
 unsigned int enter_powersave_phase(void* attributes)
 {
 
@@ -153,9 +180,9 @@ unsigned int run_powersave_phase(void* attributes)
 
 }
 
-init_phase_struct(powersave);
+//init_phase_struct(powersave);
 
-//PRIORITY
+////PRIORITY
 unsigned int enter_performance_phase(void* attributes)
 {
 
@@ -171,9 +198,9 @@ unsigned int run_performance_phase(void* attributes)
 
 }
 
-init_phase_struct(performance);
+//init_phase_struct(performance);
 
-//RESPONSE
+////RESPONSE
 unsigned int enter_response_phase(void* attributes)
 {
 
@@ -189,9 +216,9 @@ unsigned int run_response_phase(void* attributes)
 
 }
 
-init_phase_struct(response);
+//init_phase_struct(response);
 
-//EXIT
+////EXIT
 unsigned int enter_exit_phase(void* attributes)
 {
 
@@ -207,7 +234,9 @@ unsigned int run_exit_phase(void* attributes)
 
 }
 
-init_phase_struct(exit);
+//init_phase_struct(exit);
+
+FOR_EACH_PHASE(init_phase_struct);
 
 enum PHASE_ENUM {
 	FOR_EACH_PHASE(GENERATE_ENUM)
@@ -217,6 +246,21 @@ enum PHASE_ENUM {
 static const char* PHASE_STRINGS[] = {
 	FOR_EACH_PHASE(GENERATE_STRING)
 };
+
+struct phase_profile* AI_phases_get_name(char* name)
+{
+	if(AI_gov->profile_count == 0) return NULL;
+
+	struct phase_profile* head = AI_gov->profile_head;
+
+	while(strcmp(head->phase_name, name)){
+		if(head->next == NULL) return NULL;
+
+		head = head->next;
+	}
+
+	return head;
+}
 
 struct phase_profile* AI_phases_get_last()
 {
@@ -255,40 +299,36 @@ unsigned char AI_phases_add_profile(struct phase_profile* to_add)
 
 
 
-unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
+unsigned char AI_phases_set_defaults()
 {
 //	profiles->init->phase_name = kmalloc(strlen(PHASE_NAME_INIT) + 1, GFP_KERNEL);
 //	if(profiles->init->phase_name != NULL) strcpy(profiles->init->phase_name, PHASE_NAME_INIT);
 
 	//WHAT I WAS DOING. PHASE PROFILES LIST LINKED TO ENUM AND THEN ACESSABLE AS ARRAY/.
 
-	set_phase_name_string(init);
-	set_phase_name_string(framerate);
-	set_phase_name_string(priority);
-	set_phase_name_string(time);
-	set_phase_name_string(powersave);
-	set_phase_name_string(performance);
-	set_phase_name_string(response);
-	set_phase_name_string(exit);
-
+	struct phase_profile* set_defaults;
 	//framerate
-	GET_ATTRIBUTES(framerate)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[framerate]);
+	GET_ATTRIBUTES(framerate, set_defaults)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
 	//THIS LINE IS PROBABLY WRONG VVVVV
-	GET_ATTRIBUTES(framerate)->timestamp_history =
+	GET_ATTRIBUTES(framerate, set_defaults)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
 	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	if(GET_ATTRIBUTES(framerate)->timestamp_history == NULL) return -ENOMEM;
+	if(GET_ATTRIBUTES(framerate, set_defaults)->timestamp_history == NULL) return -ENOMEM;
 
 	//priority
-	GET_ATTRIBUTES(priority)->maximum_priority = MAXIMUM_PRIORITY;
-	GET_ATTRIBUTES(priority)->minimum_priority = MINIMUM_PRIORITY;
-	GET_ATTRIBUTES(priority)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[priority]);
+	GET_ATTRIBUTES(priority, set_defaults)->maximum_priority = MAXIMUM_PRIORITY;
+	GET_ATTRIBUTES(priority, set_defaults)->minimum_priority = MINIMUM_PRIORITY;
+	GET_ATTRIBUTES(priority, set_defaults)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
 
 	//time
-	GET_ATTRIBUTES(time)->alarm_mode = DEFAULT_TIME_MODE;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[time]);
+	GET_ATTRIBUTES(time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
 
 	//response
-	GET_ATTRIBUTES(response)->user_input_importance = DEFAULT_USER_IMPORTANCE;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[response]);
+	GET_ATTRIBUTES(response, set_defaults)->user_input_importance = DEFAULT_USER_IMPORTANCE;
 
 	return 0;
 }
@@ -298,6 +338,8 @@ unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 unsigned char AI_phases_init_profiles()
 {
 	GENERATE_PROFILES
+
+	AI_phases_set_defaults();
 
 	return 0;
 }
