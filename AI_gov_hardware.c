@@ -17,7 +17,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 {
 
 	(*in) =
-			(struct AI_gov_info*)kmalloc(sizeof(struct AI_gov_info), GFP_KERNEL);
+			(struct AI_gov_info*)kcalloc(1, sizeof(struct AI_gov_info), GFP_KERNEL);
 
 	if ((*in) == NULL) {
 		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: governor malloc failed\n");
@@ -27,7 +27,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: governor malloc\n");
 
 	(*in)->hardware =
-			(struct AI_gov_cur_HW*)kmalloc(sizeof(struct AI_gov_cur_HW), GFP_KERNEL);
+			(struct AI_gov_cur_HW*)kcalloc( 1, sizeof(struct AI_gov_cur_HW), GFP_KERNEL);
 
 	if ((*in)->hardware == NULL) {
 		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: hardware malloc failed\n");
@@ -37,7 +37,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: hardware malloc\n");
 
 	(*in)->hardware->freq_table =
-			(struct AI_gov_freq_table* )kmalloc(sizeof(struct AI_gov_freq_table), GFP_KERNEL);
+			(struct AI_gov_freq_table* )kcalloc( 1, sizeof(struct AI_gov_freq_table), GFP_KERNEL);
 
 	if ((*in)->hardware->freq_table == NULL) {
 		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: AI_freq_table malloc failed\n");
@@ -47,7 +47,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table malloc\n");
 
 	(*in)->current_profile =
-			(struct AI_gov_profile*)kmalloc(sizeof(struct AI_gov_profile), GFP_KERNEL);
+			(struct AI_gov_profile*)kcalloc(1, sizeof(struct AI_gov_profile), GFP_KERNEL);
 
 	if ((*in)->profile == NULL) {
 		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc failed\n");

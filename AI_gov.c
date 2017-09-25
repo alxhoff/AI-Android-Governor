@@ -300,7 +300,8 @@ static int AI_touch_nb_callback(void)
 }
 
 static struct notifier_block AI_touch_nb = { .notifier_call =
-		AI_touch_nb_callback, };
+		AI_touch_nb_callback,
+};
 
 
 static struct notifier_block cpufreq_notifier_block = { .notifier_call =
@@ -469,7 +470,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_Governor: init failed\n");
 		//init phases
-		rc = AI_phases_init_profiles(&AI_gov_profiles);
+		rc = AI_phases_init_profiles();
 		if(rc)
 			KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_Governor: profile init failed\n");

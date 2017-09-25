@@ -10,6 +10,21 @@
 
 #include "test_flags.h"
 
+#define AI_GOV_NUM_OF_PHASES
+
+typedef enum{
+	AI_phase_init,
+	AI_phase_framerate,
+	AI_phase_priority,
+	AI_phase_time,
+	AI_phase_powersave,
+	AI_phase_performance,
+	AI_phase_response,
+	AI_phase_end //must be here
+} phase_state;
+
+typedef struct phase_profile phase_profile_t;
+
 struct phase_profile{
 
 	unsigned char phase;
@@ -17,6 +32,8 @@ struct phase_profile{
 	char* phase_name;
 
 	void* profile_attributes;
+
+	phase_profile_t* next;
 
 	struct kobject* kobj;
 
@@ -101,7 +118,7 @@ struct phase_exit_attributes{
 
 };
 
-unsigned char AI_phases_init_profiles(struct phase_profiles** profiles);
+unsigned char AI_phases_init_profiles();
 unsigned char AI_phases_getBrowsingPhase(void);
 unsigned char AI_phases_getPrevBrowsingPhase(void);
 int AI_phases_touch_nb(void);

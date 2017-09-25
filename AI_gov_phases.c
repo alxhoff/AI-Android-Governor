@@ -32,8 +32,6 @@
 		return init; \
 	}\
 
-#define attach_phase(phase_name) \
-		(*profiles)->phase_name = init_##phase_name##_profile();
 
 #define set_phase_name_string(phase_string) \
 		profiles->phase_string->phase_name = \
@@ -43,6 +41,29 @@
 
 #define GET_ATTRIBUTES(phase) \
 		((struct phase_##phase##_attributes*)profiles->phase->profile_attributes)
+
+//enum and attribute names
+#define FOR_EACH_PHASE(PHASE)		\
+				PHASE(init) 		\
+				PHASE(framerate)	\
+				PHASE(priority)		\
+				PHASE(time)			\
+				PHASE(powersave)	\
+				PHASE(performance)	\
+				PHASE(response)
+
+#define GENERATE_ENUM(ENUM) ENUM,
+#define GENERATE_STRING(STRING)	#STRING,
+
+#define INIT_PROFILE(PHASE) \
+		init_profile = init_##PHASE##_profile(); \
+		AI_phases_add_profile(init_profile);
+
+#define GENERATE_PROFILES \
+			struct phase_profile* init_profile; \
+			FOR_EACH_PHASE(INIT_PROFILE)
+
+
 
 //INIT
 unsigned int enter_init_phase(void* attributes)
@@ -188,10 +209,58 @@ unsigned int run_exit_phase(void* attributes)
 
 init_phase_struct(exit);
 
+enum PHASE_ENUM {
+	FOR_EACH_PHASE(GENERATE_ENUM)
+	END
+};
+
+static const char* PHASE_STRINGS[] = {
+	FOR_EACH_PHASE(GENERATE_STRING)
+};
+
+struct phase_profile* AI_phases_get_last()
+{
+	if(AI_gov->profile_count == 0)
+		return NULL;
+
+	struct phase_profile* head = AI_gov->profile_head;
+
+	while(head->next != NULL)
+		head = head->next;
+
+	return head;
+}
+
+unsigned char AI_phases_add_profile(struct phase_profile* to_add)
+{
+	//TODO SHOULD THIS BE DYNAMIC?
+//	struct phase_profile* new_profile =
+//			(struct phase_profile*)kcalloc(1,sizeof(struct phase_profile), GFP_KERNEL);
+//
+//	if(new_profile == NULL) return -ENOMEM;
+//
+//	memcpy(new_profile, to_add, sizeof(struct phase_profile));
+
+	if(AI_gov->profile_count == 0){
+		AI_gov->profile_head = to_add;
+		AI_gov->profile_count++;
+	}else{
+		struct phase_profile* last = AI_phases_get_last();
+		last->next = to_add;
+		AI_gov->profile_count++;
+	}
+
+	return 0;
+}
+
+
+
 unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 {
 //	profiles->init->phase_name = kmalloc(strlen(PHASE_NAME_INIT) + 1, GFP_KERNEL);
 //	if(profiles->init->phase_name != NULL) strcpy(profiles->init->phase_name, PHASE_NAME_INIT);
+
+	//WHAT I WAS DOING. PHASE PROFILES LIST LINKED TO ENUM AND THEN ACESSABLE AS ARRAY/.
 
 	set_phase_name_string(init);
 	set_phase_name_string(framerate);
@@ -224,21 +293,11 @@ unsigned char AI_phases_set_defaults(struct phase_profiles* profiles)
 	return 0;
 }
 
-unsigned char AI_phases_init_profiles(struct phase_profiles** profiles)
+
+
+unsigned char AI_phases_init_profiles()
 {
-	(*profiles) = kmalloc(sizeof(struct phase_profiles), GFP_KERNEL);
-	if((*profiles) == NULL) return -ENOMEM;
-
-	attach_phase(init);
-	attach_phase(framerate);
-	attach_phase(priority);
-	attach_phase(time);
-	attach_phase(powersave);
-	attach_phase(performance);
-	attach_phase(response);
-	attach_phase(exit);
-
-	AI_phases_set_defaults((*profiles));
+	GENERATE_PROFILES
 
 	return 0;
 }
@@ -289,7 +348,3 @@ int AI_phases_touch_nb(void)
 //	return ret;
 }
 
-void AI_phases_init(void)
-{
-	//TODO
-}

@@ -566,9 +566,6 @@ signed int AI_gov_sysfs_init(struct AI_gov_info* AI_gov, struct phase_profiles* 
 {
 	int ret = 0;
 
-//	static struct kobject* AI_gov_kobj;
-//	static struct kobject* AI_gov_profile_kobj;
-
 	//AI_governor parent folder
 	AI_gov->kobj = kobject_create_and_add("AI_governor",
 			cpufreq_global_kobject);

@@ -10,15 +10,7 @@
 
 #include "AI_gov_phases.h"
 
-typedef enum{
-	AI_phase_init,
-	AI_phase_framerate,
-	AI_phase_priority,
-	AI_phase_time,
-	AI_phase_powersave,
-	AI_phase_performance,
-	AI_phase_response
-} phase_state;
+
 
 struct AI_gov_freq_table{
 	uint32_t LITTLE_MIN;
@@ -73,7 +65,8 @@ struct AI_gov_info{
 
 	struct phase_profile* current_profile;
 
-	struct phase_profiles* phase_profiles;
+	uint8_t profile_count;
+	struct phase_profiles* profile_head;
 
 	phase_state phase;
 	phase_state prev_phase;
