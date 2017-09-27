@@ -46,16 +46,16 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table malloc\n");
 
-	(*in)->current_profile =
-			(struct AI_gov_profile*)kcalloc(1, sizeof(struct AI_gov_profile), GFP_KERNEL);
-
-	if ((*in)->profile == NULL) {
-		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc failed\n");
-		return -ENOMEM;
-	}
-
-	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc\n");
-
+//	(*in)->current_profile =
+//			(struct AI_gov_profile*)kcalloc(1, sizeof(struct AI_gov_profile), GFP_KERNEL);
+//
+//	if ((*in)->profile == NULL) {
+//		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc failed\n");
+//		return -ENOMEM;
+//	}
+//
+//	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc\n");
+//
 	(*in)->phase = AI_phase_init;
 
 #ifdef CPU_IS_BIG_LITTLE

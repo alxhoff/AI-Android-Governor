@@ -668,11 +668,11 @@ static ssize_t store_framerate_current_framerate_attribute(char* buf, size_t cou
 	FOR_ALL_SYSFS_GROUPS(INIT_SYSFS_GROUP)
 
 INIT_ALL_SYSFS_GROUPS
-
+//TODO kype
 #define ATTACH_SINGLE_SYSFS_GROUP(PHASE) \
 	sysfs_init = AI_phases_get_name(PHASE_STRINGS[PHASE]); \
 	sysfs_init->sysfs_attr_grp = &AI_governor_attrs_group_##PHASE##_gov_sys; \
-	sysfs_init->kobj = kobject_create_and_add("profile", AI_gov->kobj);	\
+	kobject_init(sysfs_init->kobj, NULL);	\
 	if(!sysfs_init->kobj == NULL) return -ENOMEM;	\
 	ret = sysfs_create_group(sysfs_init->kobj, \
 			&AI_governor_attrs_group_##PHASE##_gov_sys);	\
@@ -688,17 +688,12 @@ signed int AI_gov_sysfs_init_profile()
 	ATTACH_SYSFS_GROUPS
 }
 
+#define GET_CURRENT_PROFILE \
+		AI_phases_get_name(PHASE_STRINGS[AI_gov->phase])
+
+
 signed int AI_gov_sysfs_init()
 {
-
-	//itterate through all profiles and init their attributes and attr group
-	if(AI_gov->profile_head == NULL) return -ENOENT;
-
-	struct phase_profile* head = AI_gov->profile_head;
-
-	while(head->next != NULL){
-
-	}
 
 	int ret = 0;
 
@@ -734,20 +729,29 @@ signed int AI_gov_sysfs_init()
 
 
 	//profile subdirectory
-	AI_gov->profile->kobj = kobject_create_and_add("profile",
-			AI_gov->kobj);
+//	AI_gov->profile->kobj = kobject_create_and_add("profile",
+//			AI_gov->kobj);
+//
+//	if(!AI_gov->profile->kobj) return -ENOMEM;
+//
+//	ret = sysfs_create_group(AI_gov->current_profile->kobj,
+//			&AI_gov_attrs_grp_profile);
+//
+//	if (ret) {
+//		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+//				"Error initializing profile sysfs! Code: %d\n", ret);
+//		kobject_put(AI_gov->profile->kobj);
+//		return ret;
+//	}
 
-	if(!AI_gov->profile->kobj) return -ENOMEM;
+	//get current phase and attach appropriate sysfs entry and link current profile
+	struct phase_profile* current_profile = GET_CURRENT_PROFILE;
 
-	ret = sysfs_create_group(AI_gov->current_profile->kobj,
-			&AI_gov_attrs_grp_profile);
+	AI_gov->current_profile = current_profile;
 
-	if (ret) {
-		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
-				"Error initializing profile sysfs! Code: %d\n", ret);
-		kobject_put(AI_gov->profile->kobj);
-		return ret;
-	}
+	//attach kobject
+
+	kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile");
 
 	return 0;
 }

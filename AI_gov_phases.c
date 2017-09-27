@@ -197,7 +197,6 @@ unsigned int run_exit_phase(void* attributes)
 
 FOR_EACH_PHASE(init_phase_struct);
 
-
 struct phase_profile* AI_phases_get_name(char* name)
 {
 	if(AI_gov->profile_count == 0) return NULL;

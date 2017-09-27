@@ -67,10 +67,10 @@ struct AI_gov_info{
 	struct AI_gov_profile* profile;
 
 	uint8_t profile_count;
-	struct phase_profiles* profile_head;
+	struct phase_profile* profile_head;
 
-	phase_state phase;
-	phase_state prev_phase;
+	enum PHASE_ENUM phase;
+	enum PHASE_ENUM prev_phase;
 
 	int test;
 
