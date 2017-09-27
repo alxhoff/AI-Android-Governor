@@ -61,9 +61,10 @@ struct AI_gov_profile{
 struct AI_gov_info{
 	struct AI_gov_cur_HW* hardware;
 
-	struct AI_gov_profile* profile;
-
 	struct phase_profile* current_profile;
+	struct phase_profile* previous_profile;
+
+	struct AI_gov_profile* profile;
 
 	uint8_t profile_count;
 	struct phase_profiles* profile_head;

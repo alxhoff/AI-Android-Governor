@@ -23,6 +23,28 @@ typedef enum{
 	AI_phase_end //must be here
 } phase_state;
 
+#define FOR_EACH_PHASE(PHASE)		\
+				PHASE(init) 		\
+				PHASE(framerate)	\
+				PHASE(priority)		\
+				PHASE(time)			\
+				PHASE(powersave)	\
+				PHASE(performance)	\
+				PHASE(response)
+
+
+#define GENERATE_ENUM(ENUM) ENUM,
+#define GENERATE_STRING(STRING)	#STRING,
+
+enum PHASE_ENUM {
+	FOR_EACH_PHASE(GENERATE_ENUM)
+	END
+};
+
+static const char* PHASE_STRINGS[] = {
+	FOR_EACH_PHASE(GENERATE_STRING)
+};
+
 typedef struct phase_profile phase_profile_t;
 
 struct phase_profile{
@@ -33,6 +55,10 @@ struct phase_profile{
 
 	void* profile_attributes;
 
+	struct attributes_group* sysfs_attr_grp;
+
+//	struct attribute** sysfs_attrs;
+
 	phase_profile_t* next;
 
 	struct kobject* kobj;
@@ -40,17 +66,6 @@ struct phase_profile{
 	unsigned int (*enter)(void* attributes);
 	unsigned int (*exit)(void* attributes);
 	unsigned int (*run)(void* attributes);
-};
-
-struct phase_profiles{
-	struct phase_profile* init;
-	struct phase_profile* framerate;
-	struct phase_profile* priority;
-	struct phase_profile* time;
-	struct phase_profile* powersave;
-	struct phase_profile* performance;
-	struct phase_profile* response;
-	struct phase_profile* exit;
 };
 
 //INIT
@@ -123,5 +138,6 @@ unsigned char AI_phases_getBrowsingPhase(void);
 unsigned char AI_phases_getPrevBrowsingPhase(void);
 int AI_phases_touch_nb(void);
 void AI_phases_enter(void);
+struct phase_profile* AI_phases_get_name(char* name);
 
 #endif /* AI_GOV_PHASES_H_ */
