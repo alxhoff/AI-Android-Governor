@@ -1,9 +1,9 @@
 /*
- * AI_gov_phases.c
- *
- *  Created on: Sep 7, 2017
- *      Author: alxhoff
- */
+* AI_gov_phases.c
+*
+*  Created on: Sep 7, 2017
+*      Author: alxhoff
+*/
 
 #include <linux/slab.h>
 
@@ -28,9 +28,9 @@
 	} \
 	struct phase_profile* init_##SET_PHASE##_profile(){ \
 		struct phase_profile* init_phase_profile =  \
-				kmalloc(sizeof(struct phase_profile), GFP_KERNEL); \
+				kcalloc(1, sizeof(struct phase_profile), GFP_KERNEL); \
 		init_phase_profile->profile_attributes = \
-				kmalloc(sizeof(struct phase_##SET_PHASE##_attributes), GFP_KERNEL); \
+				kcalloc(1, sizeof(struct phase_##SET_PHASE##_attributes), GFP_KERNEL); \
 		init_phase_profile->phase_name = \
 			kmalloc(strlen(phase_name_string_##SET_PHASE ) + 1, GFP_KERNEL); \
 		strcpy(init_phase_profile->phase_name, PHASE_STRINGS[SET_PHASE] ); \
@@ -54,33 +54,33 @@
 			FOR_EACH_PHASE(INIT_PROFILE)
 
 //INIT
-unsigned int enter_init_phase(void* attributes)
+unsigned int enter_AI_init_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_init_phase(void* attributes)
+unsigned int exit_AI_init_phase(void* attributes)
 {
 
 }
 
-unsigned int run_init_phase(void* attributes)
+unsigned int run_AI_init_phase(void* attributes)
 {
 
 }
 
 //FRAMERATE
-unsigned int enter_framerate_phase(void* attributes)
+unsigned int enter_AI_framerate_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_framerate_phase(void* attributes)
+unsigned int exit_AI_framerate_phase(void* attributes)
 {
 
 }
 
-unsigned int run_framerate_phase(void* attributes)
+unsigned int run_AI_framerate_phase(void* attributes)
 {
 
 }
@@ -88,17 +88,17 @@ unsigned int run_framerate_phase(void* attributes)
 //init_phase_struct(framerate);
 
 //PRIORITY
-unsigned int enter_priority_phase(void* attributes)
+unsigned int enter_AI_priority_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_priority_phase(void* attributes)
+unsigned int exit_AI_priority_phase(void* attributes)
 {
 
 }
 
-unsigned int run_priority_phase(void* attributes)
+unsigned int run_AI_priority_phase(void* attributes)
 {
 
 }
@@ -106,17 +106,17 @@ unsigned int run_priority_phase(void* attributes)
 //init_phase_struct(priority);
 
 ////TIME
-unsigned int enter_time_phase(void* attributes)
+unsigned int enter_AI_time_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_time_phase(void* attributes)
+unsigned int exit_AI_time_phase(void* attributes)
 {
 
 }
 
-unsigned int run_time_phase(void* attributes)
+unsigned int run_AI_time_phase(void* attributes)
 {
 
 }
@@ -124,17 +124,17 @@ unsigned int run_time_phase(void* attributes)
 //init_phase_struct(time);
 
 ////POWERSAVE
-unsigned int enter_powersave_phase(void* attributes)
+unsigned int enter_AI_powersave_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_powersave_phase(void* attributes)
+unsigned int exit_AI_powersave_phase(void* attributes)
 {
 
 }
 
-unsigned int run_powersave_phase(void* attributes)
+unsigned int run_AI_powersave_phase(void* attributes)
 {
 
 }
@@ -142,17 +142,17 @@ unsigned int run_powersave_phase(void* attributes)
 //init_phase_struct(powersave);
 
 ////PRIORITY
-unsigned int enter_performance_phase(void* attributes)
+unsigned int enter_AI_performance_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_performance_phase(void* attributes)
+unsigned int exit_AI_performance_phase(void* attributes)
 {
 
 }
 
-unsigned int run_performance_phase(void* attributes)
+unsigned int run_AI_performance_phase(void* attributes)
 {
 
 }
@@ -160,17 +160,17 @@ unsigned int run_performance_phase(void* attributes)
 //init_phase_struct(performance);
 
 ////RESPONSE
-unsigned int enter_response_phase(void* attributes)
+unsigned int enter_AI_response_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_response_phase(void* attributes)
+unsigned int exit_AI_response_phase(void* attributes)
 {
 
 }
 
-unsigned int run_response_phase(void* attributes)
+unsigned int run_AI_response_phase(void* attributes)
 {
 
 }
@@ -178,17 +178,17 @@ unsigned int run_response_phase(void* attributes)
 //init_phase_struct(response);
 
 ////EXIT
-unsigned int enter_exit_phase(void* attributes)
+unsigned int enter_AI_exit_phase(void* attributes)
 {
 
 }
 
-unsigned int exit_exit_phase(void* attributes)
+unsigned int exit_AI_exit_phase(void* attributes)
 {
 
 }
 
-unsigned int run_exit_phase(void* attributes)
+unsigned int run_AI_exit_phase(void* attributes)
 {
 
 }
@@ -246,26 +246,26 @@ unsigned char AI_phases_set_defaults()
 	struct phase_profile* set_defaults;
 	//framerate
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[framerate]);
-	GET_ATTRIBUTES(framerate, set_defaults)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
+	GET_ATTRIBUTES(AI_framerate, set_defaults)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
 	//THIS LINE IS PROBABLY WRONG VVVVV
-	GET_ATTRIBUTES(framerate, set_defaults)->timestamp_history =
+	GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
 	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	if(GET_ATTRIBUTES(framerate, set_defaults)->timestamp_history == NULL) return -ENOMEM;
+	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history == NULL) return -ENOMEM;
 
 	//priority
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[priority]);
-	GET_ATTRIBUTES(priority, set_defaults)->maximum_priority = MAXIMUM_PRIORITY;
-	GET_ATTRIBUTES(priority, set_defaults)->minimum_priority = MINIMUM_PRIORITY;
-	GET_ATTRIBUTES(priority, set_defaults)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority = MAXIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority = MINIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
 
 	//time
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[time]);
-	GET_ATTRIBUTES(time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
+	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
 
 	//response
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[response]);
-	GET_ATTRIBUTES(response, set_defaults)->user_input_importance = DEFAULT_USER_IMPORTANCE;
+	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance = DEFAULT_USER_IMPORTANCE;
 
 	return 0;
 }

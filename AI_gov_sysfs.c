@@ -580,6 +580,8 @@ signed int AI_gov_sysfs_load_profile()
 	//load
 }
 
+//START MY MACROS
+
 static ssize_t show_init_initialized_attribute(char* buf)
 {
 ;
@@ -648,17 +650,13 @@ static ssize_t store_framerate_current_framerate_attribute(char* buf, size_t cou
 
 
 
-#define SYSFS_framerate_ATTRIBS(ATTRB)\
-			ATTRB(framerate, desired_framerate) \
-			ATTRB(framerate, current_framerate)
+#define SYSFS_AI_framerate_ATTRIBS(ATTRB)\
+			ATTRB(AI_framerate, desired_framerate) \
+			ATTRB(AI_framerate, current_framerate)
 
-//INIT_SYSFS_GROUP(framerate)
+#define SYSFS_AI_init_ATTRIBS(ATTRB) \
+			ATTRB(AI_init, initialized)
 
-#define SYSFS_init_ATTRIBS(ATTRB) \
-			ATTRB(init, initialized)
-
-//INIT_SYSFS_GROUP(init)
-//HERE!!! ADDING MACROS TO CREATE ATTRIBUTES GROUPS AND STUFF
 
 #define FOR_ALL_SYSFS_GROUPS(FUNCT) \
 	FUNCT(init)		\
@@ -668,7 +666,7 @@ static ssize_t store_framerate_current_framerate_attribute(char* buf, size_t cou
 	FOR_ALL_SYSFS_GROUPS(INIT_SYSFS_GROUP)
 
 INIT_ALL_SYSFS_GROUPS
-//TODO kype
+//TODO ktype
 #define ATTACH_SINGLE_SYSFS_GROUP(PHASE) \
 	sysfs_init = AI_phases_get_name(PHASE_STRINGS[PHASE]); \
 	sysfs_init->sysfs_attr_grp = &AI_governor_attrs_group_##PHASE##_gov_sys; \

@@ -1,9 +1,9 @@
 /*
- * AI_gov_phases.h
- *
- *  Created on: Aug 31, 2017
- *      Author: alxhoff
- */
+* AI_gov_phases.h
+*
+*  Created on: Aug 31, 2017
+*      Author: alxhoff
+*/
 
 #ifndef AI_GOV_PHASES_H_
 #define AI_GOV_PHASES_H_
@@ -24,13 +24,13 @@ typedef enum{
 } phase_state;
 
 #define FOR_EACH_PHASE(PHASE)		\
-				PHASE(init) 		\
-				PHASE(framerate)	\
-				PHASE(priority)		\
-				PHASE(time)			\
-				PHASE(powersave)	\
-				PHASE(performance)	\
-				PHASE(response)
+				PHASE(AI_init) 		\
+				PHASE(AI_framerate)	\
+				PHASE(AI_priority)		\
+				PHASE(AI_time)			\
+				PHASE(AI_powersave)	\
+				PHASE(AI_performance)	\
+				PHASE(AI_response)
 
 
 #define GENERATE_ENUM(ENUM) ENUM,
@@ -69,17 +69,17 @@ struct phase_profile{
 };
 
 //INIT
-#define phase_name_string_init			"init"
+// #define phase_name_string_init			"init"
 struct phase_init_attributes{
 	int initialized;
 };
 
 //FRAMERATE
-#define phase_name_string_framerate		"framerate"
+// #define phase_name_string_framerate		"framerate"
 #define FRAMERATE_HISTORY_LENGTH		20
 #define FRAMERATE_DESIRED_FRAMERATE		60
 
-struct phase_framerate_attributes{
+struct phase_AI_framerate_attributes{
 	int desired_framerate;
 	int current_frametate;
 
@@ -87,12 +87,12 @@ struct phase_framerate_attributes{
 };
 
 //PRIORITY
-#define phase_name_string_priority		"priority"
+// #define phase_name_string_priority		"priority"
 #define DEFAULT_PRIORITY_SCALAR			1
 #define MINIMUM_PRIORITY				1
 #define MAXIMUM_PRIORITY				10
 
-struct phase_priority_attributes{
+struct phase_AI_priority_attributes{
 	int priority_scalar;
 
 	int minimum_priority;
@@ -100,10 +100,10 @@ struct phase_priority_attributes{
 };
 
 //TIME
-#define phase_name_string_time			"time"
+// #define phase_name_string_time			"time"
 #define DEFAULT_TIME_MODE				1
 
-struct phase_time_attributes{
+struct phase_AI_time_attributes{
 	long time_till_completion;
 	long time_at_completion;
 
@@ -111,25 +111,25 @@ struct phase_time_attributes{
 };
 
 //POWERSAVE
-#define phase_name_string_powersave		"powersave"
-struct phase_powersave_attributes{
+// #define phase_name_string_powersave		"powersave"
+struct phase_AI_powersave_attributes{
 };
 
 //PERFORMANCE
-#define phase_name_string_performance	"performance"
-struct phase_performance_attributes{
+// #define phase_name_string_performance	"performance"
+struct phase_AI_performance_attributes{
 };
 
 //RESPONSE
-#define phase_name_string_response		"response"
+// #define phase_name_string_response		"response"
 #define DEFAULT_USER_IMPORTANCE			1
-struct phase_response_attributes{
+struct phase_AI_response_attributes{
 	int user_input_importance;
 };
 
 //EXIT
-#define phase_name_string_exit			"exit"
-struct phase_exit_attributes{
+// #define phase_name_string_exit			"exit"
+struct phase_AI_exit_attributes{
 
 };
 
