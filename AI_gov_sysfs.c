@@ -689,6 +689,12 @@ signed int AI_gov_sysfs_init_profile()
 #define GET_CURRENT_PROFILE \
 		AI_phases_get_name(PHASE_STRINGS[AI_gov->phase])
 
+//must get called after the phase has been updated
+signed int AI_gov_sysfs_actualize_phase(){
+	//unregisted old kobj
+	kobject_del(AI_gov->previous_profile->kobj);
+	kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile");
+}
 
 signed int AI_gov_sysfs_init()
 {
