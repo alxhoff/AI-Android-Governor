@@ -46,26 +46,15 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table malloc\n");
 
-//	(*in)->current_profile =
-//			(struct AI_gov_profile*)kcalloc(1, sizeof(struct AI_gov_profile), GFP_KERNEL);
-//
-//	if ((*in)->profile == NULL) {
-//		KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc failed\n");
-//		return -ENOMEM;
-//	}
-//
-//	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: profile malloc\n");
-//
-	(*in)->phase = AI_phase_init;
+	(*in)->phase = AI_init;
+	//this returns null V
+	(*in)->current_profile = AI_phases_get_name(PHASE_STRINGS[AI_init]);
 
 #ifdef CPU_IS_BIG_LITTLE
 	(*in)->hardware->is_big_little = true;
 #else
 	(*in)->hardware->is_big_little = false;
 #endif
-
-	//TEST VALUES
-
 
 	(*in)->hardware->big_freq = 1200000000;
 	(*in)->hardware->big_state = true;

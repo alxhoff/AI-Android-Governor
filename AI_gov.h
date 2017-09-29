@@ -24,8 +24,8 @@
 //	load
 //} phase_state;
 
-extern struct cpufreq_AI_governor_tunables *common_tunables_AI;
-extern struct cpufreq_AI_governor_tunables *tuned_parameters_AI;
+extern struct cpufreq_AI_gov_tunables *common_tunables_AI;
+extern struct cpufreq_AI_gov_tunables *tuned_parameters_AI;
 extern struct AI_gov_info* AI_gov;
 extern struct phase_profiles* AI_gov_profiles;
 

@@ -13,6 +13,7 @@
 #include "test_flags.h"
 #include "AI_gov_kernel_write.h"
 #include "AI_gov_types.h"
+#include "AI_gov_phases.h"
 
 
 static dev_t dev;
@@ -65,18 +66,18 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 	}
 		break;
 	case GOVERNOR_SET_PHASE:{
-		phase_state g;
-		if(copy_from_user(&g, (phase_state*)arg, sizeof(phase_state)))
+		enum PHASE_ENUM g;
+		if(copy_from_user(&g, (enum PHASE_ENUM*)arg, sizeof(enum PHASE_ENUM)))
 			return -EACCES;
 		AI_gov->prev_phase = AI_gov->phase;
 		AI_gov->phase = g;
 	}
 		break;
 	case GOVERNOR_GET_PHASE:{
-		phase_state g;
+		enum PHASE_ENUM g;
 		g = AI_gov->phase;
 		if(copy_to_user(
-				(phase_state *)arg, &g, sizeof(phase_state)))
+				(enum PHASE_ENUM *)arg, &g, sizeof(enum PHASE_ENUM)))
 				return -EACCES;
 	}
 		break;

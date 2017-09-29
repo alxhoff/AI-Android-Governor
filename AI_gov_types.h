@@ -97,7 +97,7 @@ struct cpufreq_AI_governor_cpuinfo {
 
 };
 
-struct cpufreq_AI_governor_tunables {
+struct cpufreq_AI_gov_tunables {
 	int usage_count;
 	spinlock_t target_loads_lock;
 	unsigned int *target_loads;

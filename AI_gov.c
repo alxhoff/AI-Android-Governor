@@ -70,8 +70,8 @@ static struct mutex gov_lock_AI;
 
 static bool gov_started = 0;
 
-struct cpufreq_AI_governor_tunables *common_tunables_AI;
-struct cpufreq_AI_governor_tunables *tuned_parameters_AI = NULL;
+struct cpufreq_AI_gov_tunables *common_tunables_AI;
+struct cpufreq_AI_gov_tunables *tuned_parameters_AI = NULL;
 struct AI_gov_info* AI_gov;
 struct phase_profiles* AI_gov_profiles;
 
@@ -83,7 +83,7 @@ void cpufreq_AI_governor_timer_resched(unsigned long expires)
 	unsigned long flags;
 	// load cpu 0
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, 0);
-	struct cpufreq_AI_governor_tunables *tunables =
+	struct cpufreq_AI_gov_tunables *tunables =
 			pcpu->policy->governor_data;
 
 	// rearm the timer
@@ -111,7 +111,7 @@ void cpufreq_AI_governor_timer_resched(unsigned long expires)
  **/
 void cpufreq_AI_governor_timer(unsigned long data) {
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, data);
-	struct cpufreq_AI_governor_tunables *tunables =
+	struct cpufreq_AI_gov_tunables *tunables =
 			pcpu->policy->governor_data;
 
 	//KERNEL_DEBUG_MSG(" [GOVERNOR] Timer expired\n");
@@ -134,7 +134,7 @@ void cpufreq_AI_governor_timer(unsigned long data) {
  * function.
  */
 static void cpufreq_AI_governor_timer_start(
-	struct cpufreq_AI_governor_tunables *tunables, int cpu) {
+	struct cpufreq_AI_gov_tunables *tunables, int cpu) {
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, cpu);
 	unsigned long expires = jiffies + usecs_to_jiffies(tunables->timer_rate);
 
@@ -177,19 +177,19 @@ void AI_coordinator(void)
 #endif
 
 	switch(AI_gov->phase){
-	case AI_phase_init:
+	case AI_init:
 		break;
-	case AI_phase_framerate:
+	case AI_framerate:
 		break;
-	case AI_phase_priority:
+	case AI_priority:
 		break;
-	case AI_phase_time:
+	case AI_time:
 		break;
-	case AI_phase_powersave:
+	case AI_powersave:
 		break;
-	case AI_phase_performance:
+	case AI_performance:
 			break;
-	case AI_phase_response:
+	case AI_response:
 			break;
 	}
 }
@@ -315,7 +315,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	unsigned int j;
 	struct cpufreq_AI_governor_cpuinfo *pcpu;
 	struct cpufreq_frequency_table *freq_table;
-	struct cpufreq_AI_governor_tunables *tunables =  common_tunables_AI;
+	struct cpufreq_AI_gov_tunables *tunables =  common_tunables_AI;
 	char speedchange_task_name[TASK_NAME_LEN];
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
 

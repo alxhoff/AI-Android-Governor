@@ -12,16 +12,16 @@
 
 #define AI_GOV_NUM_OF_PHASES
 
-typedef enum{
-	AI_phase_init,
-	AI_phase_framerate,
-	AI_phase_priority,
-	AI_phase_time,
-	AI_phase_powersave,
-	AI_phase_performance,
-	AI_phase_response,
-	AI_phase_end //must be here
-} phase_state;
+//typedef enum{
+//	AI_phase_init,
+//	AI_phase_framerate,
+//	AI_phase_priority,
+//	AI_phase_time,
+//	AI_phase_powersave,
+//	AI_phase_performance,
+//	AI_phase_response,
+//	AI_phase_end //must be here
+//} phase_state;
 
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
@@ -34,7 +34,7 @@ typedef enum{
 
 
 #define GENERATE_ENUM(ENUM) ENUM,
-#define GENERATE_STRING(STRING)	AI_phase_##STRING,
+#define GENERATE_STRING(STRING)	#STRING,
 
 enum PHASE_ENUM {
 	FOR_EACH_PHASE(GENERATE_ENUM)
@@ -70,7 +70,7 @@ struct phase_profile{
 
 //INIT
 // #define phase_name_string_init			"init"
-struct phase_init_attributes{
+struct phase_AI_init_attributes{
 	int initialized;
 };
 
@@ -133,7 +133,7 @@ struct phase_AI_exit_attributes{
 
 };
 
-unsigned char AI_phases_init_profiles();
+unsigned char AI_phases_init_profiles(void);
 unsigned char AI_phases_getBrowsingPhase(void);
 unsigned char AI_phases_getPrevBrowsingPhase(void);
 int AI_phases_touch_nb(void);

@@ -10,6 +10,7 @@
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
 #include "AI_gov_phases.h"
+#include "AI_gov_sysfs.h"
 
 #define PHASE_NAME(NAME)	#NAME
 
@@ -32,7 +33,7 @@
 		init_phase_profile->profile_attributes = \
 				kcalloc(1, sizeof(struct phase_##SET_PHASE##_attributes), GFP_KERNEL); \
 		init_phase_profile->phase_name = \
-			kmalloc(strlen(phase_name_string_##SET_PHASE ) + 1, GFP_KERNEL); \
+			kmalloc(strlen(PHASE_STRINGS[SET_PHASE]) + 1, GFP_KERNEL); \
 		strcpy(init_phase_profile->phase_name, PHASE_STRINGS[SET_PHASE] ); \
 		init_phase_profile->enter = &phase_##SET_PHASE##_enter; \
 		init_phase_profile->exit = &phase_##SET_PHASE##_exit; \
@@ -52,6 +53,9 @@
 #define GENERATE_PROFILES \
 			struct phase_profile* init_profile; \
 			FOR_EACH_PHASE(INIT_PROFILE)
+
+
+FOR_EACH_PHASE(init_phase_struct);
 
 //INIT
 unsigned int enter_AI_init_phase(void* attributes)
@@ -195,7 +199,6 @@ unsigned int run_AI_exit_phase(void* attributes)
 
 //init_phase_struct(exit);
 
-FOR_EACH_PHASE(init_phase_struct);
 
 struct phase_profile* AI_phases_get_name(char* name)
 {
@@ -245,36 +248,44 @@ unsigned char AI_phases_set_defaults()
 
 	struct phase_profile* set_defaults;
 	//framerate
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[framerate]);
-	GET_ATTRIBUTES(AI_framerate, set_defaults)->desired_framerate = FRAMERATE_DESIRED_FRAMERATE;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_framerate]);
+	GET_ATTRIBUTES(AI_framerate, set_defaults)->desired_framerate
+			= FRAMERATE_DESIRED_FRAMERATE;
 	//THIS LINE IS PROBABLY WRONG VVVVV
 	GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
 	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history == NULL) return -ENOMEM;
+	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history
+			== NULL) return -ENOMEM;
 
 	//priority
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[priority]);
-	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority = MAXIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority = MINIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar = DEFAULT_PRIORITY_SCALAR;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
+	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
+			= MAXIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
+			= MINIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
+			= DEFAULT_PRIORITY_SCALAR;
 
 	//time
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[time]);
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
 	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
 
 	//response
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[response]);
-	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance = DEFAULT_USER_IMPORTANCE;
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
+	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
+			= DEFAULT_USER_IMPORTANCE;
 
 	return 0;
 }
 
-unsigned char AI_phases_init_profiles()
+unsigned char AI_phases_init_profiles(void)
 {
 	GENERATE_PROFILES
 
 	AI_phases_set_defaults();
+
+	AI_gov_sysfs_init_profiles();
 
 	return 0;
 }

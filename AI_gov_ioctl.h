@@ -29,8 +29,8 @@ extern struct file_operations AI_governor_fops;
 #define GOVERNOR_SET_PROFILE _IOW('g', 2, struct AI_gov_profile*)
 #define GOVERNOR_CLR_PROFILE _IO('g', 3)
 
-#define GOVERNOR_SET_PHASE _IOW('g', 4, phase_state*)
-#define GOVERNOR_GET_PHASE _IOR('g', 5, phase_state*)
+#define GOVERNOR_SET_PHASE _IOW('g', 4, enum PHASE_ENUM*)
+#define GOVERNOR_GET_PHASE _IOR('g', 5, enum PHASE_ENUM*)
 
 int AI_gov_open(struct inode *i, struct file *f);
 int AI_gov_close(struct inode *i, struct file *f);
