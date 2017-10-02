@@ -673,19 +673,50 @@ static struct attribute_group *AI_get_sysfs_attr(void)
 	return &AI_gov_attr_group_gov_sys;
 }
 
-signed int AI_gov_sysfs_load_profile()
+signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 {
 	int ret = 0;
 	//check if there is a currently loaded group of attrs/kobj (profile)
-	if(AI_gov->previous_profile->kobj != NULL)
-		kobject_del(AI_gov->previous_profile->kobj);
 
-	AI_gov->current_profile->kobj = kobject_create_and_add("profile",
-			AI_gov->kobj);
+	if(AI_gov->current_profile != NULL){
+		KERNEL_DEBUG_MSG(
+				"[GOVERNOR] unloading profile: %s \n",
+				AI_gov->current_profile->phase_name);
+		AI_gov->previous_profile = AI_gov->current_profile;
+		kobject_del(AI_gov->current_profile->kobj);
+	} else {
+		KERNEL_DEBUG_MSG(
+				"[GOVERNOR] no profile to unload \n");
+		return -ENOENT;
+	}
 
-	if( !AI_gov->current_profile->kobj ) return -ENOMEM;
+	AI_gov->prev_phase = AI_gov->phase;
+	AI_gov->phase = new_phase;
 
-	//load
+	AI_gov->current_profile = AI_phases_get_name(PHASE_STRINGS[new_phase]);
+
+	if(AI_gov->current_profile == NULL){
+		KERNEL_ERROR_MSG( \
+			"[GOVERNOR] AI_Governor: failed to retrieve new profile:" \
+				" %d \n", new_phase);
+		return -ENOENT;
+	}
+
+	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile")){
+		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+						"Can't add kobj\n");
+		return -ENOENT;
+	}
+
+	ret = sysfs_create_group(AI_gov->current_profile->kobj,
+			AI_gov->current_profile->sysfs_attr_grp);
+
+	if(ret){
+		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+				"Error attaching current sysfs profile's attributes! Code: %d\n", ret);
+		kobject_put(AI_gov->hardware->kobj);
+		return ret;
+	}
 }
 
 void debug_profile(struct phase_profile* profile)
@@ -800,15 +831,13 @@ signed int AI_gov_sysfs_init()
 
 	AI_gov_sysfs_init_profiles();
 
-	AI_gov->phase = AI_framerate;
+	AI_gov->current_profile = GET_CURRENT_PROFILE;
 
-	struct phase_profile* current_profile = GET_CURRENT_PROFILE;
-
-	if(current_profile == NULL){
+	if(AI_gov->current_profile == NULL){
 			KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: Can't add kobj\n");
 	}
 
-	AI_gov->current_profile = current_profile;
+//	AI_gov->current_profile = current_profile;
 
 	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile")){
 			KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
@@ -825,6 +854,8 @@ signed int AI_gov_sysfs_init()
 		kobject_put(AI_gov->hardware->kobj);
 		return ret;
 	}
+
+	AI_gov_sysfs_load_profile(AI_framerate);
 
 	return 0;
 }
