@@ -11,10 +11,6 @@
 #include "AI_gov_phases.h"
 #include "AI_gov_kernel_write.h"
 
-#define FOR_ALL_SYSFS_GROUPS(FUNCT) \
-		FUNCT(AI_init)\
-		FUNCT(AI_framerate)
-
 //ACCESSER FUNCTIONS
 //TOP LEVEL
 static ssize_t show_timer_rate(
@@ -517,26 +513,6 @@ const char *AI_gov_sysfs[] = {
 	"prev_phase"
 };
 
-static struct attribute *AI_gov_attrs_profile[] = {
-		&min_freq_gov_sys.attr,
-		&max_freq_gov_sys.attr,
-		&desired_frame_rate_gov_sys.attr,
-		&current_frame_rate_gov_sys.attr,
-		NULL,
-};
-
-struct attribute_group AI_gov_attrs_grp_profile = {
-		.attrs = AI_gov_attrs_profile,
-		.name = NULL,
-};
-
-const char *AI_gov_sysfs_profile[] = {
-	"min_freq",
-	"max_freq",
-	"desired_frame_rate",
-	"current_frame_rate"
-};
-
 static struct attribute *AI_gov_attrs_hardware[] = {
 		&is_big_little_gov_sys.attr,
 		&cpu_count_gov_sys.attr,
@@ -565,7 +541,7 @@ const char *AI_gov_sysfs_hardware[] = {
 
 
 //START MY MACROS
-
+//INIT
 static ssize_t show_AI_init_initialized_attribute(char* buf)
 {
 
@@ -578,6 +554,7 @@ static ssize_t store_AI_init_initialized_attribute(char* buf, size_t count)
 	return 0;
 }
 
+//FRAMERATE
 static ssize_t show_AI_framerate_desired_framerate_attribute(char* buf)
 {
 
@@ -597,6 +574,132 @@ static ssize_t show_AI_framerate_current_framerate_attribute(char* buf)
 }
 
 static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+//PRIORITY
+static ssize_t show_AI_priority_priority_scalar_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_priority_priority_scalar_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+static ssize_t show_AI_priority_minimum_priority_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_priority_minimum_priority_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+static ssize_t show_AI_priority_maximum_priority_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_priority_maximum_priority_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+//TIME
+
+static ssize_t show_AI_time_time_till_completion_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_time_time_till_completion_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+static ssize_t show_AI_time_time_at_completion_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_time_time_at_completion_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+static ssize_t show_AI_time_alarm_mode_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_time_alarm_mode_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+//POWERSAVE
+static ssize_t show_AI_powersave_initialized_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_powersave_initialized_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+//PERFORMANCE
+static ssize_t show_AI_performance_initialized_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_performance_initialized_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+
+//RESPONSE
+static ssize_t show_AI_response_user_input_importance_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_response_user_input_importance_attribute(char* buf, size_t count)
+{
+
+	return 0;
+}
+//EXIT
+static ssize_t show_AI_exit_deinitialized_attribute(char* buf)
+{
+
+	return 0;
+}
+
+static ssize_t store_AI_exit_deinitialized_attribute(char* buf, size_t count)
 {
 
 	return 0;
@@ -638,15 +741,8 @@ static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t 
 	ATTRB_INIT_ATTR_ARRAY(PROFILE)	\
 	ATTRB_INIT_GRP(PROFILE)
 
-#define SYSFS_AI_framerate_ATTRIBS(ATTRB)\
-			ATTRB(AI_framerate, desired_framerate) \
-			ATTRB(AI_framerate, current_framerate)
-
-#define SYSFS_AI_init_ATTRIBS(ATTRB) \
-			ATTRB(AI_init, initialized)
-
 #define INIT_ALL_SYSFS_GROUPS \
-	FOR_ALL_SYSFS_GROUPS(INIT_SYSFS_GROUP)
+	FOR_EACH_PHASE(INIT_SYSFS_GROUP)
 
 INIT_ALL_SYSFS_GROUPS
 
@@ -666,7 +762,7 @@ INIT_ALL_SYSFS_GROUPS
 	kobject_del(sysfs_init->kobj); \
 
 #define ATTACH_SYSFS_GROUPS \
-	FOR_ALL_SYSFS_GROUPS(ATTACH_SINGLE_SYSFS_GROUP)
+	FOR_EACH_PHASE(ATTACH_SINGLE_SYSFS_GROUP)
 
 static struct attribute_group *AI_get_sysfs_attr(void)
 {
@@ -729,18 +825,9 @@ void debug_profile(struct phase_profile* profile)
 		KERNEL_DEBUG_MSG(
 				"[PROFILE] name: %s \n",profile->phase_name);
 
-//	if(profile->sysfs_attr_grp->name != NULL)
-//		KERNEL_DEBUG_MSG(
-//						"[PROFILE] attrb grp name: %s \n",
-//						profile->sysfs_attr_grp->name);
-
 	if(profile->next != NULL)
 		KERNEL_DEBUG_MSG(
 				"[PROFILE] next profile: %s \n", profile->next->phase_name);
-
-//	if(profile->kobj != NULL && profile->kobj->name != NULL)
-//		KERNEL_DEBUG_MSG(
-//				"[PROFILE]profile kobj name: %s \n", profile->kobj->name);
 }
 
 signed int AI_gov_sysfs_init_profiles()
@@ -750,29 +837,6 @@ signed int AI_gov_sysfs_init_profiles()
 	struct phase_profile* sysfs_init;
 
 	ATTACH_SYSFS_GROUPS
-
-	/*KERNEL_DEBUG_MSG(
-					"[SYSFS] sys init profiles started \n");
-
-	KERNEL_DEBUG_MSG(
-					"[SYSFS] init phase string is: %s \n", PHASE_STRINGS[AI_init]);
-
-	sysfs_init = AI_phases_get_name(PHASE_STRINGS[AI_init]);
-
-	sysfs_init->sysfs_attr_grp = &AI_gov_attrs_group_AI_init_gov_sys;
-
-	sysfs_init->kobj = kobject_create_and_add("profile", AI_gov->kobj);
-	if(sysfs_init->kobj == NULL){
-		KERNEL_DEBUG_MSG(
-				"[SYSFS] AI_Governor: Init sysfs group couldn't init kobject for"
-					"profile %s \n", sysfs_init->phase_name);
-		return -ENOMEM;
-	}
-
-	ret = sysfs_create_group(sysfs_init->kobj,
-			sysfs_init->sysfs_attr_grp);
-
-	kobject_del(sysfs_init->kobj);*/
 
 	return 0;
 }
@@ -855,7 +919,7 @@ signed int AI_gov_sysfs_init()
 		return ret;
 	}
 
-	AI_gov_sysfs_load_profile(AI_framerate);
+	AI_gov_sysfs_load_profile(AI_exit);
 
 	return 0;
 }

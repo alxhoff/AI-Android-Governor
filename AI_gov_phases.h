@@ -12,28 +12,44 @@
 
 #define AI_GOV_NUM_OF_PHASES
 
-//typedef enum{
-//	AI_phase_init,
-//	AI_phase_framerate,
-//	AI_phase_priority,
-//	AI_phase_time,
-//	AI_phase_powersave,
-//	AI_phase_performance,
-//	AI_phase_response,
-//	AI_phase_end //must be here
-//} phase_state;
-
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
 				PHASE(AI_framerate)	\
+				PHASE(AI_priority)	\
+				PHASE(AI_time)	\
+				PHASE(AI_powersave)	\
+				PHASE(AI_performance)	\
+				PHASE(AI_response)	\
+				PHASE(AI_exit)
 
+#define SYSFS_AI_framerate_ATTRIBS(ATTRB)\
+			ATTRB(AI_framerate, desired_framerate) \
+			ATTRB(AI_framerate, current_framerate)
 
-//PHASE(AI_priority)		\
-//				PHASE(AI_time)			\
-//				PHASE(AI_powersave)	\
-//				PHASE(AI_performance)	\
-//				PHASE(AI_response)
+#define SYSFS_AI_init_ATTRIBS(ATTRB) \
+			ATTRB(AI_init, initialized)
 
+#define SYSFS_AI_priority_ATTRIBS(ATTRB) \
+			ATTRB(AI_priority, priority_scalar) \
+			ATTRB(AI_priority, minimum_priority) \
+			ATTRB(AI_priority, maximum_priority)
+
+#define SYSFS_AI_time_ATTRIBS(ATTRB) \
+			ATTRB(AI_time, time_till_completion) \
+			ATTRB(AI_time, time_at_completion) \
+			ATTRB(AI_time, alarm_mode) \
+
+#define SYSFS_AI_powersave_ATTRIBS(ATTRB) \
+			ATTRB(AI_powersave, initialized) \
+
+#define SYSFS_AI_performance_ATTRIBS(ATTRB) \
+			ATTRB(AI_performance, initialized) \
+
+#define SYSFS_AI_response_ATTRIBS(ATTRB) \
+			ATTRB(AI_response, user_input_importance) \
+
+#define SYSFS_AI_exit_ATTRIBS(ATTRB) \
+			ATTRB(AI_exit, deinitialized) \
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING)	#STRING,
@@ -58,8 +74,6 @@ struct phase_profile{
 	void* profile_attributes;
 
 	struct attribute_group* sysfs_attr_grp;
-
-//	struct attribute** sysfs_attrs;
 
 	phase_profile_t* next;
 
@@ -115,11 +129,13 @@ struct phase_AI_time_attributes{
 //POWERSAVE
 // #define phase_name_string_powersave		"powersave"
 struct phase_AI_powersave_attributes{
+	int initialized;
 };
 
 //PERFORMANCE
 // #define phase_name_string_performance	"performance"
 struct phase_AI_performance_attributes{
+	int initialized;
 };
 
 //RESPONSE
@@ -132,7 +148,7 @@ struct phase_AI_response_attributes{
 //EXIT
 // #define phase_name_string_exit			"exit"
 struct phase_AI_exit_attributes{
-
+	int deinitialized;
 };
 
 unsigned char AI_phases_init_profiles(void);
