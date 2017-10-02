@@ -16,72 +16,75 @@
 static ssize_t show_timer_rate(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
-//	return sprintf(buf, "%lu\n", tunables->timer_rate);
+	return sprintf(buf, "%lu\n", tunables->timer_rate);
 }
 
 static ssize_t store_timer_rate(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count)
 {
-//	int ret;
-//	unsigned long val;
-//
-//	ret = strict_strtoul(buf, 0, &val);
-//	if (ret < 0) return ret;
-//	tunables->timer_rate = val;
+	int ret;
+	unsigned long val;
+
+	ret = strict_strtoul(buf, 0, &val);
+	if (ret < 0) return ret;
+	tunables->timer_rate = val;
 	return count;
 }
 
 static ssize_t show_io_is_busy(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
-//	return sprintf(buf, "%u\n", tunables->io_is_busy);
+	return sprintf(buf, "%u\n", tunables->io_is_busy);
 }
 
 static ssize_t store_io_is_busy(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count)
 {
-//	int ret;
-//	unsigned long val;
-//
-//	ret = kstrtoul(buf, 0, &val);
-//	if (ret < 0)
-//		return ret;
-//	tunables->io_is_busy = val;
+	int ret;
+	unsigned long val;
+
+	ret = kstrtoul(buf, 0, &val);
+	if (ret < 0)
+		return ret;
+	tunables->io_is_busy = val;
+
 	return count;
 }
 
 static ssize_t show_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
-//	phase_state phase = AI_phases_getBrowsingPhase();
-//	switch (phase) {
-//		case AI_phase_init:
-//			return sprintf(buf, "%s\n", "INIT");
-//			break;
-//		case AI_phase_framerate:
-//			return sprintf(buf, "%s\n", "FRAMERATE");
-//			break;
-//		case AI_phase_priority:
-//			return sprintf(buf, "%s\n", "PRIORITY");
-//			break;
-//		case AI_phase_time:
-//			return sprintf(buf, "%s\n", "TIME");
-//			break;
-//		case AI_phase_powersave:
-//			return sprintf(buf, "%s\n", "POWERSAVE");
-//			break;
-//		case AI_phase_performance:
-//				return sprintf(buf, "%s\n", "PERFORMANCE");
-//				break;
-//		case AI_phase_response:
-//				return sprintf(buf, "%s\n", "RESPONSE");
-//				break;
-//		default:
+	enum PHASE_ENUM phase = AI_phases_getBrowsingPhase();
+	switch (phase) {
+		case AI_init:
+			return sprintf(buf, "%s\n", "INIT");
+			break;
+		case AI_framerate:
+			return sprintf(buf, "%s\n", "FRAMERATE");
+			break;
+		case AI_priority:
+			return sprintf(buf, "%s\n", "PRIORITY");
+			break;
+		case AI_time:
+			return sprintf(buf, "%s\n", "TIME");
+			break;
+		case AI_powersave:
+			return sprintf(buf, "%s\n", "POWERSAVE");
+			break;
+		case AI_performance:
+			return sprintf(buf, "%s\n", "PERFORMANCE");
+			break;
+		case AI_response:
+			return sprintf(buf, "%s\n", "RESPONSE");
+			break;
+		case AI_exit:
+			return sprintf(buf, "%s\n", "EXIT");
+		default:
 			return sprintf(buf, "%s\n", "INVALID");
-//			break;
-//		}
+			break;
+		}
 }
 
 static ssize_t store_phase_state(
@@ -101,33 +104,35 @@ static ssize_t store_phase_state(
 
 static ssize_t show_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf) {
-//	phase_state phase = AI_phases_getPrevBrowsingPhase();
-//	switch (phase) {
-//	case AI_phase_init:
-//		return sprintf(buf, "%s\n", "INIT");
-//		break;
-//	case AI_phase_framerate:
-//		return sprintf(buf, "%s\n", "FRAMERATE");
-//		break;
-//	case AI_phase_priority:
-//		return sprintf(buf, "%s\n", "PRIORITY");
-//		break;
-//	case AI_phase_time:
-//		return sprintf(buf, "%s\n", "TIME");
-//		break;
-//	case AI_phase_powersave:
-//		return sprintf(buf, "%s\n", "POWERSAVE");
-//		break;
-//	case AI_phase_performance:
-//			return sprintf(buf, "%s\n", "PERFORMANCE");
-//			break;
-//	case AI_phase_response:
-//			return sprintf(buf, "%s\n", "RESPONSE");
-//			break;
-//	default:
-		return sprintf(buf, "%s\n", "INVALID");
-//		break;
-//	}
+	enum PHASE_ENUM phase = AI_phases_getPrevBrowsingPhase();
+	switch (phase) {
+		case AI_init:
+			return sprintf(buf, "%s\n", "INIT");
+			break;
+		case AI_framerate:
+			return sprintf(buf, "%s\n", "FRAMERATE");
+			break;
+		case AI_priority:
+			return sprintf(buf, "%s\n", "PRIORITY");
+			break;
+		case AI_time:
+			return sprintf(buf, "%s\n", "TIME");
+			break;
+		case AI_powersave:
+			return sprintf(buf, "%s\n", "POWERSAVE");
+			break;
+		case AI_performance:
+			return sprintf(buf, "%s\n", "PERFORMANCE");
+			break;
+		case AI_response:
+			return sprintf(buf, "%s\n", "RESPONSE");
+			break;
+		case AI_exit:
+			return sprintf(buf, "%s\n", "EXIT");
+		default:
+			return sprintf(buf, "%s\n", "INVALID");
+			break;
+		}
 }
 
 static ssize_t store_prev_phase(
@@ -142,83 +147,6 @@ static ssize_t store_prev_phase(
 //
 //	if(ret < 0) return ret;
 //
-	return count;
-}
-
-//PROFILE
-
-static ssize_t show_min_freq(
-		struct AI_gov_profile* profile, const char *buf)
-{
-//	return sprintf(buf, "%lu\n", profile->min_freq);
-}
-
-static ssize_t store_min_freq(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
-{
-//	int ret;
-//	unsigned long val;
-//
-//	ret = kstrtoul(buf, 0, &val);
-//	if (ret < 0)
-//		return ret;
-//	profile->min_freq = val;
-	return count;
-}
-
-static ssize_t show_max_freq(
-		struct AI_gov_profile* profile, const char *buf)
-{
-	return sprintf(buf, "%lu\n", profile->max_freq);
-}
-
-static ssize_t store_max_freq(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
-{
-//	int ret;
-//	unsigned long val;
-//
-//	ret = strict_strtoul(buf, 0, &val);
-//	if (ret < 0) return ret;
-//	profile->max_freq = val;
-	return count;
-}
-
-static ssize_t show_desired_frame_rate(
-		struct AI_gov_profile* profile, const char *buf)
-{
-	return sprintf(buf, "%lu\n", profile->desired_frame_rate);
-}
-
-static ssize_t store_desired_frame_rate(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
-{
-//	int ret;
-//	unsigned int val;
-//
-//	ret = kstrtoint(buf, 0, &val);
-//	if (ret < 0)
-//		return ret;
-//	profile->desired_frame_rate = val;
-	return count;
-}
-
-static ssize_t show_current_frame_rate(
-		struct AI_gov_profile* profile, const char *buf)
-{
-//	return sprintf(buf, "%u\n", profile->current_frame_rate);
-}
-
-static ssize_t store_current_frame_rate(
-		struct AI_gov_profile* profile, const char *buf, size_t count)
-{
-//	int ret;
-//	unsigned int val;
-//
-//	ret = kstrtoint(buf, 0, &val);
-//	if (ret < 0)
-//		return ret;
-//	profile->current_frame_rate = val;
 	return count;
 }
 
@@ -373,37 +301,6 @@ show_store_gov_pol_sys(phase_state)
 show_store_gov_pol_sys(prev_phase)
 ;
 
-//profile
-//SHOW
-#define show_gov_sys_profile(file_name)					\
-static ssize_t show_##file_name##_gov_sys				\
-(struct kobject *kobj, struct attribute *attr, char *buf)		\
-{									\
-	return show_##file_name(AI_gov->profile, buf);			\
-}									\
-
-//STORE
-#define store_gov_sys_profile(file_name)					\
-static ssize_t store_##file_name##_gov_sys				\
-(struct kobject *kobj, struct attribute *attr, const char *buf,		\
-	size_t count)							\
-{									\
-	return store_##file_name(AI_gov->profile, buf, count);		\
-}									\
-
-#define show_store_gov_profile(file_name)				\
-show_gov_sys_profile(file_name);						\
-store_gov_sys_profile(file_name)
-
-show_store_gov_profile(min_freq)
-;
-show_store_gov_profile(max_freq)
-;
-show_store_gov_profile(desired_frame_rate)
-;
-show_store_gov_profile(current_frame_rate)
-;
-
 //hardware
 #define show_gov_sys_hardware(file_name)					\
 static ssize_t show_##file_name##_gov_sys				\
@@ -448,27 +345,6 @@ gov_sys_pol_attr_rw(phase_state)
 ;
 //new
 gov_sys_pol_attr_rw(prev_phase)
-;
-
-//profile
-#define show_store_gov_pol_sys(file_name)				\
-show_gov_pol_sys(file_name);						\
-store_gov_pol_sys(file_name)
-
-#define gov_sys_attr_rw_profile(_name)						\
-static struct global_attr _name##_gov_sys =				\
-__ATTR(_name, 0644, show_##_name##_gov_sys, store_##_name##_gov_sys)
-
-#define gov_sys_pol_attr_rw_profile(_name)					\
-gov_sys_attr_rw_profile(_name);
-
-gov_sys_pol_attr_rw_profile(min_freq)
-;
-gov_sys_pol_attr_rw_profile(max_freq)
-;
-gov_sys_pol_attr_rw_profile(desired_frame_rate)
-;
-gov_sys_pol_attr_rw_profile(current_frame_rate)
 ;
 
 //hardware
@@ -539,8 +415,10 @@ const char *AI_gov_sysfs_hardware[] = {
 #endif
 };
 
-
 //START MY MACROS
+
+//HERE - ADDING STORE AND SHOW FUNCTIONS
+
 //INIT
 static ssize_t show_AI_init_initialized_attribute(char* buf)
 {
