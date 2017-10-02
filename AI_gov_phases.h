@@ -26,11 +26,13 @@
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
 				PHASE(AI_framerate)	\
-				PHASE(AI_priority)		\
-				PHASE(AI_time)			\
-				PHASE(AI_powersave)	\
-				PHASE(AI_performance)	\
-				PHASE(AI_response)
+
+
+//PHASE(AI_priority)		\
+//				PHASE(AI_time)			\
+//				PHASE(AI_powersave)	\
+//				PHASE(AI_performance)	\
+//				PHASE(AI_response)
 
 
 #define GENERATE_ENUM(ENUM) ENUM,
@@ -49,13 +51,13 @@ typedef struct phase_profile phase_profile_t;
 
 struct phase_profile{
 
-	unsigned char phase;
+	enum PHASE_ENUM phase;
 
 	char* phase_name;
 
 	void* profile_attributes;
 
-	struct attributes_group* sysfs_attr_grp;
+	struct attribute_group* sysfs_attr_grp;
 
 //	struct attribute** sysfs_attrs;
 

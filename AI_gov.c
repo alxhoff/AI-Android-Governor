@@ -181,16 +181,16 @@ void AI_coordinator(void)
 		break;
 	case AI_framerate:
 		break;
-	case AI_priority:
-		break;
-	case AI_time:
-		break;
-	case AI_powersave:
-		break;
-	case AI_performance:
-			break;
-	case AI_response:
-			break;
+//	case AI_priority:
+//		break;
+//	case AI_time:
+//		break;
+//	case AI_powersave:
+//		break;
+//	case AI_performance:
+//			break;
+//	case AI_response:
+//			break;
 	}
 }
 
@@ -463,7 +463,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	case CPUFREQ_GOV_LIMITS:
 		break;
 	case CPUFREQ_GOV_POLICY_INIT:
-
+//		AI_gov_attrs_group_AI_init_gov_sys
 		//AI_GOV
 		rc = AI_gov_init(&AI_gov);
 		if(rc)

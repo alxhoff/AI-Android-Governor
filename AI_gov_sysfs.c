@@ -11,6 +11,8 @@
 #include "AI_gov_phases.h"
 #include "AI_gov_kernel_write.h"
 
+
+
 //ACCESSER FUNCTIONS
 //TOP LEVEL
 static ssize_t show_timer_rate(
@@ -560,30 +562,6 @@ const char *AI_gov_sysfs_hardware[] = {
 };
 
 
-static struct attribute_group *AI_get_sysfs_attr(void)
-{
-	return &AI_gov_attr_group_gov_sys;
-}
-
-signed int AI_gov_sysfs_load_profile()
-{
-	int ret = 0;
-	//check if there is a currently loaded group of attrs/kobj (profile)
-	if(AI_gov->previous_profile->kobj != NULL)
-		kobject_del(AI_gov->previous_profile->kobj);
-
-	AI_gov->current_profile->kobj = kobject_create_and_add("profile",
-			AI_gov->kobj);
-
-	if( !AI_gov->current_profile->kobj ) return -ENOMEM;
-
-
-
-
-
-	//load
-}
-
 //START MY MACROS
 
 static ssize_t show_AI_init_initialized_attribute(char* buf)
@@ -623,22 +601,23 @@ static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t 
 }
 
 #define ATTRB_INIT_ATTRS(PROFILE, ATTRS) \
-	static ssize_t show_##ATTRS##_gov_sys									\
+	static ssize_t show_##PROFILE##_##ATTRS##_gov_sys									\
 		(struct kobject *kobj, struct attribute *attr, char *buf)			\
 			{																\
 				return show_##PROFILE##_##ATTRS##_attribute(buf);						\
 			}																\
-	static ssize_t store_##ATTRS##_gov_sys								\
+	static ssize_t store_##PROFILE##_##ATTRS##_gov_sys								\
 		(struct kobject *kobj, struct attribute *attr, const char *buf,		\
 				size_t count)												\
 			{																\
 				return store_##PROFILE##_##ATTRS##_attribute(buf, count);				\
 			}																\
-	static struct global_attr ATTRS##_gov_sys =								\
-		__ATTR(_name, 0644, show_##ATTRS##_gov_sys, store_##ATTRS##_gov_sys);
+	static struct global_attr PROFILE##_##ATTRS##_gov_sys =								\
+		__ATTR(ATTRS, 0644, show_##PROFILE##_##ATTRS##_gov_sys,				\
+				store_##PROFILE##_##ATTRS##_gov_sys);
 
 #define ATTRB_INIT_ATTR_ARRAY_ENTRY(PROFILE, ATTRS)									\
-		&ATTRS##_gov_sys.attr,
+		&PROFILE##_##ATTRS##_gov_sys.attr,
 
 #define ATTRB_INIT_ATTR_ARRAY(PROFILE)									\
 		static struct attribute *AI_gov_attrs_##PROFILE##_gov_sys[] = {	\
@@ -649,16 +628,13 @@ static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t 
 #define ATTRB_INIT_GRP(PROFILE)			\
 		static struct attribute_group AI_gov_attrs_group_##PROFILE##_gov_sys = { \
 			.attrs = AI_gov_attrs_##PROFILE##_gov_sys,					\
-			.name = NULL, 															\
+			.name = NULL, 								\
 			};
-
 
 #define INIT_SYSFS_GROUP(PROFILE)		\
 	SYSFS_##PROFILE##_ATTRIBS(ATTRB_INIT_ATTRS)			\
 	ATTRB_INIT_ATTR_ARRAY(PROFILE)	\
 	ATTRB_INIT_GRP(PROFILE)
-
-
 
 #define SYSFS_AI_framerate_ATTRIBS(ATTRB)\
 			ATTRB(AI_framerate, desired_framerate) \
@@ -667,39 +643,117 @@ static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t 
 #define SYSFS_AI_init_ATTRIBS(ATTRB) \
 			ATTRB(AI_init, initialized)
 
-
 #define FOR_ALL_SYSFS_GROUPS(FUNCT) \
-	FUNCT(AI_init)		\
-	FUNCT(AI_framerate) \
+		FUNCT(AI_init)\
+		FUNCT(AI_framerate)
 
 #define INIT_ALL_SYSFS_GROUPS \
 	FOR_ALL_SYSFS_GROUPS(INIT_SYSFS_GROUP)
 
 INIT_ALL_SYSFS_GROUPS
 
-
 //TODO ktype
 #define ATTACH_SINGLE_SYSFS_GROUP(PHASE) \
 	sysfs_init = AI_phases_get_name(PHASE_STRINGS[PHASE]); \
 	if(sysfs_init == NULL) \
-	KERNEL_ERROR_MSG( \
-	"[IOCTL] AI_Governor: Init sysfs group could not get profile "); \
-	return -1; \
+		KERNEL_ERROR_MSG( \
+				"[SYSFS] AI_Governor: Init sysfs group could not get profile \n"); \
+		return -1; \
 	sysfs_init->sysfs_attr_grp = &AI_gov_attrs_group_##PHASE##_gov_sys; \
-	kobject_init(sysfs_init->kobj, NULL);	\
-	if(!sysfs_init->kobj == NULL) return -ENOMEM;	\
+	/*kobject_init(sysfs_init->kobj, NULL);	\*/ \
+	sysfs_init->kobj = kobject_create_and_add("profile", AI_gov->kobj); \
+	kobject_del(sysfs_init); \
+	if(!sysfs_init->kobj == NULL){ \
+		KERNEL_ERROR_MSG( \
+				"[SYSFS] AI_Governor: Init sysfs group couldn't init kobject for" \
+					"profile %s \n", sysfs_init->phase_name); \
+		return -ENOMEM;	\
+	}\
+	KERNEL_ERROR_MSG( \
+					"[SYSFS] AI_Governor: zzzz Init sysfs group could init kobject for" \
+						"profile %s \n", sysfs_init->phase_name); \
 	ret = sysfs_create_group(sysfs_init->kobj, \
 			&AI_gov_attrs_group_##PHASE##_gov_sys);	\
 	if(ret) return ret;
 
 //#define ATTACH_SYSFS_GROUPS \
 
+static struct attribute_group *AI_get_sysfs_attr(void)
+{
+	return &AI_gov_attr_group_gov_sys;
+}
+
+signed int AI_gov_sysfs_load_profile()
+{
+	int ret = 0;
+	//check if there is a currently loaded group of attrs/kobj (profile)
+	if(AI_gov->previous_profile->kobj != NULL)
+		kobject_del(AI_gov->previous_profile->kobj);
+
+	AI_gov->current_profile->kobj = kobject_create_and_add("profile",
+			AI_gov->kobj);
+
+	if( !AI_gov->current_profile->kobj ) return -ENOMEM;
+
+	//load
+}
+
+void debug_profile(struct phase_profile* profile)
+{
+	if(profile->phase != NULL)
+		KERNEL_DEBUG_MSG(
+				"[PROFILE] phase: %s \n", PHASE_STRINGS[profile->phase]);
+
+	if(profile->phase_name != NULL)
+		KERNEL_DEBUG_MSG(
+				"[PROFILE] name: %s \n",profile->phase_name);
+
+//	if(profile->sysfs_attr_grp->name != NULL)
+//		KERNEL_DEBUG_MSG(
+//						"[PROFILE] attrb grp name: %s \n",
+//						profile->sysfs_attr_grp->name);
+
+	if(profile->next != NULL)
+		KERNEL_DEBUG_MSG(
+				"[PROFILE] next profile: %s \n", profile->next->phase_name);
+
+//	if(profile->kobj != NULL && profile->kobj->name != NULL)
+//		KERNEL_DEBUG_MSG(
+//				"[PROFILE]profile kobj name: %s \n", profile->kobj->name);
+}
+
 
 signed int AI_gov_sysfs_init_profiles()
 {
-	int ret = 0;	\
-	struct phase_profile* sysfs_init; \
-	FOR_ALL_SYSFS_GROUPS(ATTACH_SINGLE_SYSFS_GROUP)
+
+	int ret = 0;
+	struct phase_profile* sysfs_init;
+	KERNEL_DEBUG_MSG(
+					"[SYSFS] sys init profiles started \n");
+
+	KERNEL_DEBUG_MSG(
+					"[SYSFS] init phase string is: %s \n", PHASE_STRINGS[AI_init]);
+
+	sysfs_init = AI_phases_get_name(PHASE_STRINGS[AI_init]);
+
+	sysfs_init->sysfs_attr_grp = &AI_gov_attrs_group_AI_init_gov_sys;
+
+	sysfs_init->kobj = kobject_create_and_add("profile", AI_gov->kobj);
+	if(sysfs_init->kobj == NULL){
+		KERNEL_DEBUG_MSG(
+				"[SYSFS] AI_Governor: Init sysfs group couldn't init kobject for"
+					"profile %s \n", sysfs_init->phase_name);
+		return -ENOMEM;
+	}
+
+	ret = sysfs_create_group(sysfs_init->kobj,
+			sysfs_init->sysfs_attr_grp);
+
+	kobject_del(sysfs_init->kobj);
+
+//	kobject_add(sysfs_init->kobj, AI_gov->kobj, "profile");
+//	ret = sysfs_create_group(sysfs_init->kobj,
+//				sysfs_init->sysfs_attr_grp);
 
 	return 0;
 }
@@ -727,6 +781,9 @@ signed int AI_gov_sysfs_init()
 	AI_gov->kobj = kobject_create_and_add("AI_governor",
 			cpufreq_global_kobject);
 
+	KERNEL_DEBUG_MSG(
+					"[SYSFS] HERE2 \n");
+
 	if(!AI_gov->kobj) return -ENOMEM;
 
 	ret = sysfs_create_group(AI_gov->kobj, AI_get_sysfs_attr());
@@ -753,18 +810,31 @@ signed int AI_gov_sysfs_init()
 		return ret;
 	}
 
-	//get current phase and attach appropriate sysfs entry and link current profile
+	AI_gov_sysfs_init_profiles();
+
 	struct phase_profile* current_profile = GET_CURRENT_PROFILE;
+
+	if(current_profile == NULL){
+			KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: Can't add kobj\n");
+	}
 
 	AI_gov->current_profile = current_profile;
 
-	//attach kobject
-
-	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile"))
-		while(1){
+	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile")){
 			KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
 							"Can't add kobj\n");
-		}
+			return -ENOENT;
+	}
+
+	ret = sysfs_create_group(AI_gov->current_profile->kobj,
+			AI_gov->current_profile->sysfs_attr_grp);
+
+	if(ret){
+		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+				"Error attaching current sysfs profile's attributes! Code: %d\n", ret);
+		kobject_put(AI_gov->hardware->kobj);
+		return ret;
+	}
 
 	return 0;
 }

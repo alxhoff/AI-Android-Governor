@@ -11,6 +11,7 @@
 #include "AI_gov.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_sysfs.h"
+#include "AI_gov_kernel_write.h"
 
 #define PHASE_NAME(NAME)	#NAME
 
@@ -202,15 +203,28 @@ unsigned int run_AI_exit_phase(void* attributes)
 
 struct phase_profile* AI_phases_get_name(char* name)
 {
-	if(AI_gov->profile_count == 0) return NULL;
+	if(AI_gov->profile_count == 0){
+		KERNEL_ERROR_MSG(
+				"[GOVERNOR] AI_Governor: head returned as NULL,"
+				"no profile count\n");
+		return NULL;
+	}
 
 	struct phase_profile* head = AI_gov->profile_head;
 
 	while(strcmp(head->phase_name, name)){
-		if(head->next == NULL) return NULL;
+		if(head->next == NULL){
+			KERNEL_ERROR_MSG(
+					"[GOVERNOR] AI_Governor: head returned as NULL, "
+					"no head set\n");
+			return NULL;
+		}
 
 		head = head->next;
 	}
+
+	KERNEL_ERROR_MSG(
+		"[GOVERNOR] AI_Governor: head returned as %s\n", head->phase_name);
 
 	return head;
 }
@@ -258,23 +272,23 @@ unsigned char AI_phases_set_defaults()
 	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history
 			== NULL) return -ENOMEM;
 
-	//priority
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
-	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
-			= MAXIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
-			= MINIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
-			= DEFAULT_PRIORITY_SCALAR;
-
-	//time
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
-	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
-
-	//response
-	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
-	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
-			= DEFAULT_USER_IMPORTANCE;
+//	//priority
+//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
+//	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
+//			= MAXIMUM_PRIORITY;
+//	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
+//			= MINIMUM_PRIORITY;
+//	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
+//			= DEFAULT_PRIORITY_SCALAR;
+//
+//	//time
+//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
+//	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
+//
+//	//response
+//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
+//	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
+//			= DEFAULT_USER_IMPORTANCE;
 
 	return 0;
 }
@@ -284,8 +298,6 @@ unsigned char AI_phases_init_profiles(void)
 	GENERATE_PROFILES
 
 	AI_phases_set_defaults();
-
-	AI_gov_sysfs_init_profiles();
 
 	return 0;
 }
