@@ -6,6 +6,7 @@
  */
 
 #include <linux/slab.h>
+#include <linux/string.h>
 
 #include "AI_gov_sysfs.h"
 #include "AI_gov_phases.h"
@@ -62,28 +63,28 @@ ssize_t show_phase_state(
 //	enum PHASE_ENUM phase = AI_phases_getBrowsingPhase();
 	switch (AI_gov->phase) {
 		case AI_init:
-			return sprintf(buf, "%s\n", "INIT");
+			return sprintf(buf, "%s\n", "AI_init");
 			break;
 		case AI_framerate:
-			return sprintf(buf, "%s\n", "FRAMERATE");
+			return sprintf(buf, "%s\n", "AI_framerate");
 			break;
 		case AI_priority:
-			return sprintf(buf, "%s\n", "PRIORITY");
+			return sprintf(buf, "%s\n", "AI_priority");
 			break;
 		case AI_time:
-			return sprintf(buf, "%s\n", "TIME");
+			return sprintf(buf, "%s\n", "AI_time");
 			break;
 		case AI_powersave:
-			return sprintf(buf, "%s\n", "POWERSAVE");
+			return sprintf(buf, "%s\n", "AI_powersave");
 			break;
 		case AI_performance:
-			return sprintf(buf, "%s\n", "PERFORMANCE");
+			return sprintf(buf, "%s\n", "AI_performance");
 			break;
 		case AI_response:
-			return sprintf(buf, "%s\n", "RESPONSE");
+			return sprintf(buf, "%s\n", "AI_response");
 			break;
 		case AI_exit:
-			return sprintf(buf, "%s\n", "EXIT");
+			return sprintf(buf, "%s\n", "AI_exit");
 		default:
 			return sprintf(buf, "%s\n", "INVALID");
 			break;
@@ -93,45 +94,79 @@ ssize_t show_phase_state(
 ssize_t store_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables,const char *buf,
 		size_t count) {
-//
-//	int ret;
-//
-//	int phase = (int)AI_gov->phase;
-//
-//	ret= kstrtoint(buf, 10, &phase);
-//
-//	if(ret < 0) return ret;
-//
+
+	if(strcmp(buf, "AI_init\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_init);
+	}else if(strcmp(buf, "AI_framerate\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_framerate);
+	}else if(strcmp(buf, "AI_priority\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_priority);
+	}else if(strcmp(buf, "AI_time\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_time);
+	}else if(strcmp(buf, "AI_powersave\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_powersave);
+	}else if(strcmp(buf, "AI_performance\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_performance);
+	}else if(strcmp(buf, "AI_response\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_response);
+	}else if(strcmp(buf, "AI_exit\n") == 0){
+		KERNEL_ERROR_MSG(
+						"[GOVERNOR] STORING STATE: %s \n",
+								buf);
+		AI_gov_sysfs_load_profile(AI_exit);
+	}
+
 	return count;
 }
 
 ssize_t show_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf) {
-	enum PHASE_ENUM phase = AI_phases_getPrevBrowsingPhase();
-	switch (phase) {
-		case AI_init:
-			return sprintf(buf, "%s\n", "INIT");
+//	enum PHASE_ENUM phase = AI_phases_getPrevBrowsingPhase();
+	switch (AI_gov->prev_phase) {
+	case AI_init:
+			return sprintf(buf, "%s\n", "AI_init");
 			break;
 		case AI_framerate:
-			return sprintf(buf, "%s\n", "FRAMERATE");
+			return sprintf(buf, "%s\n", "AI_framerate");
 			break;
 		case AI_priority:
-			return sprintf(buf, "%s\n", "PRIORITY");
+			return sprintf(buf, "%s\n", "AI_priority");
 			break;
 		case AI_time:
-			return sprintf(buf, "%s\n", "TIME");
+			return sprintf(buf, "%s\n", "AI_time");
 			break;
 		case AI_powersave:
-			return sprintf(buf, "%s\n", "POWERSAVE");
+			return sprintf(buf, "%s\n", "AI_powersave");
 			break;
 		case AI_performance:
-			return sprintf(buf, "%s\n", "PERFORMANCE");
+			return sprintf(buf, "%s\n", "AI_performance");
 			break;
 		case AI_response:
-			return sprintf(buf, "%s\n", "RESPONSE");
+			return sprintf(buf, "%s\n", "AI_response");
 			break;
 		case AI_exit:
-			return sprintf(buf, "%s\n", "EXIT");
+			return sprintf(buf, "%s\n", "AI_exit");
 		default:
 			return sprintf(buf, "%s\n", "INVALID");
 			break;
@@ -433,10 +468,11 @@ static ssize_t show_AI_framerate_desired_framerate_attribute(char* buf)
 //	struct phase_AI_framerate_attributes* test_struct = AI_gov->current_profile->profile_attributes;
 //
 //	test_struct->desired_framerate = 50;
+	AI_gov_sysfs_load_profile(AI_framerate);
 
 	KERNEL_DEBUG_MSG(
-					"[GOVERNOR] value: %s \n",
-					AI_gov->current_profile->phase_name);
+					"[GOVERNOR] value: %d \n",
+					AI_gov->phase);
 
 	return sprintf(buf, "%d\n", test);
 //		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate);
@@ -712,6 +748,13 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 	int ret = 0;
 	//check if there is a currently loaded group of attrs/kobj (profile)
 
+	AI_gov->prev_phase = AI_gov->phase;
+	AI_gov->phase = new_phase;
+
+	KERNEL_ERROR_MSG(
+					"[GOVERNOR] loading profile: %d \n",
+					AI_gov->phase);
+
 	if(AI_gov->current_profile != NULL){
 		KERNEL_DEBUG_MSG(
 				"[GOVERNOR] unloading profile: %s \n",
@@ -749,8 +792,9 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 		return ret;
 	}
 
-	AI_gov->prev_phase = AI_gov->phase;
-	AI_gov->phase = new_phase;
+	KERNEL_DEBUG_MSG(
+		"[GOVERNOR] profile loaded: %s \n",
+		AI_gov->current_profile->phase_name);
 
 	return 0;
 }
@@ -785,9 +829,12 @@ signed int AI_gov_sysfs_init_profiles(void)
 signed int AI_gov_sysfs_actualize_phase(void){
 	//unregisted old kobj
 
+	int ret = 0;
 	//TODO checks
 	kobject_del(AI_gov->previous_profile->kobj);
-	kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile");
+	ret = kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile");
+
+	if(ret) return ret;
 
 	return 0;
 }
@@ -838,8 +885,6 @@ signed int AI_gov_sysfs_init(void)
 			KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: Can't add kobj\n");
 	}
 
-//	AI_gov->current_profile = current_profile;
-
 	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile")){
 			KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
 							"Can't add kobj\n");
@@ -855,8 +900,6 @@ signed int AI_gov_sysfs_init(void)
 		kobject_put(AI_gov->hardware->kobj);
 		return ret;
 	}
-
-	AI_gov_sysfs_load_profile(AI_framerate);
 
 	return 0;
 }

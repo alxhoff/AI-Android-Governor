@@ -43,8 +43,6 @@
 	}\
 
 
-//enum and attribute names
-
 #define INIT_PROFILE(PHASE) \
 		init_profile = init_##PHASE##_profile(); \
 		AI_phases_add_profile(init_profile);
@@ -231,12 +229,12 @@ struct phase_profile* AI_phases_get_name(char* name)
 	return head;
 }
 
-struct phase_profile* AI_phases_get_last()
+struct phase_profile* AI_phases_get_last(void)
 {
+	struct phase_profile* head = AI_gov->profile_head;
+
 	if(AI_gov->profile_count == 0)
 		return NULL;
-
-	struct phase_profile* head = AI_gov->profile_head;
 
 	while(head->next != NULL)
 		head = head->next;
@@ -259,7 +257,7 @@ unsigned char AI_phases_add_profile(struct phase_profile* to_add)
 	return 0;
 }
 
-unsigned char AI_phases_set_defaults()
+unsigned char AI_phases_set_defaults(void)
 {
 
 	struct phase_profile* set_defaults;

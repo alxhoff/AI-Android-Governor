@@ -46,7 +46,7 @@ signed int AI_gov_init(struct AI_gov_info** in)
 
 	KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table malloc\n");
 
-	(*in)->phase = AI_init;
+//	(*in)->phase = AI_init;
 	//this returns null V
 	//(*in)->current_profile = AI_phases_get_name(PHASE_STRINGS[AI_init]);
 
