@@ -56,7 +56,7 @@ static ssize_t store_io_is_busy(
 	return count;
 }
 
-static ssize_t show_phase_state(
+ssize_t show_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
 //	enum PHASE_ENUM phase = AI_phases_getBrowsingPhase();
@@ -90,7 +90,7 @@ static ssize_t show_phase_state(
 		}
 }
 
-static ssize_t store_phase_state(
+ssize_t store_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables,const char *buf,
 		size_t count) {
 //
@@ -105,7 +105,7 @@ static ssize_t store_phase_state(
 	return count;
 }
 
-static ssize_t show_prev_phase(
+ssize_t show_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf) {
 	enum PHASE_ENUM phase = AI_phases_getPrevBrowsingPhase();
 	switch (phase) {
@@ -138,7 +138,7 @@ static ssize_t show_prev_phase(
 		}
 }
 
-static ssize_t store_prev_phase(
+ssize_t store_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count) {
 
@@ -154,7 +154,6 @@ static ssize_t store_prev_phase(
 }
 
 //HARDWARE
-
 static ssize_t show_is_big_little(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -758,7 +757,7 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 
 void debug_profile(struct phase_profile* profile)
 {
-	if(profile->phase != NULL)
+	if(profile->phase >= AI_init && profile->phase < AI_END)
 		KERNEL_DEBUG_MSG(
 				"[PROFILE] phase: %s \n", PHASE_STRINGS[profile->phase]);
 

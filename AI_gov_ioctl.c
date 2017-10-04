@@ -112,7 +112,7 @@ char *device_node(struct device *dev, umode_t *mode)
 
 int AI_gov_ioctl_init(void)
 {
-	int ret;
+	int ret = 0;
 	struct device *dev_ret;
 
 	if (initialized > 0) {

@@ -12,17 +12,9 @@
 #include <linux/rwsem.h>
 
 #include "AI_gov_hardware.h"
-#include "AI_gov_phases.h"
 #include "AI_gov_types.h"
 
 #define TASK_NAME_LEN 15
-
-//typedef enum{
-//	response,
-//	animation,
-//	idle,
-//	load
-//} phase_state;
 
 extern struct cpufreq_AI_gov_tunables *common_tunables_AI;
 extern struct cpufreq_AI_gov_tunables *tuned_parameters_AI;
@@ -33,8 +25,6 @@ extern struct phase_profiles* AI_gov_profiles;
 #define FAST_RESCHEDULE (2 * USEC_PER_MSEC)
 #endif
 
-
-void AI_phase_change(void);
 //static int AI_touch_nb_callback(void);
 
 void cpufreq_AI_governor_timer_resched(unsigned long expires);

@@ -59,12 +59,12 @@
 
 enum PHASE_ENUM {
 	FOR_EACH_PHASE(GENERATE_ENUM)
-	END
+	AI_END
 };
 
-char* PHASE_STRINGS[] = {
-	FOR_EACH_PHASE(GENERATE_STRING)
-};
+extern char* PHASE_STRINGS[];// = {
+//	FOR_EACH_PHASE(GENERATE_STRING)
+//};
 
 typedef struct phase_profile phase_profile_t;
 

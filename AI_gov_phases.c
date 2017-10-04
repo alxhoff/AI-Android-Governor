@@ -53,8 +53,11 @@
 			struct phase_profile* init_profile; \
 			FOR_EACH_PHASE(INIT_PROFILE)
 
-
 FOR_EACH_PHASE(init_phase_struct);
+
+char* PHASE_STRINGS[] = {
+	FOR_EACH_PHASE(GENERATE_STRING)
+};
 
 //INIT
 unsigned int enter_AI_init_phase(void* attributes)
@@ -202,14 +205,14 @@ unsigned int run_AI_exit_phase(void* attributes)
 
 struct phase_profile* AI_phases_get_name(char* name)
 {
+	struct phase_profile* head = AI_gov->profile_head;
+
 	if(AI_gov->profile_count == 0){
 		KERNEL_ERROR_MSG(
 				"[GOVERNOR] AI_Governor: head returned as NULL,"
 				"no profile count\n");
 		return NULL;
 	}
-
-	struct phase_profile* head = AI_gov->profile_head;
 
 	while(strcmp(head->phase_name, name)){
 		if(head->next == NULL){

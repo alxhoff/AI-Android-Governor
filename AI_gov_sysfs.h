@@ -19,8 +19,6 @@
 
 extern const char *AI_governor_sysfs[];
 
-static ssize_t show_phase_state(
-		struct cpufreq_AI_gov_tunables *tunables, char *buf);
 signed int AI_gov_sysfs_init_profiles(void);
 signed int AI_gov_sysfs_init(void);
 struct attribute_group* AI_get_sysfs_attr(void);

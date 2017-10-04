@@ -19,9 +19,9 @@
 #define MINOR_CNT       1
 
 
-static dev_t dev;
-static struct cdev c_dev;
-static struct class *cl;
+//static dev_t dev;
+//static struct cdev c_dev;
+//static struct class *cl;
 
 extern struct file_operations AI_governor_fops;
 

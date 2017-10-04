@@ -39,7 +39,6 @@
 #include <linux/cpufreq.h>
 
 #include "AI_gov_hardware.h"
-#include "AI_gov_phases.h"
 #include "AI_gov_sched.h"
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
@@ -62,7 +61,7 @@
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
 static DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
-static DEFINE_PER_CPU(struct cpufreq_frequency_table *, cpufreq_show_table);
+//static DEFINE_PER_CPU(struct cpufreq_frequency_table *, cpufreq_show_table);
 
 static cpumask_t speedchange_cpumask_AI;
 static spinlock_t speedchange_cpumask_lock_AI;
@@ -153,22 +152,8 @@ static void cpufreq_AI_governor_timer_start(
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
 }
 
-
-
-
-void AI_phase_change(void)
-{
-	AI_gov->prev_phase = AI_gov->phase;
-
-	//do stuff
-}
-
 void AI_coordinator(void)
 {
-	//phase change
-	if (AI_gov->prev_phase!=AI_gov->phase)
-		AI_phase_change();
-
 //	//get cpu freq
 //	uint32_t little_freq = AI_gov->hardware->little_freq;
 //
