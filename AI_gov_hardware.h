@@ -21,7 +21,6 @@
 #define FALSE	0
 #endif
 
-
 signed int AI_gov_init(struct AI_gov_info** in);
 
 #endif /* AI_GOV_HARDWARE_H_ */

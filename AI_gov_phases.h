@@ -12,6 +12,9 @@
 
 #define AI_GOV_NUM_OF_PHASES
 
+#define GET_ATTRIBUTES(phase, defaults) \
+		((struct phase_##phase##_attributes*)defaults->profile_attributes)
+
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
 				PHASE(AI_framerate)	\
@@ -22,12 +25,12 @@
 				PHASE(AI_response)	\
 				PHASE(AI_exit)
 
+#define SYSFS_AI_init_ATTRIBS(ATTRB) \
+			ATTRB(AI_init, initialized)
+
 #define SYSFS_AI_framerate_ATTRIBS(ATTRB)\
 			ATTRB(AI_framerate, desired_framerate) \
 			ATTRB(AI_framerate, current_framerate)
-
-#define SYSFS_AI_init_ATTRIBS(ATTRB) \
-			ATTRB(AI_init, initialized)
 
 #define SYSFS_AI_priority_ATTRIBS(ATTRB) \
 			ATTRB(AI_priority, priority_scalar) \
@@ -59,7 +62,7 @@ enum PHASE_ENUM {
 	END
 };
 
-static const char* PHASE_STRINGS[] = {
+char* PHASE_STRINGS[] = {
 	FOR_EACH_PHASE(GENERATE_STRING)
 };
 

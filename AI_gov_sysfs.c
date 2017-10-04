@@ -11,6 +11,9 @@
 #include "AI_gov_phases.h"
 #include "AI_gov_kernel_write.h"
 
+#define GET_CURRENT_PROFILE \
+		AI_phases_get_name(PHASE_STRINGS[AI_gov->phase])
+
 //ACCESSER FUNCTIONS
 //TOP LEVEL
 static ssize_t show_timer_rate(
@@ -56,8 +59,8 @@ static ssize_t store_io_is_busy(
 static ssize_t show_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
-	enum PHASE_ENUM phase = AI_phases_getBrowsingPhase();
-	switch (phase) {
+//	enum PHASE_ENUM phase = AI_phases_getBrowsingPhase();
+	switch (AI_gov->phase) {
 		case AI_init:
 			return sprintf(buf, "%s\n", "INIT");
 			break;
@@ -88,7 +91,7 @@ static ssize_t show_phase_state(
 }
 
 static ssize_t store_phase_state(
-		struct cpufreq_AI_gov_tunables *tunables, char *buf,
+		struct cpufreq_AI_gov_tunables *tunables,const char *buf,
 		size_t count) {
 //
 //	int ret;
@@ -136,7 +139,7 @@ static ssize_t show_prev_phase(
 }
 
 static ssize_t store_prev_phase(
-		struct cpufreq_AI_gov_tunables *tunables, char *buf,
+		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count) {
 
 //	int ret;
@@ -153,9 +156,9 @@ static ssize_t store_prev_phase(
 //HARDWARE
 
 static ssize_t show_is_big_little(
-		struct AI_gov_cur_HW* hardware, const char *buf)
+		struct AI_gov_cur_HW* hardware, char *buf)
 {
-//	return sprintf(buf, "%u\n", hardware->is_big_little);
+	return sprintf(buf, "%u\n", hardware->is_big_little);
 }
 
 static ssize_t store_is_big_little(
@@ -170,7 +173,7 @@ static ssize_t store_is_big_little(
 }
 
 static ssize_t show_cpu_count(
-		struct AI_gov_cur_HW* hardware, const char *buf)
+		struct AI_gov_cur_HW* hardware, char *buf)
 {
 	return sprintf(buf, "%u\n", hardware->cpu_count);
 }
@@ -187,7 +190,7 @@ static ssize_t store_cpu_count(
 }
 
 static ssize_t show_little_freq(
-		struct AI_gov_cur_HW* hardware, const char *buf)
+		struct AI_gov_cur_HW* hardware, char *buf)
 {
 	return sprintf(buf, "%u\n", hardware->little_freq);
 }
@@ -207,7 +210,7 @@ static ssize_t store_little_freq(
 #ifdef CPU_IS_BIG_LITTLE
 
 static ssize_t show_big_state(
-		struct AI_gov_cur_HW* hardware, const char *buf)
+		struct AI_gov_cur_HW* hardware, char *buf)
 {
 	return sprintf(buf, "%u\n", hardware->big_state);
 }
@@ -224,7 +227,7 @@ static ssize_t store_big_state(
 }
 
 static ssize_t show_big_freq(
-		struct AI_gov_cur_HW* hardware, const char *buf)
+		struct AI_gov_cur_HW* hardware, char *buf)
 {
 	return sprintf(buf, "%u\n", hardware->big_freq);
 }
@@ -254,12 +257,7 @@ static ssize_t show_##file_name##_gov_sys				\
 {									\
 	return show_##file_name(common_tunables_AI, buf);			\
 }									\
-									\
-static ssize_t show_##file_name##_gov_pol				\
-(struct cpufreq_policy *policy, char *buf)				\
-{									\
-	return show_##file_name(policy->governor_data, buf);		\
-}
+
 
 #define store_gov_pol_sys(file_name)					\
 static ssize_t store_##file_name##_gov_sys				\
@@ -268,12 +266,6 @@ static ssize_t store_##file_name##_gov_sys				\
 {									\
 	return store_##file_name(common_tunables_AI, buf, count);		\
 }									\
-									\
-static ssize_t store_##file_name##_gov_pol				\
-(struct cpufreq_policy *policy, const char *buf, size_t count)		\
-{									\
-	return store_##file_name(policy->governor_data, buf, count);	\
-}
 
 #define show_store_gov_pol_sys(file_name)				\
 show_gov_pol_sys(file_name);						\
@@ -287,7 +279,6 @@ static struct freq_attr _name##_gov_pol =				\
 __ATTR(_name, 0644, show_##_name##_gov_pol, store_##_name##_gov_pol)
 #define gov_sys_pol_attr_rw(_name)					\
 gov_sys_attr_rw(_name); \
-gov_pol_attr_rw(_name);
 
 //fucntions
 //top level
@@ -419,167 +410,234 @@ const char *AI_gov_sysfs_hardware[] = {
 
 //HERE - ADDING STORE AND SHOW FUNCTIONS
 
+
 //INIT
 static ssize_t show_AI_init_initialized_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_init,AI_gov->current_profile)->initialized);
 }
 
-static ssize_t store_AI_init_initialized_attribute(char* buf, size_t count)
+static ssize_t store_AI_init_initialized_attribute(const char* buf, size_t count)
 {
-
 	return 0;
 }
 
 //FRAMERATE
 static ssize_t show_AI_framerate_desired_framerate_attribute(char* buf)
 {
+//	return sprintf(buf, "sup\n");
+//	if(GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate == NULL)
+	int test = 10;
+//		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate = 0;
 
-	return 0;
+//	struct phase_AI_framerate_attributes* test_struct = AI_gov->current_profile->profile_attributes;
+//
+//	test_struct->desired_framerate = 50;
+
+	KERNEL_DEBUG_MSG(
+					"[GOVERNOR] value: %s \n",
+					AI_gov->current_profile->phase_name);
+
+	return sprintf(buf, "%d\n", test);
+//		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate);
 }
 
-static ssize_t store_AI_framerate_desired_framerate_attribute(char* buf, size_t count)
+static ssize_t store_AI_framerate_desired_framerate_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate = var;
+
+	return count;
 }
 
 static ssize_t show_AI_framerate_current_framerate_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->current_frametate);
 }
 
-static ssize_t store_AI_framerate_current_framerate_attribute(char* buf, size_t count)
+static ssize_t store_AI_framerate_current_framerate_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->current_frametate = var;
+
+	return count;
 }
 
 //PRIORITY
 static ssize_t show_AI_priority_priority_scalar_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->priority_scalar);;
 }
 
-static ssize_t store_AI_priority_priority_scalar_attribute(char* buf, size_t count)
+static ssize_t store_AI_priority_priority_scalar_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->priority_scalar = var;
+
+	return count;
 }
 
 static ssize_t show_AI_priority_minimum_priority_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->minimum_priority);
 }
 
-static ssize_t store_AI_priority_minimum_priority_attribute(char* buf, size_t count)
+static ssize_t store_AI_priority_minimum_priority_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->minimum_priority = var;
+
+	return count;
 }
 
 static ssize_t show_AI_priority_maximum_priority_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->maximum_priority);
 }
 
-static ssize_t store_AI_priority_maximum_priority_attribute(char* buf, size_t count)
+static ssize_t store_AI_priority_maximum_priority_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->maximum_priority = var;
+
+	return count;
 }
 
 //TIME
 
 static ssize_t show_AI_time_time_till_completion_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%lu\n",
+		GET_ATTRIBUTES(AI_time, AI_gov->current_profile)->time_till_completion);
 }
 
-static ssize_t store_AI_time_time_till_completion_attribute(char* buf, size_t count)
+static ssize_t store_AI_time_time_till_completion_attribute(const char* buf, size_t count)
 {
+	long var;
+	int ret;
 
-	return 0;
+	ret = kstrtoul(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_till_completion = var;
+
+	return count;
 }
 
 static ssize_t show_AI_time_time_at_completion_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%lu\n",
+			GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_at_completion);
 }
 
-static ssize_t store_AI_time_time_at_completion_attribute(char* buf, size_t count)
+static ssize_t store_AI_time_time_at_completion_attribute(const char* buf, size_t count)
 {
+	long var;
+	int ret;
 
-	return 0;
+	ret = kstrtoul(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_at_completion = var;
+
+	return count;
 }
 
 static ssize_t show_AI_time_alarm_mode_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->alarm_mode);
 }
 
-static ssize_t store_AI_time_alarm_mode_attribute(char* buf, size_t count)
+static ssize_t store_AI_time_alarm_mode_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->alarm_mode = var;
+
+	return count;
 }
 
 //POWERSAVE
 static ssize_t show_AI_powersave_initialized_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_powersave,AI_gov->current_profile)->initialized);
 }
 
-static ssize_t store_AI_powersave_initialized_attribute(char* buf, size_t count)
+static ssize_t store_AI_powersave_initialized_attribute(const char* buf, size_t count)
 {
-
 	return 0;
 }
 
 //PERFORMANCE
 static ssize_t show_AI_performance_initialized_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_performance,AI_gov->current_profile)->initialized);
 }
 
-static ssize_t store_AI_performance_initialized_attribute(char* buf, size_t count)
+static ssize_t store_AI_performance_initialized_attribute(const char* buf, size_t count)
 {
-
 	return 0;
 }
 
 //RESPONSE
 static ssize_t show_AI_response_user_input_importance_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_response,AI_gov->current_profile)->user_input_importance);
 }
 
-static ssize_t store_AI_response_user_input_importance_attribute(char* buf, size_t count)
+static ssize_t store_AI_response_user_input_importance_attribute(const char* buf, size_t count)
 {
+	int var, ret;
 
-	return 0;
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES(AI_response,AI_gov->current_profile)->user_input_importance = var;
+
+	return count;
 }
+
 //EXIT
 static ssize_t show_AI_exit_deinitialized_attribute(char* buf)
 {
-
-	return 0;
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES(AI_exit,AI_gov->current_profile)->deinitialized);
 }
 
-static ssize_t store_AI_exit_deinitialized_attribute(char* buf, size_t count)
+static ssize_t store_AI_exit_deinitialized_attribute(const char* buf, size_t count)
 {
-
 	return 0;
 }
 
@@ -625,6 +683,7 @@ static ssize_t store_AI_exit_deinitialized_attribute(char* buf, size_t count)
 INIT_ALL_SYSFS_GROUPS
 
 //TODO ktype
+
 #define ATTACH_SINGLE_SYSFS_GROUP(PHASE) \
 	sysfs_init = AI_phases_get_name(PHASE_STRINGS[PHASE]); \
 	sysfs_init->sysfs_attr_grp = &AI_gov_attrs_group_##PHASE##_gov_sys; \
@@ -637,15 +696,17 @@ INIT_ALL_SYSFS_GROUPS
 	}\
 	ret = sysfs_create_group(sysfs_init->kobj, \
 			sysfs_init->sysfs_attr_grp);	\
-	kobject_del(sysfs_init->kobj); \
+	kobject_del(sysfs_init->kobj);
 
 #define ATTACH_SYSFS_GROUPS \
 	FOR_EACH_PHASE(ATTACH_SINGLE_SYSFS_GROUP)
 
-static struct attribute_group *AI_get_sysfs_attr(void)
+
+struct attribute_group *AI_get_sysfs_attr(void)
 {
 	return &AI_gov_attr_group_gov_sys;
 }
+
 
 signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 {
@@ -663,9 +724,6 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 				"[GOVERNOR] no profile to unload \n");
 		return -ENOENT;
 	}
-
-	AI_gov->prev_phase = AI_gov->phase;
-	AI_gov->phase = new_phase;
 
 	AI_gov->current_profile = AI_phases_get_name(PHASE_STRINGS[new_phase]);
 
@@ -691,6 +749,11 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 		kobject_put(AI_gov->hardware->kobj);
 		return ret;
 	}
+
+	AI_gov->prev_phase = AI_gov->phase;
+	AI_gov->phase = new_phase;
+
+	return 0;
 }
 
 void debug_profile(struct phase_profile* profile)
@@ -708,7 +771,7 @@ void debug_profile(struct phase_profile* profile)
 				"[PROFILE] next profile: %s \n", profile->next->phase_name);
 }
 
-signed int AI_gov_sysfs_init_profiles()
+signed int AI_gov_sysfs_init_profiles(void)
 {
 
 	int ret = 0;
@@ -719,11 +782,8 @@ signed int AI_gov_sysfs_init_profiles()
 	return 0;
 }
 
-#define GET_CURRENT_PROFILE \
-		AI_phases_get_name(PHASE_STRINGS[AI_gov->phase])
-
 //must get called after the phase has been updated
-signed int AI_gov_sysfs_actualize_phase(){
+signed int AI_gov_sysfs_actualize_phase(void){
 	//unregisted old kobj
 
 	//TODO checks
@@ -733,7 +793,7 @@ signed int AI_gov_sysfs_actualize_phase(){
 	return 0;
 }
 
-signed int AI_gov_sysfs_init()
+signed int AI_gov_sysfs_init(void)
 {
 
 	int ret = 0;
@@ -797,42 +857,12 @@ signed int AI_gov_sysfs_init()
 		return ret;
 	}
 
-	AI_gov_sysfs_load_profile(AI_exit);
+	AI_gov_sysfs_load_profile(AI_framerate);
 
 	return 0;
 }
 
-static ssize_t phase_show(struct kobject *kobj, struct kobj_attribute *attr,
-                                         char *buf)
-{
-	int val = 0;
 
-	if(strcmp(attr->attr.name, "phase") == 0){
-		val = (int)AI_gov->phase;
-	}else if(strcmp(attr->attr.name, "prev_phase") == 0){
-		val = AI_gov->prev_phase;
-	}
-
-	return sprintf(buf, "%d\n", val);
-}
-
-static ssize_t phase_store(struct kobject *kobj, struct kobj_attribute *attr,
-                         const char *buf, size_t count)
-{
-
-        int val, ret;
-        ret = kstrtoint(buf, 10, &val);
-        if(ret<0)
-        	return ret;
-
-        if(strcmp(attr->attr.name, "phase") == 0){
-			  AI_gov->phase = val;
-		}else if(strcmp(attr->attr.name, "prev_phase") == 0){
-			  AI_gov->prev_phase = val;
-		}
-
-        return count;
-}
 
 struct kobject *AI_get_gov_parent_kobj(struct cpufreq_policy *policy)
 {

@@ -169,28 +169,32 @@ void AI_coordinator(void)
 	if (AI_gov->prev_phase!=AI_gov->phase)
 		AI_phase_change();
 
-	//get cpu freq
-	uint32_t little_freq = AI_gov->hardware->little_freq;
-
-#ifdef CPU_IS_BIG_LITTLE
-	uint32_t big_freq = AI_gov->hardware->big_freq;
-#endif
+//	//get cpu freq
+//	uint32_t little_freq = AI_gov->hardware->little_freq;
+//
+//#ifdef CPU_IS_BIG_LITTLE
+//	uint32_t big_freq = AI_gov->hardware->big_freq;
+//#endif
 
 	switch(AI_gov->phase){
 	case AI_init:
 		break;
 	case AI_framerate:
 		break;
-//	case AI_priority:
-//		break;
-//	case AI_time:
-//		break;
-//	case AI_powersave:
-//		break;
-//	case AI_performance:
-//			break;
-//	case AI_response:
-//			break;
+	case AI_priority:
+		break;
+	case AI_time:
+		break;
+	case AI_powersave:
+		break;
+	case AI_performance:
+		break;
+	case AI_response:
+		break;
+	case AI_exit:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -272,7 +276,7 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 	unsigned int cpu = (unsigned long) hcpu;
 	struct cpufreq_policy *policy = NULL;
 
-	printk(KERN_WARNING "[GOVERNOR] successfully starting %d %d\n", cpu, action);
+//	printk(KERN_WARNING "[GOVERNOR] successfully starting %d %d\n", cpu, action);
 	switch (action) {
 	case CPU_ONLINE:
 	case CPU_ONLINE_FROZEN:
@@ -280,7 +284,7 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 		if (policy)
 			policy->governor_data = common_tunables_AI;
 		else
-			printk(KERN_WARNING "[CPUFREQ] could not get policy %d\n", hcpu);
+//			printk(KERN_WARNING "[CPUFREQ] could not get policy %d\n", hcpu);
 		break;
 	case CPU_DOWN_PREPARE:
 	case CPU_DOWN_PREPARE_FROZEN:
@@ -518,7 +522,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			// create sysfs entry
 			// the location is /sys/devices/system/cpu/cpufreq/AI_governor
 			// speculation: it is in the common folder because we use the governor for all CPUs
-			rc = AI_gov_sysfs_init(AI_gov, AI_gov_profiles);
+			rc = AI_gov_sysfs_init();
 			change_sysfs_owner(policy);
 
 	//		if (!policy->governor->initialized) {

@@ -28,7 +28,7 @@
 	static unsigned int phase_##SET_PHASE##_run(void* attributes){ \
 		return run_##SET_PHASE##_phase(attributes); \
 	} \
-	struct phase_profile* init_##SET_PHASE##_profile(){ \
+	struct phase_profile* init_##SET_PHASE##_profile(void){ \
 		struct phase_profile* init_phase_profile =  \
 				kcalloc(1, sizeof(struct phase_profile), GFP_KERNEL); \
 		init_phase_profile->profile_attributes = \
@@ -42,8 +42,6 @@
 		return init_phase_profile; \
 	}\
 
-#define GET_ATTRIBUTES(phase, defaults) \
-		((struct phase_##phase##_attributes*)defaults->profile_attributes)
 
 //enum and attribute names
 
@@ -62,32 +60,33 @@ FOR_EACH_PHASE(init_phase_struct);
 unsigned int enter_AI_init_phase(void* attributes)
 {
 
+	return 0;
 }
 
 unsigned int exit_AI_init_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_init_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //FRAMERATE
 unsigned int enter_AI_framerate_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_framerate_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_framerate_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(framerate);
@@ -95,17 +94,17 @@ unsigned int run_AI_framerate_phase(void* attributes)
 //PRIORITY
 unsigned int enter_AI_priority_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_priority_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_priority_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(priority);
@@ -113,17 +112,17 @@ unsigned int run_AI_priority_phase(void* attributes)
 ////TIME
 unsigned int enter_AI_time_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_time_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_time_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(time);
@@ -131,17 +130,17 @@ unsigned int run_AI_time_phase(void* attributes)
 ////POWERSAVE
 unsigned int enter_AI_powersave_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_powersave_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_powersave_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(powersave);
@@ -149,17 +148,17 @@ unsigned int run_AI_powersave_phase(void* attributes)
 ////PRIORITY
 unsigned int enter_AI_performance_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_performance_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_performance_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(performance);
@@ -167,17 +166,17 @@ unsigned int run_AI_performance_phase(void* attributes)
 ////RESPONSE
 unsigned int enter_AI_response_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_response_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_response_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(response);
@@ -185,17 +184,17 @@ unsigned int run_AI_response_phase(void* attributes)
 ////EXIT
 unsigned int enter_AI_exit_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int exit_AI_exit_phase(void* attributes)
 {
-
+	return 0;
 }
 
 unsigned int run_AI_exit_phase(void* attributes)
 {
-
+	return 0;
 }
 
 //init_phase_struct(exit);
@@ -272,23 +271,23 @@ unsigned char AI_phases_set_defaults()
 	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history
 			== NULL) return -ENOMEM;
 
-//	//priority
-//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
-//	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
-//			= MAXIMUM_PRIORITY;
-//	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
-//			= MINIMUM_PRIORITY;
-//	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
-//			= DEFAULT_PRIORITY_SCALAR;
-//
-//	//time
-//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
-//	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
-//
-//	//response
-//	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
-//	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
-//			= DEFAULT_USER_IMPORTANCE;
+	//priority
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
+	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
+			= MAXIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
+			= MINIMUM_PRIORITY;
+	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
+			= DEFAULT_PRIORITY_SCALAR;
+
+	//time
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
+	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
+
+	//response
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
+	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
+			= DEFAULT_USER_IMPORTANCE;
 
 	return 0;
 }
@@ -297,7 +296,7 @@ unsigned char AI_phases_init_profiles(void)
 {
 	GENERATE_PROFILES
 
-	AI_phases_set_defaults();
+	//AI_phases_set_defaults();
 
 	return 0;
 }
@@ -346,5 +345,7 @@ int AI_phases_touch_nb(void)
 //	AI_overhead_add_log_entry(AI_OVERHEAD_TOUCH_START, ts, 0);
 //#endif
 //	return ret;
+
+	return 0;
 }
 
