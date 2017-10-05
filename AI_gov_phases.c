@@ -49,6 +49,8 @@
 
 #define INIT_PROFILE(PHASE) \
 		init_profile = init_##PHASE##_profile(); \
+		KERNEL_DEBUG_MSG("[GOVERNOR] profile initialized named: %s \n", \
+				init_profile->phase_name); \
 		AI_phases_add_profile(init_profile);
 
 #define GENERATE_PROFILES \
@@ -232,7 +234,8 @@ struct phase_profile* AI_phases_get_name(char* name)
 	}
 
 	KERNEL_ERROR_MSG(
-		"[GOVERNOR] AI_Governor: head returned as %s\n", head->phase_name);
+		"[GOVERNOR] head returned as %s for input %s\n",
+		head->phase_name, name);
 
 	return head;
 }
@@ -253,18 +256,18 @@ struct phase_profile* AI_phases_get_last(void)
 unsigned char AI_phases_add_profile(struct phase_profile* to_add)
 {
 
-	KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] adding profile %s \n",
+	KERNEL_DEBUG_MSG( "[GOVERNOR] adding profile %s \n",
 			to_add->phase_name);
 
 	if(AI_gov->profile_count == 0){
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] profile %s added to head\n",
+		KERNEL_DEBUG_MSG( "[GOVERNOR] profile %s added to head\n",
 				to_add->phase_name);
 		AI_gov->profile_head = to_add;
 		AI_gov->profile_count++;
 	}else{
 		struct phase_profile* last = AI_phases_get_last();
 		last->next = to_add;
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] adding profile %s after %s \n",
+		KERNEL_DEBUG_MSG( "[GOVERNOR] adding profile %s after %s \n",
 				to_add->phase_name, last->phase_name);
 		AI_gov->profile_count++;
 	}

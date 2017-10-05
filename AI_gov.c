@@ -376,7 +376,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			pcpu->governor_enabled = 0;
 			up_write(&pcpu->enable_sem);
 		}
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 1\n");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] 1\n");
 		mutex_unlock(&gov_lock_AI);
 
 		//HARDWARE CLEANUP (TODO)
@@ -391,7 +391,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 				del_timer_sync(&pcpu->cpu_timer);
 				up_write(&pcpu->enable_sem);
 			}
-			KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 2\n");
+			KERNEL_DEBUG_MSG( "[GOVERNOR] 2\n");
 			// Make sure that the task is stopped only once.
 			// Remember: We have started only one task.
 			if (j == 0 && tunables && tunables->speedchange_task) {
@@ -401,12 +401,12 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			}
 
 			mutex_unlock(&gov_lock_AI);
-			KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 3\n");
+			KERNEL_DEBUG_MSG( "[GOVERNOR] 3\n");
 
 			if (AI_sched_getManagedCores() == 0)
 				AI_gov_ioctl_exit();
 		}
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 4\n");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] 4\n");
 
 		break;
 	case CPUFREQ_GOV_LIMITS:
@@ -425,35 +425,51 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 
 		KERNEL_DEBUG_MSG("[GOVERNOR] YO 1: %d \n", AI_gov->phase);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED INIT PROFILES \n");
+
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED INIT PROFILES \n");
 
 		rc = AI_phases_init_profiles();
 
 		if(rc) KERNEL_DEBUG_MSG(
 				"[GOVERNOR] AI_phases_init_profiles failed: %d\n", rc);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED INIT PROFILES \n");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED INIT PROFILES \n");
 
 		KERNEL_DEBUG_MSG("[GOVERNOR] YO 2: %d \n", AI_gov->phase);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED SYSFS INIT \n");
+
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SYSFS INIT \n");
 
 		rc = AI_gov_sysfs_init();
+
+		//THIS IS NULL VVV
+		KERNEL_DEBUG_MSG("[GOVERNOR] AI_gov->current profile pointing to: %p \n",
+							(void*)AI_gov->current_profile);
 
 		if(rc) KERNEL_DEBUG_MSG(
 				"[GOVERNOR] AI_gov_sysfs_init failed: %d\n", rc);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED SYSFS INIT");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SYSFS INIT");
 
 		KERNEL_DEBUG_MSG("[GOVERNOR] YO 3: %d \n", AI_gov->phase);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED SETTING TEST PROFILE \n");
+
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SETTING TEST PROFILE \n");
 
 		AI_gov_sysfs_load_profile(AI_exit);
 
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED SETTING TEST PROFILE \n");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SETTING TEST PROFILE \n");
 
 		KERNEL_DEBUG_MSG("[GOVERNOR] YO 4: %d \n", AI_gov->phase);
+
+//		KERNEL_DEBUG_MSG("[GOVERNOR] YO profile name: %s \n",
+//				AI_gov->current_profile->phase_name);
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] AI_gov->current profile pointing to: %p \n",
+					(void*)AI_gov->current_profile);
 
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
 			tunables->usage_count++;
@@ -516,13 +532,13 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		}
 		break;
 	case CPUFREQ_GOV_POLICY_EXIT:
-//		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 5\n");
+//		KERNEL_DEBUG_MSG( "[GOVERNOR] 5\n");
 
 		if(policy->cpu == L0){
 //			//CHECK FOR VALID CPU SOMEHOW
 ////			KERNEL_DEBUG_MSG("Entering exit routine, usage count: %d\n",
 ////								tunables->usage_count);
-//			KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 6\n");
+//			KERNEL_DEBUG_MSG( "[GOVERNOR] 6\n");
 			if (AI_sched_getManagedCores() == 0) {
 //				if (policy->governor->initialized == 1) {
 ////					//unregister_hotcpu_notifier(&cpufreq_notifier_block);
@@ -532,7 +548,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 				//TODO ADD DEINIT
 //				sysfs_remove_group(AI_get_governor_parent_kobj(policy),
 //						AI_get_sysfs_attr());
-//				KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 7\n");
+//				KERNEL_DEBUG_MSG( "[GOVERNOR] 7\n");
 //
 				tuned_parameters_AI = kzalloc(sizeof(*tunables), GFP_KERNEL);
 				if (!tuned_parameters_AI) {
@@ -542,12 +558,12 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 				memcpy(tuned_parameters_AI, tunables, sizeof(*tunables));
 				kfree(tunables);
 				common_tunables_AI = NULL;
-				KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 8\n");
+				KERNEL_DEBUG_MSG( "[GOVERNOR] 8\n");
 				//				KERNEL_DEBUG_MSG("Cleaned up all data\n");
 			}
 			policy->governor_data = NULL;
 		}
-		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] 9\n");
+		KERNEL_DEBUG_MSG( "[GOVERNOR] 9\n");
 		break;
 	default:
 		break;
