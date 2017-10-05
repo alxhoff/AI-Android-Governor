@@ -494,22 +494,22 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 
 
 
-				KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SETTING TEST PROFILE \n");
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
-									(void*)AI_gov->current_profile);
-
-				AI_gov_sysfs_load_profile(AI_exit);
-
-				KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SETTING TEST PROFILE \n");
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] YO 4: %d \n", AI_gov->phase);
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] YO profile name: %s \n",
-						AI_gov->current_profile->phase_name);
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
-							(void*)AI_gov->current_profile);
+//				KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SETTING TEST PROFILE \n");
+//
+//				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
+//									(void*)AI_gov->current_profile);
+//
+//				AI_gov_sysfs_load_profile(AI_exit);
+//
+//				KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SETTING TEST PROFILE \n");
+//
+//				KERNEL_DEBUG_MSG("[GOVERNOR] YO 4: %d \n", AI_gov->phase);
+//
+//				KERNEL_DEBUG_MSG("[GOVERNOR] YO profile name: %s \n",
+//						AI_gov->current_profile->phase_name);
+//
+//				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
+//							(void*)AI_gov->current_profile);
 
 				profiles_initd = true;
 			}

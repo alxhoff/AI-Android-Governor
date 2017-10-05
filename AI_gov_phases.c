@@ -308,6 +308,8 @@ unsigned char AI_phases_set_defaults(void)
 	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
 			= DEFAULT_USER_IMPORTANCE;
 
+	//exit
+
 	return 0;
 }
 
@@ -319,7 +321,7 @@ unsigned char AI_phases_init_profiles(void)
 	//creates, attachees then removes each kobject
 	AI_gov_sysfs_init_profiles();
 
-	//AI_phases_set_defaults();
+	AI_phases_set_defaults();
 
 	return 0;
 }

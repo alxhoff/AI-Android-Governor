@@ -188,14 +188,6 @@ ssize_t store_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count) {
 
-//	int ret;
-//
-//	int phase = (int)AI_gov->prev_phase;
-//
-//	ret= kstrtoint(buf, 10, &phase);
-//
-//	if(ret < 0) return ret;
-//
 	return count;
 }
 
@@ -473,24 +465,8 @@ static ssize_t store_AI_init_initialized_attribute(const char* buf, size_t count
 //FRAMERATE
 static ssize_t show_AI_framerate_desired_framerate_attribute(char* buf)
 {
-
-
-//	return sprintf(buf, "sup\n");
-//	if(GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate == NULL)
-//	int test = 10;
-////		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate = 0;
-//
-////	struct phase_AI_framerate_attributes* test_struct = AI_gov->current_profile->profile_attributes;
-////
-////	test_struct->desired_framerate = 50;
-//	AI_gov_sysfs_load_profile(AI_framerate);
-//
-//	KERNEL_DEBUG_MSG(
-//					"[GOVERNOR] value: %d \n",
-//					AI_gov->phase);
-//
-//	return sprintf(buf, "%d\n", test);
-//		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate);
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate);
 }
 
 static ssize_t store_AI_framerate_desired_framerate_attribute(const char* buf, size_t count)

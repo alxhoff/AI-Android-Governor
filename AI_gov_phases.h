@@ -149,7 +149,6 @@ struct phase_AI_response_attributes{
 };
 
 //EXIT
-// #define phase_name_string_exit			"exit"
 struct phase_AI_exit_attributes{
 	int deinitialized;
 };
