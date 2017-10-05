@@ -161,26 +161,26 @@ void AI_coordinator(void)
 //	uint32_t big_freq = AI_gov->hardware->big_freq;
 //#endif
 
-	switch(AI_gov->phase){
-	case AI_init:
-		break;
-	case AI_framerate:
-		break;
-	case AI_priority:
-		break;
-	case AI_time:
-		break;
-	case AI_powersave:
-		break;
-	case AI_performance:
-		break;
-	case AI_response:
-		break;
-	case AI_exit:
-		break;
-	default:
-		break;
-	}
+//	switch(AI_gov->phase){
+//	case AI_init:
+//		break;
+//	case AI_framerate:
+//		break;
+//	case AI_priority:
+//		break;
+//	case AI_time:
+//		break;
+//	case AI_powersave:
+//		break;
+//	case AI_performance:
+//		break;
+//	case AI_response:
+//		break;
+//	case AI_exit:
+//		break;
+//	default:
+//		break;
+//	}
 }
 
 static int cpufreq_AI_governor_speedchange_task(void* data){
@@ -219,6 +219,7 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 
 		//CALCULATE GOVERNOR's ACTIONS
 		AI_coordinator();
+
 
 		//rearm timer
 		cpufreq_AI_governor_timer_resched(common_tunables_AI->timer_rate);
@@ -331,48 +332,6 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		//TODO Conditional regarding hardware
 		if(tunables && gov_started == 0){
 
-			////HARDWARE INIT
-			//populate AI_gov_freq_table
-
-//			if (!AI_freq_table) {
-//				KERNEL_DEBUG_MSG("[GOVERNOR] AI_governor: freq table kzalloc\n");
-//				return -ENOMEM;
-//			}
-			//AI_gov->hardware->freq_table = &AI_freq_table;
-
-//			AI_gov->phase = init;
-//			AI_gov->prev_phase = init;
-//			AI_gov->profile = NULL;
-
-//			unsigned int cpu = policy->cpu;
-//			ssize_t freq_step_count = 0;
-			//struct cpu_frequency_table *freq_table;
-
-//			if (!per_cpu(cpufreq_show_table, cpu))
-//					return -ENODEV;
-
-//			AI_freq_table = per_cpu(cpufreq_show_table, cpu);
-
-//			int i = 0;
-//			for(i = 0; (freq_table[i].frequency != CPUFREQ_TABLE_END); i++){
-//				if(freq_table[i].frequency == CPUFREQ_ENTRY_INVALID)
-//					continue;
-//				if(i == 0)
-//					AI_gov->hardware->freq_table->LITTLE_MIN = freq_table[i].frequency;
-//				freq_step_count++;
-//			}
-//			freq_step_count++;
-//			AI_gov->hardware->freq_table->LITTLE_MAX = freq_table[i].frequency;
-//			AI_gov->hardware->freq_table->freq_steps_LITTLE = freq_step_count;
-//
-//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
-//									"LITTLE MIN: %d\n", AI_gov->hardware->freq_table->LITTLE_MIN);
-//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
-//											"LITTLE MAX: %d\n", AI_gov->hardware->freq_table->LITTLE_MAX);
-//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: "
-//												"LITTLE STEP COUNT: %d\n",
-//												AI_gov->hardware->freq_table->freq_steps_LITTLE);
-
 			//create task
 			snprintf(speedchange_task_name, TASK_NAME_LEN,
 					"AI_governor%d\n", policy->cpu);
@@ -427,7 +386,8 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			for_each_cpu(j, policy->cpus) {
 				pcpu = &per_cpu(cpuinfo, j);
 				down_write(&pcpu->enable_sem);
-				// we have initialized timers for all cores, so we have to delete them all
+				// we have initialized timers for all cores, so we
+				//have to delete them all
 				del_timer_sync(&pcpu->cpu_timer);
 				up_write(&pcpu->enable_sem);
 			}
@@ -454,16 +414,46 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	case CPUFREQ_GOV_POLICY_INIT:
 
 		//AI_GOV
+		KERNEL_DEBUG_MSG("[GOVERNOR] STARTING AI_GOV_INIT\n");
+
 		rc = AI_gov_init(&AI_gov);
-		if(rc)
-			KERNEL_DEBUG_MSG(
-						"[GOVERNOR] AI_Governor: init failed\n");
-		//init phases
+
+		if(rc) KERNEL_DEBUG_MSG(
+				"[GOVERNOR] AI_gov_init failed: %d\n", rc);
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] FINISHED AI_GOV_INIT\n");
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO 1: %d \n", AI_gov->phase);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED INIT PROFILES \n");
+
 		rc = AI_phases_init_profiles();
 
-		if(rc)
-			KERNEL_DEBUG_MSG(
-						"[GOVERNOR] AI_Governor: profile init failed\n");
+		if(rc) KERNEL_DEBUG_MSG(
+				"[GOVERNOR] AI_phases_init_profiles failed: %d\n", rc);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED INIT PROFILES \n");
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO 2: %d \n", AI_gov->phase);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED SYSFS INIT \n");
+
+		rc = AI_gov_sysfs_init();
+
+		if(rc) KERNEL_DEBUG_MSG(
+				"[GOVERNOR] AI_gov_sysfs_init failed: %d\n", rc);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED SYSFS INIT");
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO 3: %d \n", AI_gov->phase);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] STARTED SETTING TEST PROFILE \n");
+
+		AI_gov_sysfs_load_profile(AI_exit);
+
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] FINISHED SETTING TEST PROFILE \n");
+
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO 4: %d \n", AI_gov->phase);
 
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
 			tunables->usage_count++;
@@ -503,12 +493,6 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			common_tunables_AI = tunables;
 
 			spin_lock_init(&tunables->target_loads_lock);
-
-			// create sysfs entry
-			// the location is /sys/devices/system/cpu/cpufreq/AI_governor
-			// speculation: it is in the common folder because we use the governor for all CPUs
-			rc = AI_gov_sysfs_init();
-			change_sysfs_owner(policy);
 
 	//		if (!policy->governor->initialized) {
 	//			AI_touch_register_notify(&AI_touch_nb);

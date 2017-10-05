@@ -32,10 +32,14 @@
 		struct phase_profile* init_phase_profile =  \
 				kcalloc(1, sizeof(struct phase_profile), GFP_KERNEL); \
 		init_phase_profile->profile_attributes = \
-				kcalloc(1, sizeof(struct phase_##SET_PHASE##_attributes), GFP_KERNEL); \
+				kcalloc(1, sizeof(struct phase_##SET_PHASE##_attributes), \
+						GFP_KERNEL); \
 		init_phase_profile->phase_name = \
 			kmalloc(strlen(PHASE_STRINGS[SET_PHASE]) + 1, GFP_KERNEL); \
 		strcpy(init_phase_profile->phase_name, PHASE_STRINGS[SET_PHASE] ); \
+		KERNEL_DEBUG_MSG(  \
+				"[GOVERNOR] initializing %s with the saved name %s \n", \
+				PHASE_STRINGS[SET_PHASE], init_phase_profile->phase_name); \
 		init_phase_profile->enter = &phase_##SET_PHASE##_enter; \
 		init_phase_profile->exit = &phase_##SET_PHASE##_exit; \
 		init_phase_profile->run = &phase_##SET_PHASE##_run; \
@@ -205,6 +209,10 @@ struct phase_profile* AI_phases_get_name(char* name)
 {
 	struct phase_profile* head = AI_gov->profile_head;
 
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] getting phase via name: %s \n",
+			name);
+
 	if(AI_gov->profile_count == 0){
 		KERNEL_ERROR_MSG(
 				"[GOVERNOR] AI_Governor: head returned as NULL,"
@@ -244,13 +252,20 @@ struct phase_profile* AI_phases_get_last(void)
 
 unsigned char AI_phases_add_profile(struct phase_profile* to_add)
 {
-	//TODO SHOULD THIS BE DYNAMIC?
+
+	KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] adding profile %s \n",
+			to_add->phase_name);
+
 	if(AI_gov->profile_count == 0){
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] profile %s added to head\n",
+				to_add->phase_name);
 		AI_gov->profile_head = to_add;
 		AI_gov->profile_count++;
 	}else{
 		struct phase_profile* last = AI_phases_get_last();
 		last->next = to_add;
+		KERNEL_DEBUG_MSG( "[GOVERNOR_DEBUG] adding profile %s after %s \n",
+				to_add->phase_name, last->phase_name);
 		AI_gov->profile_count++;
 	}
 
@@ -295,7 +310,11 @@ unsigned char AI_phases_set_defaults(void)
 
 unsigned char AI_phases_init_profiles(void)
 {
+	//calls phase init and appends profile struct to LL
 	GENERATE_PROFILES
+
+	//creates, attachees then removes each kobject
+	AI_gov_sysfs_init_profiles();
 
 	//AI_phases_set_defaults();
 
