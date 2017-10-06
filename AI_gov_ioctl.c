@@ -34,6 +34,224 @@ int AI_gov_close(struct inode *i, struct file *f)
 	return 0;
 }
 
+unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
+{
+	if(var->phase != AI_gov->phase) return -EACCES;
+
+switch(var->phase){
+		case AI_init:
+			switch(var->variable_index){
+			case 0:
+				return GET_ATTRIBUTES(AI_init)->initialized;
+				break;
+			default:
+				break;
+			}
+			break;
+		case AI_framerate:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_framerate)->desired_framerate;
+				break;
+			case 1:
+				var->variable_value = GET_ATTRIBUTES(AI_framerate)->current_frametate;
+				break;
+			default:
+				break;
+			}
+			break;
+		case AI_priority:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_priority)->priority_scalar;
+				break;
+			case 1:
+				var->variable_value = GET_ATTRIBUTES(AI_priority)->minimum_priority;
+				break;
+			case 2:
+				var->variable_value = GET_ATTRIBUTES(AI_priority)->maximum_priority;
+				break;
+			}
+			break;
+		case AI_time:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_time)->time_till_completion;
+				break;
+			case 1:
+				var->variable_value = GET_ATTRIBUTES(AI_time)->time_at_completion;
+				break;
+			case 2:
+				var->variable_value = GET_ATTRIBUTES(AI_time)->alarm_mode;
+				break;
+			}
+			break;
+		case AI_powersave:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_powersave)->initialized;
+				break;
+			}
+			break;
+		case AI_performance:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_performance)->initialized;
+				break;
+			}
+			break;
+		case AI_response:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_response)->user_input_importance;
+				break;
+			}
+			break;
+		case AI_exit:
+			switch(var->variable_index){
+			case 0:
+				var->variable_value = GET_ATTRIBUTES(AI_exit)->deinitialized;
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+
+	return 0;
+}
+
+signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var)
+{
+	//TODO current profile phase == aig_gov phase check?
+	if(var.phase != AI_gov->phase) return -EACCES;
+
+	switch(var.phase){
+		case AI_init:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_init)->initialized = var.variable_value;
+				break;
+			default:
+				break;
+			}
+			break;
+		case AI_framerate:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_framerate)->desired_framerate = var.variable_value;
+				break;
+			case 1:
+				GET_ATTRIBUTES(AI_framerate)->current_frametate = var.variable_value;
+				break;
+			default:
+				break;
+			}
+			break;
+		case AI_priority:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_priority)->priority_scalar = var.variable_value;
+				break;
+			case 1:
+				GET_ATTRIBUTES(AI_priority)->minimum_priority = var.variable_value;
+				break;
+			case 2:
+				GET_ATTRIBUTES(AI_priority)->maximum_priority = var.variable_value;
+				break;
+			}
+			break;
+		case AI_time:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_time)->time_till_completion = var.variable_value;
+				break;
+			case 1:
+				GET_ATTRIBUTES(AI_time)->time_at_completion = var.variable_value;
+				break;
+			case 2:
+				GET_ATTRIBUTES(AI_time)->alarm_mode = var.variable_value;
+				break;
+			}
+			break;
+		case AI_powersave:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_powersave)->initialized = var.variable_value;
+				break;
+			}
+			break;
+		case AI_performance:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_performance)->initialized = var.variable_value;
+				break;
+			}
+			break;
+		case AI_response:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_response)->user_input_importance = var.variable_value;
+				break;
+			}
+			break;
+		case AI_exit:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_exit)->deinitialized = var.variable_value;
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+
+	return 0;
+}
+
+signed int AI_gov_ioctl_clear_phase(enum PHASE_ENUM phase)
+{
+	if(phase != AI_gov->phase) return -EACCES;
+
+	switch(phase){
+	case AI_init:
+		GET_ATTRIBUTES(AI_init)->initialized = 0;
+		break;
+	case AI_framerate:
+		GET_ATTRIBUTES(AI_framerate)->current_frametate = 0;
+		GET_ATTRIBUTES(AI_framerate)->desired_framerate = 0;
+		//TODO Dynamic free
+		GET_ATTRIBUTES(AI_framerate)->timestamp_history = NULL;
+		break;
+	case AI_priority:
+		GET_ATTRIBUTES(AI_priority)->maximum_priority = 0;
+		GET_ATTRIBUTES(AI_priority)->minimum_priority = 0;
+		GET_ATTRIBUTES(AI_priority)->priority_scalar = 0;
+		break;
+	case AI_time:
+		GET_ATTRIBUTES(AI_time)->alarm_mode = 0;
+		GET_ATTRIBUTES(AI_time)->time_at_completion = 0;
+		GET_ATTRIBUTES(AI_time)->time_till_completion = 0;
+		break;
+	case AI_powersave:
+		GET_ATTRIBUTES(AI_powersave)->initialized = 0;
+		break;
+	case AI_performance:
+		GET_ATTRIBUTES(AI_performance)->initialized = 0;
+		break;
+	case AI_response:
+		GET_ATTRIBUTES(AI_response)->user_input_importance = 0;
+		break;
+	case AI_exit:
+		GET_ATTRIBUTES(AI_exit)->deinitialized = 0;
+		break;
+	default:
+		break;
+	}
+
+	return 0;
+}
+
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
 int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
 #else
@@ -42,43 +260,48 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 {
 
 	switch(cmd){
-	case GOVERNOR_GET_PROFILE:{
-		struct AI_gov_profile g;
-		memcpy(&g, AI_gov->profile, sizeof(struct AI_gov_profile));
-		if(copy_to_user(
-				(struct AI_gov_profile *)arg, &g, sizeof(struct AI_gov_profile)))
+	case GOVERNOR_GET_PHASE:{
+		unsigned long g;
+		g = AI_gov->phase;
+		if(copy_to_user((unsigned long *)arg, &g, sizeof(unsigned long)))
 				return -EACCES;
-	}
-		break;
-	case GOVERNOR_SET_PROFILE:{
-		struct AI_gov_profile g;
-		if(copy_from_user(&g, (struct AI_gov_profile*)arg, sizeof(struct AI_gov_profile)))
-					return -EACCES;
-		memcpy(AI_gov->profile, &g, sizeof(struct AI_gov_profile));
-	}
-		break;
-	case GOVERNOR_CLR_PROFILE:{
-		//TODO set to appropriate values, cpu freq table etc
-		AI_gov->profile->current_frame_rate = 0;
-		AI_gov->profile->desired_frame_rate = 0;
-		AI_gov->profile->max_freq = 0;
-		AI_gov->profile->min_freq = 0;
 	}
 		break;
 	case GOVERNOR_SET_PHASE:{
-		enum PHASE_ENUM g;
-		if(copy_from_user(&g, (enum PHASE_ENUM*)arg, sizeof(enum PHASE_ENUM)))
-			return -EACCES;
-		AI_gov->prev_phase = AI_gov->phase;
-		AI_gov->phase = g;
+		unsigned long g;
+		enum PHASE_ENUM phase;
+		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
+					return -EACCES;
+		phase = (enum PHASE_ENUM)g;
+		AI_gov->phase = phase;
 	}
 		break;
-	case GOVERNOR_GET_PHASE:{
-		enum PHASE_ENUM g;
-		g = AI_gov->phase;
-		if(copy_to_user(
-				(enum PHASE_ENUM *)arg, &g, sizeof(enum PHASE_ENUM)))
-				return -EACCES;
+	case GOVERNOR_CLR_PHASE_VARIABLES:{
+		unsigned long g;
+		enum PHASE_ENUM phase;
+		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
+			return -EACCES;
+		phase = (enum PHASE_ENUM)g;
+		AI_gov_ioctl_clear_phase(phase);
+	}
+		break;
+	case GOVERNOR_SET_PHASE_VARIABLE:{
+		struct AI_gov_ioctl_phase_variable g;
+		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
+				sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
+		AI_gov_ioctl_set_variable(g);
+	}
+		break;
+	case GOVERNOR_GET_PHASE_VARIABLE:{
+		struct AI_gov_ioctl_phase_variable g;
+		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
+				sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
+		AI_gov_ioctl_get_variable(&g);
+		if(copy_to_user((struct AI_gov_ioctl_phase_variable *)arg,
+				&g, sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
 	}
 		break;
 	default:

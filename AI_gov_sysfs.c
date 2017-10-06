@@ -454,7 +454,7 @@ static ssize_t show_AI_init_initialized_attribute(char* buf)
 	KERNEL_DEBUG_MSG(
 			"[GOVERNOR] YO DA PHASE IS: %d\n", AI_gov->phase);
 //	return sprintf(buf, "%d\n",
-//			GET_ATTRIBUTES(AI_init,AI_gov->current_profile)->initialized);
+//			GET_ATTRIBUTES_W_PROFILE(AI_init,AI_gov->current_profile)->initialized);
 }
 
 static ssize_t store_AI_init_initialized_attribute(const char* buf, size_t count)
@@ -466,7 +466,7 @@ static ssize_t store_AI_init_initialized_attribute(const char* buf, size_t count
 static ssize_t show_AI_framerate_desired_framerate_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate);
+		GET_ATTRIBUTES_W_PROFILE(AI_framerate,AI_gov->current_profile)->desired_framerate);
 }
 
 static ssize_t store_AI_framerate_desired_framerate_attribute(const char* buf, size_t count)
@@ -476,7 +476,7 @@ static ssize_t store_AI_framerate_desired_framerate_attribute(const char* buf, s
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->desired_framerate = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_framerate,AI_gov->current_profile)->desired_framerate = var;
 
 	return count;
 }
@@ -484,7 +484,7 @@ static ssize_t store_AI_framerate_desired_framerate_attribute(const char* buf, s
 static ssize_t show_AI_framerate_current_framerate_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->current_frametate);
+		GET_ATTRIBUTES_W_PROFILE(AI_framerate,AI_gov->current_profile)->current_frametate);
 }
 
 static ssize_t store_AI_framerate_current_framerate_attribute(const char* buf, size_t count)
@@ -494,7 +494,7 @@ static ssize_t store_AI_framerate_current_framerate_attribute(const char* buf, s
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_framerate,AI_gov->current_profile)->current_frametate = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_framerate,AI_gov->current_profile)->current_frametate = var;
 
 	return count;
 }
@@ -503,7 +503,7 @@ static ssize_t store_AI_framerate_current_framerate_attribute(const char* buf, s
 static ssize_t show_AI_priority_priority_scalar_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->priority_scalar);;
+		GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->priority_scalar);;
 }
 
 static ssize_t store_AI_priority_priority_scalar_attribute(const char* buf, size_t count)
@@ -513,7 +513,7 @@ static ssize_t store_AI_priority_priority_scalar_attribute(const char* buf, size
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->priority_scalar = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->priority_scalar = var;
 
 	return count;
 }
@@ -521,7 +521,7 @@ static ssize_t store_AI_priority_priority_scalar_attribute(const char* buf, size
 static ssize_t show_AI_priority_minimum_priority_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->minimum_priority);
+		GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->minimum_priority);
 }
 
 static ssize_t store_AI_priority_minimum_priority_attribute(const char* buf, size_t count)
@@ -531,7 +531,7 @@ static ssize_t store_AI_priority_minimum_priority_attribute(const char* buf, siz
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->minimum_priority = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->minimum_priority = var;
 
 	return count;
 }
@@ -539,7 +539,7 @@ static ssize_t store_AI_priority_minimum_priority_attribute(const char* buf, siz
 static ssize_t show_AI_priority_maximum_priority_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->maximum_priority);
+		GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->maximum_priority);
 }
 
 static ssize_t store_AI_priority_maximum_priority_attribute(const char* buf, size_t count)
@@ -549,7 +549,7 @@ static ssize_t store_AI_priority_maximum_priority_attribute(const char* buf, siz
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_priority,AI_gov->current_profile)->maximum_priority = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->maximum_priority = var;
 
 	return count;
 }
@@ -559,7 +559,7 @@ static ssize_t store_AI_priority_maximum_priority_attribute(const char* buf, siz
 static ssize_t show_AI_time_time_till_completion_attribute(char* buf)
 {
 	return sprintf(buf, "%lu\n",
-		GET_ATTRIBUTES(AI_time, AI_gov->current_profile)->time_till_completion);
+		GET_ATTRIBUTES_W_PROFILE(AI_time, AI_gov->current_profile)->time_till_completion);
 }
 
 static ssize_t store_AI_time_time_till_completion_attribute(const char* buf, size_t count)
@@ -570,7 +570,7 @@ static ssize_t store_AI_time_time_till_completion_attribute(const char* buf, siz
 	ret = kstrtoul(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_till_completion = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_time,AI_gov->current_profile)->time_till_completion = var;
 
 	return count;
 }
@@ -578,7 +578,7 @@ static ssize_t store_AI_time_time_till_completion_attribute(const char* buf, siz
 static ssize_t show_AI_time_time_at_completion_attribute(char* buf)
 {
 	return sprintf(buf, "%lu\n",
-			GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_at_completion);
+			GET_ATTRIBUTES_W_PROFILE(AI_time,AI_gov->current_profile)->time_at_completion);
 }
 
 static ssize_t store_AI_time_time_at_completion_attribute(const char* buf, size_t count)
@@ -589,7 +589,7 @@ static ssize_t store_AI_time_time_at_completion_attribute(const char* buf, size_
 	ret = kstrtoul(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->time_at_completion = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_time,AI_gov->current_profile)->time_at_completion = var;
 
 	return count;
 }
@@ -597,7 +597,7 @@ static ssize_t store_AI_time_time_at_completion_attribute(const char* buf, size_
 static ssize_t show_AI_time_alarm_mode_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-			GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->alarm_mode);
+			GET_ATTRIBUTES_W_PROFILE(AI_time,AI_gov->current_profile)->alarm_mode);
 }
 
 static ssize_t store_AI_time_alarm_mode_attribute(const char* buf, size_t count)
@@ -607,7 +607,7 @@ static ssize_t store_AI_time_alarm_mode_attribute(const char* buf, size_t count)
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_time,AI_gov->current_profile)->alarm_mode = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_time,AI_gov->current_profile)->alarm_mode = var;
 
 	return count;
 }
@@ -616,7 +616,7 @@ static ssize_t store_AI_time_alarm_mode_attribute(const char* buf, size_t count)
 static ssize_t show_AI_powersave_initialized_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-			GET_ATTRIBUTES(AI_powersave,AI_gov->current_profile)->initialized);
+			GET_ATTRIBUTES_W_PROFILE(AI_powersave,AI_gov->current_profile)->initialized);
 }
 
 static ssize_t store_AI_powersave_initialized_attribute(const char* buf, size_t count)
@@ -628,7 +628,7 @@ static ssize_t store_AI_powersave_initialized_attribute(const char* buf, size_t 
 static ssize_t show_AI_performance_initialized_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-			GET_ATTRIBUTES(AI_performance,AI_gov->current_profile)->initialized);
+			GET_ATTRIBUTES_W_PROFILE(AI_performance,AI_gov->current_profile)->initialized);
 }
 
 static ssize_t store_AI_performance_initialized_attribute(const char* buf, size_t count)
@@ -640,7 +640,7 @@ static ssize_t store_AI_performance_initialized_attribute(const char* buf, size_
 static ssize_t show_AI_response_user_input_importance_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-			GET_ATTRIBUTES(AI_response,AI_gov->current_profile)->user_input_importance);
+			GET_ATTRIBUTES_W_PROFILE(AI_response,AI_gov->current_profile)->user_input_importance);
 }
 
 static ssize_t store_AI_response_user_input_importance_attribute(const char* buf, size_t count)
@@ -650,7 +650,7 @@ static ssize_t store_AI_response_user_input_importance_attribute(const char* buf
 	ret = kstrtoint(buf, 10, &var);
 	if(ret < 0) return ret;
 
-	GET_ATTRIBUTES(AI_response,AI_gov->current_profile)->user_input_importance = var;
+	GET_ATTRIBUTES_W_PROFILE(AI_response,AI_gov->current_profile)->user_input_importance = var;
 
 	return count;
 }
@@ -659,7 +659,7 @@ static ssize_t store_AI_response_user_input_importance_attribute(const char* buf
 static ssize_t show_AI_exit_deinitialized_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-			GET_ATTRIBUTES(AI_exit,AI_gov->current_profile)->deinitialized);
+			GET_ATTRIBUTES_W_PROFILE(AI_exit,AI_gov->current_profile)->deinitialized);
 }
 
 static ssize_t store_AI_exit_deinitialized_attribute(const char* buf, size_t count)

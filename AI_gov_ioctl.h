@@ -18,6 +18,13 @@
 #define FIRST_MINOR     0
 #define MINOR_CNT       1
 
+struct AI_gov_ioctl_phase_variable{
+	enum PHASE_ENUM phase;
+
+	uint8_t variable_index;
+
+	unsigned long variable_value;
+};
 
 //static dev_t dev;
 //static struct cdev c_dev;
@@ -25,12 +32,13 @@
 
 extern struct file_operations AI_governor_fops;
 
-#define GOVERNOR_GET_PROFILE _IOR('g', 1, struct AI_gov_profile*)
-#define GOVERNOR_SET_PROFILE _IOW('g', 2, struct AI_gov_profile*)
-#define GOVERNOR_CLR_PROFILE _IO('g', 3)
+#define GOVERNOR_GET_PHASE _IOR('g', 1, unsigned long)
+#define GOVERNOR_SET_PHASE _IOW('g', 2, unsigned long)
+#define GOVERNOR_CLR_PHASE_VARIABLES _IOWR('g', 3, unsigned long)
+#define GOVERNOR_SET_PHASE_VARIABLE _IOW('g', 4, struct AI_gov_ioctl_phase_variable*)
+#define GOVERNOR_GET_PHASE_VARIABLE _IOWR('g', 4, struct AI_gov_ioctl_phase_variable*)
 
-#define GOVERNOR_SET_PHASE _IOW('g', 4, enum PHASE_ENUM*)
-#define GOVERNOR_GET_PHASE _IOR('g', 5, enum PHASE_ENUM*)
+
 
 int AI_gov_open(struct inode *i, struct file *f);
 int AI_gov_close(struct inode *i, struct file *f);

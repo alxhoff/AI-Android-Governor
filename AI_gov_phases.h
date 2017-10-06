@@ -12,8 +12,11 @@
 
 #define AI_GOV_NUM_OF_PHASES
 
-#define GET_ATTRIBUTES(phase, defaults) \
+#define GET_ATTRIBUTES_W_PROFILE(phase, defaults) \
 		((struct phase_##phase##_attributes*)defaults->profile_attributes)
+
+#define GET_ATTRIBUTES(phase) \
+		((struct phase_##phase##_attributes*)AI_gov->current_profile->profile_attributes)
 
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\

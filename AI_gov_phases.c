@@ -281,31 +281,31 @@ unsigned char AI_phases_set_defaults(void)
 	struct phase_profile* set_defaults;
 	//framerate
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_framerate]);
-	GET_ATTRIBUTES(AI_framerate, set_defaults)->desired_framerate
+	GET_ATTRIBUTES_W_PROFILE(AI_framerate, set_defaults)->desired_framerate
 			= FRAMERATE_DESIRED_FRAMERATE;
 	//THIS LINE IS PROBABLY WRONG VVVVV
-	GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history =
+	GET_ATTRIBUTES_W_PROFILE(AI_framerate, set_defaults)->timestamp_history =
 			kmalloc(sizeof(int)*FRAMERATE_HISTORY_LENGTH, GFP_KERNEL);
 	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	if(GET_ATTRIBUTES(AI_framerate, set_defaults)->timestamp_history
+	if(GET_ATTRIBUTES_W_PROFILE(AI_framerate, set_defaults)->timestamp_history
 			== NULL) return -ENOMEM;
 
 	//priority
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
-	GET_ATTRIBUTES(AI_priority, set_defaults)->maximum_priority
+	GET_ATTRIBUTES_W_PROFILE(AI_priority, set_defaults)->maximum_priority
 			= MAXIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->minimum_priority
+	GET_ATTRIBUTES_W_PROFILE(AI_priority, set_defaults)->minimum_priority
 			= MINIMUM_PRIORITY;
-	GET_ATTRIBUTES(AI_priority, set_defaults)->priority_scalar
+	GET_ATTRIBUTES_W_PROFILE(AI_priority, set_defaults)->priority_scalar
 			= DEFAULT_PRIORITY_SCALAR;
 
 	//time
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_time]);
-	GET_ATTRIBUTES(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
+	GET_ATTRIBUTES_W_PROFILE(AI_time, set_defaults)->alarm_mode = DEFAULT_TIME_MODE;
 
 	//response
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_response]);
-	GET_ATTRIBUTES(AI_response, set_defaults)->user_input_importance
+	GET_ATTRIBUTES_W_PROFILE(AI_response, set_defaults)->user_input_importance
 			= DEFAULT_USER_IMPORTANCE;
 
 	//exit
