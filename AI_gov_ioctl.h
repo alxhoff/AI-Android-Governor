@@ -26,17 +26,17 @@ struct AI_gov_ioctl_phase_variable{
 	unsigned long variable_value;
 };
 
-//static dev_t dev;
-//static struct cdev c_dev;
-//static struct class *cl;
+static dev_t dev;
+static struct cdev c_dev;
+static struct class *cl;
 
 extern struct file_operations AI_governor_fops;
 
 #define GOVERNOR_GET_PHASE _IOR('g', 1, unsigned long)
 #define GOVERNOR_SET_PHASE _IOW('g', 2, unsigned long)
 #define GOVERNOR_CLR_PHASE_VARIABLES _IOWR('g', 3, unsigned long)
-#define GOVERNOR_SET_PHASE_VARIABLE _IOW('g', 4, struct AI_gov_ioctl_phase_variable*)
 #define GOVERNOR_GET_PHASE_VARIABLE _IOWR('g', 4, struct AI_gov_ioctl_phase_variable*)
+#define GOVERNOR_SET_PHASE_VARIABLE _IOW('g', 5, struct AI_gov_ioctl_phase_variable*)
 
 
 
