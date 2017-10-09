@@ -15,6 +15,10 @@
 #include "AI_gov_types.h"
 #include "AI_gov_phases.h"
 
+signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var);
+unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var);
+signed int AI_gov_ioctl_clear_phase(enum PHASE_ENUM phase);
+char *device_node(struct device *dev, umode_t *mode);
 
 static dev_t dev;
 static struct cdev c_dev;
@@ -23,6 +27,147 @@ static struct class *cl;
 const unsigned AI_baseminor = 0, AI_minorCount = 1;
 
 static uint8_t initialized = 0;
+
+struct file_operations AI_governor_fops =
+{
+	.owner = THIS_MODULE,
+	.open = AI_gov_open,
+	.release = AI_gov_close,
+//#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+//	.ioctl = AI_gov_ioctl
+//#else
+        .unlocked_ioctl = AI_gov_ioctl
+//#endif
+};
+
+//#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+//int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
+//#else
+long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+//#endif
+{
+	switch(cmd){
+	case GOVERNOR_GET_PHASE:{
+		unsigned long g;
+		g = AI_gov->phase;
+		if(copy_to_user((unsigned long *)arg, &g, sizeof(unsigned long)))
+			return -EACCES;
+	}
+		break;
+	case GOVERNOR_SET_PHASE:{
+		unsigned long g;
+		enum PHASE_ENUM phase;
+		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
+			return -EACCES;
+		phase = (enum PHASE_ENUM)g;
+		AI_gov->phase = phase;
+	}
+		break;
+	case GOVERNOR_CLR_PHASE_VARIABLES:{
+		unsigned long g;
+		enum PHASE_ENUM phase;
+		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
+			return -EACCES;
+		phase = (enum PHASE_ENUM)g;
+		AI_gov_ioctl_clear_phase(phase);
+	}
+		break;
+	case GOVERNOR_SET_PHASE_VARIABLE:{
+		struct AI_gov_ioctl_phase_variable g;
+		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
+				sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
+		AI_gov_ioctl_set_variable(g);
+	}
+		break;
+	case GOVERNOR_GET_PHASE_VARIABLE:{
+		struct AI_gov_ioctl_phase_variable g;
+		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
+				sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
+		AI_gov_ioctl_get_variable(&g);
+		if(copy_to_user((struct AI_gov_ioctl_phase_variable *)arg,
+				&g, sizeof(struct AI_gov_ioctl_phase_variable)))
+			return -EACCES;
+	}
+		break;
+	default:
+		return -EINVAL;
+		break;
+	}
+	return 0;
+}
+
+int AI_gov_ioctl_init(void)
+{
+	int ret = 0;
+	struct device *dev_ret;
+
+	if (initialized > 0) {
+		return ret;
+	}
+
+	//register char dev numbers, call with zero to get dynamic number allocated
+	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0){
+		KERNEL_ERROR_MSG(
+				"[IOCTL] AI_Governor: Error allocating char device region. "
+				"Aborting!\n");
+		return ret;
+	}
+
+	//init cdev struct with file operations
+	cdev_init(&c_dev, &AI_governor_fops);
+
+	//add char device to system
+	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0)
+		KERNEL_ERROR_MSG(
+				"[IOCTL] AI_Governor: Error adding char device. Aborting!\n");
+		return ret;
+
+	if (IS_ERR(cl = class_create(THIS_MODULE, "AI_governor_ioctl")))
+	{
+		cdev_del(&c_dev);
+		unregister_chrdev_region(dev, AI_minorCount);
+		KERNEL_ERROR_MSG(
+				"[IOCTL] AI_Governor: Error initializing char device."
+				" Aborting!\n");
+		return PTR_ERR(cl);
+	}
+
+	//permissions again
+	cl->devnode = device_node;
+
+	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AI_governor_ioctl")))
+	{
+		class_destroy(cl);
+		cdev_del(&c_dev);
+		unregister_chrdev_region(dev, AI_minorCount);
+		KERNEL_ERROR_MSG(
+						"[IOCTL] AI_Governor: Error initializing char device."
+						" Aborting!\n");
+		return PTR_ERR(dev_ret);
+	}
+
+	initialized = 1;
+
+	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Char device initialized! \n");
+	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Device name: %s\n",
+			dev_name(dev_ret));
+
+	return 0;
+}
+
+int AI_gov_ioctl_exit(void)
+{
+	initialized = 0;
+	device_destroy(cl, dev);
+	class_destroy(cl);
+	cdev_del(&c_dev);
+	unregister_chrdev_region(dev, AI_minorCount);
+
+	KERNEL_ERROR_MSG("[IOCTL] AI_Governor: IOCTL closed\n");
+	return 0;
+}
 
 int AI_gov_open(struct inode *i, struct file *f)
 {
@@ -38,7 +183,7 @@ unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
 {
 	if(var->phase != AI_gov->phase) return -EACCES;
 
-switch(var->phase){
+	switch(var->phase){
 		case AI_init:
 			switch(var->variable_index){
 			case 0:
@@ -252,77 +397,6 @@ signed int AI_gov_ioctl_clear_phase(enum PHASE_ENUM phase)
 	return 0;
 }
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
-int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
-#else
-long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
-#endif
-{
-
-	switch(cmd){
-	case GOVERNOR_GET_PHASE:{
-		unsigned long g;
-		g = AI_gov->phase;
-		if(copy_to_user((unsigned long *)arg, &g, sizeof(unsigned long)))
-				return -EACCES;
-	}
-		break;
-	case GOVERNOR_SET_PHASE:{
-		unsigned long g;
-		enum PHASE_ENUM phase;
-		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
-					return -EACCES;
-		phase = (enum PHASE_ENUM)g;
-		AI_gov->phase = phase;
-	}
-		break;
-	case GOVERNOR_CLR_PHASE_VARIABLES:{
-		unsigned long g;
-		enum PHASE_ENUM phase;
-		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
-			return -EACCES;
-		phase = (enum PHASE_ENUM)g;
-		AI_gov_ioctl_clear_phase(phase);
-	}
-		break;
-	case GOVERNOR_SET_PHASE_VARIABLE:{
-		struct AI_gov_ioctl_phase_variable g;
-		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
-				sizeof(struct AI_gov_ioctl_phase_variable)))
-			return -EACCES;
-		AI_gov_ioctl_set_variable(g);
-	}
-		break;
-	case GOVERNOR_GET_PHASE_VARIABLE:{
-		struct AI_gov_ioctl_phase_variable g;
-		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
-				sizeof(struct AI_gov_ioctl_phase_variable)))
-			return -EACCES;
-		AI_gov_ioctl_get_variable(&g);
-		if(copy_to_user((struct AI_gov_ioctl_phase_variable *)arg,
-				&g, sizeof(struct AI_gov_ioctl_phase_variable)))
-			return -EACCES;
-	}
-		break;
-	default:
-		return -EINVAL;
-		break;
-
-	}
-	return 0;
-}
-
-struct file_operations AI_governor_fops =
-{
-	.owner = THIS_MODULE,
-	.open = AI_gov_open,
-	.release = AI_gov_close,
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
-	.ioctl = AI_gov_ioctl
-#else
-        .unlocked_ioctl = AI_gov_ioctl
-#endif
-};
 
 //permissions change
 char *device_node(struct device *dev, umode_t *mode)
@@ -333,75 +407,3 @@ char *device_node(struct device *dev, umode_t *mode)
 	return NULL;
 }
 
-int AI_gov_ioctl_init(void)
-{
-	int ret = 0;
-	struct device *dev_ret;
-
-	if (initialized > 0) {
-		return ret;
-	}
-
-	//register char dev numbers, call with zero to get dynamic number allocated
-	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0){
-		KERNEL_ERROR_MSG(
-						"[IOCTL] AI_Governor: Error allocating char device region. "
-						"Aborting!\n");
-		return ret;
-	}
-
-	//init cdev struct with file operations
-	cdev_init(&c_dev, &AI_governor_fops);
-
-	//add char device to system
-	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0)
-		KERNEL_ERROR_MSG(
-						"[IOCTL] AI_Governor: Error adding char device. Aborting!\n");
-		return ret;
-
-	if (IS_ERR(cl = class_create(THIS_MODULE, "AI_governor_ioctl")))
-	{
-		cdev_del(&c_dev);
-		unregister_chrdev_region(dev, AI_minorCount);
-		KERNEL_ERROR_MSG(
-						"[IOCTL] AI_Governor: Error initializing char device."
-						" Aborting!\n");
-		return PTR_ERR(cl);
-	}
-
-	//permissions again
-	cl->devnode = device_node;
-
-	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AI_governor_ioctl")))
-	{
-		class_destroy(cl);
-		cdev_del(&c_dev);
-		unregister_chrdev_region(dev, AI_minorCount);
-		KERNEL_ERROR_MSG(
-						"[IOCTL] AI_Governor: Error initializing char device."
-						" Aborting!\n");
-		return PTR_ERR(dev_ret);
-	}
-
-	//AI_phases_init();
-
-	initialized = 1;
-
-	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Char device initialized! \n");
-	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Device name: %s\n",
-			dev_name(dev_ret));
-
-	return 0;
-}
-
-int AI_gov_ioctl_exit(void)
-{
-	initialized = 0;
-	device_destroy(cl, dev);
-	class_destroy(cl);
-	cdev_del(&c_dev);
-	unregister_chrdev_region(dev, AI_minorCount);
-
-	KERNEL_ERROR_MSG("[IOCTL] AI_Governor: IOCTL closed\n");
-	return 0;
-}
