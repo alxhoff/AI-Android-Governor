@@ -28,13 +28,74 @@
 #include "AI_gov_power_manager.h"
 #include "test_flags.h"
 #include "AI_gov_task_handling.h"
+#include "AI_gov_kernel_write.h"
+#include "AI_gov_sched.h"
 
+extern DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
 #define NUMBER_CPUS 8
 
 // data structure for the workload prediction
 //TODO CHECKS ON CPU COUNT
 ring_buffer_t AI_workload_history_cpus[NUMBER_CPUS];
 static short ring_buffer_initialized = 0;
+
+void AI_coordinator(void)
+{
+	int i = 0;
+	unsigned int total_workload = 0;
+	unsigned flags, workload[8];
+	struct cpufreq_AI_governor_cpuinfo *pcpu_tmp = 0;
+//	static enum PHASE_ENUM current_phase;
+//	enum PHASE_ENUM previous_phase;
+
+	for_each_online_cpu(i) {
+			pcpu_tmp = &per_cpu(cpuinfo, i);
+			spin_lock_irqsave(&pcpu_tmp->load_lock, flags);
+			workload[i] = AI_sched_update_load(i, pcpu_tmp);
+			total_workload += workload[i];
+			AI_tasks_add_data_to_ringbuffer(&(AI_workload_history_cpus[i]), workload[i]);
+			spin_unlock_irqrestore(&pcpu_tmp->load_lock, flags);
+	}
+
+	//TASK HANDLING HERE
+
+//	//get cpu freq
+//	uint32_t little_freq = AI_gov->hardware->little_freq;
+//
+//#ifdef CPU_IS_BIG_LITTLE
+//	uint32_t big_freq = AI_gov->hardware->big_freq;
+//#endif
+
+	switch(AI_gov->phase){
+	case AI_init:
+		break;
+	case AI_framerate:
+		break;
+	case AI_priority:
+		break;
+	case AI_time:
+		break;
+	case AI_powersave:
+		//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+		pr_debug("setting to %u kHz because of powersave \n",
+									AI_gov->cpu_freq_policy->min);
+		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
+						CPUFREQ_RELATION_L);
+		break;
+	case AI_performance:
+		pr_debug("setting to %u kHz because of performance \n",
+											AI_gov->cpu_freq_policy->max);
+		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
+						CPUFREQ_RELATION_H);
+		break;
+	case AI_response:
+		break;
+	case AI_exit:
+		break;
+	default:
+		break;
+	}
+}
 
 void AI_pm_init_wma_buffers(void)
 {

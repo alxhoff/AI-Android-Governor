@@ -64,7 +64,6 @@
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
 static DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
-//static DEFINE_PER_CPU(struct cpufreq_frequency_table *, cpufreq_show_table);
 
 static cpumask_t speedchange_cpumask_AI;
 static spinlock_t speedchange_cpumask_lock_AI;
@@ -78,8 +77,6 @@ struct AI_gov_info* AI_gov;
 struct phase_profiles* AI_gov_profiles;
 bool profiles_initd = false;
 bool ioctl_initd = false;
-
-//HARDWARE
 
 //TIMER
 void cpufreq_AI_governor_timer_resched(unsigned long expires)
@@ -157,45 +154,7 @@ static void cpufreq_AI_governor_timer_start(
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
 }
 
-void AI_coordinator(void)
-{
-//	//get cpu freq
-//	uint32_t little_freq = AI_gov->hardware->little_freq;
-//
-//#ifdef CPU_IS_BIG_LITTLE
-//	uint32_t big_freq = AI_gov->hardware->big_freq;
-//#endif
 
-	switch(AI_gov->phase){
-	case AI_init:
-		break;
-	case AI_framerate:
-		break;
-	case AI_priority:
-		break;
-	case AI_time:
-		break;
-	case AI_powersave:
-		//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
-		pr_debug("setting to %u kHz because of powersave \n",
-									AI_gov->cpu_freq_policy->min);
-		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
-						CPUFREQ_RELATION_L);
-		break;
-	case AI_performance:
-		pr_debug("setting to %u kHz because of performance \n",
-											AI_gov->cpu_freq_policy->max);
-		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
-						CPUFREQ_RELATION_H);
-		break;
-	case AI_response:
-		break;
-	case AI_exit:
-		break;
-	default:
-		break;
-	}
-}
 
 static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
@@ -234,7 +193,6 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 		//CALCULATE GOVERNOR's ACTIONS
 		AI_coordinator();
 
-
 		//rearm timer
 		cpufreq_AI_governor_timer_resched(common_tunables_AI->timer_rate);
 	}
@@ -246,25 +204,24 @@ extern uint8_t AI_shutdownCpu;
 #ifdef CONFIG_ANDROID
 static void change_sysfs_owner(struct cpufreq_policy *policy)
 {
-	//TODO FIX THIS
 //	char buf[NAME_MAX];
-//	mm_segment_t oldfs;
-//	int i;
-//	char *path = kobject_get_path(AI_get_governor_parent_kobj(policy),
-//			GFP_KERNEL);
+//		mm_segment_t oldfs;
+//		int i;
+//		char *path = kobject_get_path(cpufreq_global_kobject,
+//				GFP_KERNEL);
 //
-//	oldfs = get_fs();
-//	set_fs(get_ds());
+//		oldfs = get_fs();
+//		set_fs(get_ds());
 //
-//	for (i = 0; i < ARRAY_SIZE(AI_governor_sysfs); i++) {
-//		snprintf(buf, sizeof(buf), "/sys%s/AI_governor/%s", path,
-//				AI_governor_sysfs[i]);
-//		sys_chown(buf, AID_SYSTEM, AID_SYSTEM);
-//		KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: path is: %s\ for cpu %d\n", buf, policy->cpu);
-//	}
+//		for (i = 0; i < ARRAY_SIZE(AI_governor_sysfs); i++) {
+//			snprintf(buf, sizeof(buf), "/sys%s/AI_governor/%s", path,
+//					AI_governor_sysfs[i]);
+//			sys_chown(buf, AID_SYSTEM, AID_SYSTEM);
+//			KERNEL_DEBUG_MSG("[GOVERNOR] AI_Governor: path is: %s for cpu %d \n", buf, policy->cpu);
+//		}
 //
-//	set_fs(oldfs);
-//	kfree(path);
+//		set_fs(oldfs);
+//		kfree(path);
 }
 #else
 static inline void change_sysfs_owner(struct cpufreq_policy *policy) {
@@ -317,7 +274,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	int rc = 0;
 	int error_ret = 0;
 	unsigned int j;
-	struct cpufreq_AI_governor_cpuinfo *pcpu;
+	struct cpufreq_AI_governor_cpuinfo *pcpu = {0};
 	struct cpufreq_frequency_table *freq_table;
 	struct cpufreq_AI_gov_tunables *tunables =  common_tunables_AI;
 	char speedchange_task_name[TASK_NAME_LEN];
@@ -417,7 +374,6 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			if (AI_sched_getManagedCores() == 0)
 				AI_gov_ioctl_exit();
 		}
-
 		break;
 	case CPUFREQ_GOV_LIMITS:
 		break;
@@ -513,8 +469,8 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 
 		if(policy->cpu == L0){
 //			//CHECK FOR VALID CPU SOMEHOW
-////			KERNEL_DEBUG_MSG("Entering exit routine, usage count: %d\n",
-////								tunables->usage_count);
+			KERNEL_DEBUG_MSG("Entering exit routine, usage count: %d\n",
+								tunables->usage_count);
 //			KERNEL_DEBUG_MSG( "[GOVERNOR] 6\n");
 			if (AI_sched_getManagedCores() == 0) {
 //				if (policy->governor->initialized == 1) {
@@ -525,6 +481,8 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 				//TODO ADD DEINIT
 				struct phase_profile* temp_phase;
 				FOR_EACH_PHASE(DEINIT_PHASE_KOBJECT);
+
+				AI_gov_ioctl_exit();
 
 				tuned_parameters_AI = kzalloc(sizeof(*tunables), GFP_KERNEL);
 				if (!tuned_parameters_AI) {

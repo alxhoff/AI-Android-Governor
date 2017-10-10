@@ -12,6 +12,8 @@
 #include <linux/types.h>
 
 #include "AI_gov_task_handling.h"
+#include "AI_gov_kernel_write.h"
+#include "AI_gov_sched.h"
 
 void AI_tasks_init_ring_buffer(ring_buffer_t * ring_buffer, unsigned int size)
 {
@@ -29,4 +31,23 @@ void AI_tasks_init_ring_buffer(ring_buffer_t * ring_buffer, unsigned int size)
 	// set first element
 	ring_buffer->first = &(ring_buffer->data[0]);
 	ring_buffer->first->next = ring_buffer->data[0].next;
+}
+
+/**
+ * Add the number and move first pointer;
+ */
+void AI_tasks_add_data_to_ringbuffer(ring_buffer_t * ring_buffer,
+		int64_t workload)
+{
+
+	if (ring_buffer->first == 0)
+		KERNEL_DEBUG_MSG("[TASKS] Error, first element is null\n");
+	else {
+		ring_buffer->first->workload = workload;
+		if (ring_buffer->first->next == 0) {
+			KERNEL_DEBUG_MSG("[TASKS] Error, ring_buffer->first->next is null %x\n", (int) ring_buffer->first);
+			return;
+		} else
+			ring_buffer->first = ring_buffer->first->next;
+	}
 }

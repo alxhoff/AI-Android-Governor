@@ -11,6 +11,7 @@
 #include "AI_gov.h"
 
 void AI_pm_init_wma_buffers(void);
+void AI_coordinator(void);
 
 
 #endif /* AI_GOV_POWER_MANAGER_H_ */
