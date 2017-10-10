@@ -61,7 +61,6 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
 			return -EACCES;
 		phase = (enum PHASE_ENUM)g;
-//		AI_gov->phase = phase;
 		AI_gov_sysfs_load_profile(phase);
 	}
 		break;

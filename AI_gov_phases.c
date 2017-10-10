@@ -16,17 +16,17 @@
 #define PHASE_NAME(NAME)	#NAME
 
 #define init_phase_struct(SET_PHASE)	\
-	unsigned int enter_##SET_PHASE##_phase(void* attributes); \
-	unsigned int exit_##SET_PHASE##_phase(void* attributes); \
-	unsigned int run_##SET_PHASE##_phase(void* attributes); \
-	static unsigned int phase_##SET_PHASE##_enter(void* attributes){ \
-		return enter_##SET_PHASE##_phase(attributes); \
+	unsigned int enter_##SET_PHASE##_phase(void); \
+	unsigned int exit_##SET_PHASE##_phase(void); \
+	unsigned int run_##SET_PHASE##_phase(void); \
+	static unsigned int phase_##SET_PHASE##_enter(void){ \
+		return enter_##SET_PHASE##_phase(); \
 	} \
-	static unsigned int phase_##SET_PHASE##_exit(void* attributes){ \
-		return exit_##SET_PHASE##_phase(attributes); \
+	static unsigned int phase_##SET_PHASE##_exit(void){ \
+		return exit_##SET_PHASE##_phase(); \
 	} \
-	static unsigned int phase_##SET_PHASE##_run(void* attributes){ \
-		return run_##SET_PHASE##_phase(attributes); \
+	static unsigned int phase_##SET_PHASE##_run(void){ \
+		return run_##SET_PHASE##_phase(); \
 	} \
 	struct phase_profile* init_##SET_PHASE##_profile(void){ \
 		struct phase_profile* init_phase_profile =  \
@@ -63,149 +63,220 @@ char* PHASE_STRINGS[] = {
 	FOR_EACH_PHASE(GENERATE_STRING)
 };
 
+signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
+{
+	int ret = 0;
+
+	if(AI_gov->current_profile->exit!= NULL) AI_gov->current_profile->exit();
+
+	AI_gov->prev_phase = AI_gov->phase;
+	AI_gov->phase = new_phase;
+
+	if(AI_gov->current_profile != NULL){
+		KERNEL_DEBUG_MSG("[GOVERNOR] unloading profile: %s \n",
+				AI_gov->current_profile->phase_name);
+
+		AI_gov->previous_profile = AI_gov->current_profile;
+
+		kobject_del(AI_gov->current_profile->kobj);
+	}else {
+		KERNEL_DEBUG_MSG(
+				"[GOVERNOR] no profile to unload \n");
+		return -ENOENT;
+	}
+
+	AI_gov->current_profile = AI_phases_get_name(PHASE_STRINGS[new_phase]);
+
+	if(AI_gov->current_profile == NULL){
+		KERNEL_ERROR_MSG( \
+			"[GOVERNOR] AI_Governor: failed to retrieve new profile:" \
+				" %d \n", new_phase);
+		return -ENOENT;
+	}
+
+	if(AI_gov->current_profile->enter != NULL) AI_gov->current_profile->enter();
+
+	if(kobject_add(AI_gov->current_profile->kobj, AI_gov->kobj, "profile")){
+		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+						"Can't add kobj\n");
+		return -ENOENT;
+	}
+
+	ret = sysfs_create_group(AI_gov->current_profile->kobj,
+			AI_gov->current_profile->sysfs_attr_grp);
+
+	if(ret){
+		KERNEL_ERROR_MSG("[GOVERNOR]AI_Governor: "
+				"Error attaching current sysfs profile's attributes! Code: %d\n", ret);
+		kobject_put(AI_gov->hardware->kobj);
+		return ret;
+	}
+
+	KERNEL_DEBUG_MSG(
+		"[GOVERNOR] profile loaded: %s \n",
+		AI_gov->current_profile->phase_name);
+
+	return 0;
+}
 //INIT
-unsigned int enter_AI_init_phase(void* attributes)
+unsigned int enter_AI_init_phase(void)
 {
-
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered INIT phase");
 	return 0;
 }
 
-unsigned int exit_AI_init_phase(void* attributes)
+unsigned int exit_AI_init_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited INIT phase");
 	return 0;
 }
 
-unsigned int run_AI_init_phase(void* attributes)
+unsigned int run_AI_init_phase(void)
 {
 	return 0;
 }
 
 //FRAMERATE
-unsigned int enter_AI_framerate_phase(void* attributes)
+unsigned int enter_AI_framerate_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered FRAMERATE phase");
 	return 0;
 }
 
-unsigned int exit_AI_framerate_phase(void* attributes)
+unsigned int exit_AI_framerate_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited FRAMERATE phase");
 	return 0;
 }
 
-unsigned int run_AI_framerate_phase(void* attributes)
+unsigned int run_AI_framerate_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(framerate);
 
 //PRIORITY
-unsigned int enter_AI_priority_phase(void* attributes)
+unsigned int enter_AI_priority_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered PRIORITY phase");
 	return 0;
 }
 
-unsigned int exit_AI_priority_phase(void* attributes)
+unsigned int exit_AI_priority_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited PRIORITY phase");
 	return 0;
 }
 
-unsigned int run_AI_priority_phase(void* attributes)
+unsigned int run_AI_priority_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(priority);
 
 ////TIME
-unsigned int enter_AI_time_phase(void* attributes)
+unsigned int enter_AI_time_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered TIME phase");
 	return 0;
 }
 
-unsigned int exit_AI_time_phase(void* attributes)
+unsigned int exit_AI_time_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited TIME phase");
 	return 0;
 }
 
-unsigned int run_AI_time_phase(void* attributes)
+unsigned int run_AI_time_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(time);
 
 ////POWERSAVE
-unsigned int enter_AI_powersave_phase(void* attributes)
+unsigned int enter_AI_powersave_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered POWERSAVE phase");
 	return 0;
 }
 
-unsigned int exit_AI_powersave_phase(void* attributes)
+unsigned int exit_AI_powersave_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited POWERSAVE phase");
 	return 0;
 }
 
-unsigned int run_AI_powersave_phase(void* attributes)
+unsigned int run_AI_powersave_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(powersave);
 
 ////PRIORITY
-unsigned int enter_AI_performance_phase(void* attributes)
+unsigned int enter_AI_performance_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered PERFORMANCE phase");
 	return 0;
 }
 
-unsigned int exit_AI_performance_phase(void* attributes)
+unsigned int exit_AI_performance_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited PERFORMANCE phase");
 	return 0;
 }
 
-unsigned int run_AI_performance_phase(void* attributes)
+unsigned int run_AI_performance_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(performance);
 
 ////RESPONSE
-unsigned int enter_AI_response_phase(void* attributes)
+unsigned int enter_AI_response_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered RESPONSE phase");
 	return 0;
 }
 
-unsigned int exit_AI_response_phase(void* attributes)
+unsigned int exit_AI_response_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited RESPONSE phase");
 	return 0;
 }
 
-unsigned int run_AI_response_phase(void* attributes)
+unsigned int run_AI_response_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(response);
 
 ////EXIT
-unsigned int enter_AI_exit_phase(void* attributes)
+unsigned int enter_AI_exit_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered EXIT phase");
 	return 0;
 }
 
-unsigned int exit_AI_exit_phase(void* attributes)
+unsigned int exit_AI_exit_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited EXIT phase");
 	return 0;
 }
 
-unsigned int run_AI_exit_phase(void* attributes)
+unsigned int run_AI_exit_phase(void)
 {
 	return 0;
 }
-
-//init_phase_struct(exit);
-
 
 struct phase_profile* AI_phases_get_name(char* name)
 {

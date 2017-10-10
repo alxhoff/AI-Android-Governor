@@ -83,9 +83,9 @@ struct phase_profile{
 
 	struct kobject* kobj;
 
-	unsigned int (*enter)(void* attributes);
-	unsigned int (*exit)(void* attributes);
-	unsigned int (*run)(void* attributes);
+	unsigned int (*enter)(void);
+	unsigned int (*exit)(void);
+	unsigned int (*run)(void);
 };
 
 //INIT
