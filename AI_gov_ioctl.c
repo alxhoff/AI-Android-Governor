@@ -14,6 +14,7 @@
 #include "AI_gov_kernel_write.h"
 #include "AI_gov_types.h"
 #include "AI_gov_phases.h"
+#include "AI_gov_sysfs.h"
 
 signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var);
 unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var);
@@ -60,7 +61,8 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
 			return -EACCES;
 		phase = (enum PHASE_ENUM)g;
-		AI_gov->phase = phase;
+//		AI_gov->phase = phase;
+		AI_gov_sysfs_load_profile(phase);
 	}
 		break;
 	case GOVERNOR_CLR_PHASE_VARIABLES:{

@@ -443,18 +443,11 @@ const char *AI_gov_sysfs_hardware[] = {
 #endif
 };
 
-//START MY MACROS
-
-//HERE - ADDING STORE AND SHOW FUNCTIONS
-
-
 //INIT
 static ssize_t show_AI_init_initialized_attribute(char* buf)
 {
-	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] YO DA PHASE IS: %d\n", AI_gov->phase);
-//	return sprintf(buf, "%d\n",
-//			GET_ATTRIBUTES_W_PROFILE(AI_init,AI_gov->current_profile)->initialized);
+	return sprintf(buf, "%d\n",
+			GET_ATTRIBUTES_W_PROFILE(AI_init,AI_gov->current_profile)->initialized);
 }
 
 static ssize_t store_AI_init_initialized_attribute(const char* buf, size_t count)
@@ -850,6 +843,7 @@ signed int AI_gov_sysfs_init(void)
 {
 
 	int ret = 0;
+	struct phase_profile* current_profile_struct;
 
 	//AI_gov parent folder
 	AI_gov->kobj = kobject_create_and_add("AI_governor",
@@ -900,7 +894,7 @@ signed int AI_gov_sysfs_init(void)
 	KERNEL_DEBUG_MSG("[GOVERNOR] retrieving first profile with "
 			"name: %s \n", PHASE_STRINGS[AI_gov->phase]);
 
-	struct phase_profile* current_profile_struct = GET_CURRENT_PROFILE;
+	current_profile_struct = GET_CURRENT_PROFILE;
 
 	AI_gov->current_profile = current_profile_struct;
 

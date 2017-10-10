@@ -140,6 +140,8 @@ int main(int argc, char *argv[])
 
 	if(argc == 1){
 		command = e_get_p;
+		fprintf(stderr, "Please specify a command, default case get phase will"
+			"execute \n");
 	}else if(argc == 2){
 		if (strcmp(argv[1], "-gp") == 0){
 			command = e_get_p;
