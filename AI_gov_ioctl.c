@@ -103,6 +103,9 @@ int AI_gov_ioctl_init(void)
 	int ret = 0;
 	struct device *dev_ret;
 
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] IOctl STARTING INIT \n");
+
 	if (initialized > 0) {
 		return ret;
 	}
@@ -115,14 +118,24 @@ int AI_gov_ioctl_init(void)
 		return ret;
 	}
 
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] IOctl char dev allocated \n");
+
 	//init cdev struct with file operations
 	cdev_init(&c_dev, &AI_governor_fops);
 
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] IOctl char dev init'd with file ops \n");
+
 	//add char device to system
-	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0)
+	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0){
 		KERNEL_ERROR_MSG(
 				"[IOCTL] AI_Governor: Error adding char device. Aborting!\n");
 		return ret;
+	}
+
+	KERNEL_DEBUG_MSG(
+					"[GOVERNOR] IOctl char dev added \n");
 
 	if (IS_ERR(cl = class_create(THIS_MODULE, "AI_governor_ioctl")))
 	{
@@ -131,11 +144,15 @@ int AI_gov_ioctl_init(void)
 		KERNEL_ERROR_MSG(
 				"[IOCTL] AI_Governor: Error initializing char device."
 				" Aborting!\n");
+
 		return PTR_ERR(cl);
 	}
 
 	//permissions again
 	cl->devnode = device_node;
+
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] IOctl class permissions set \n");
 
 	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AI_governor_ioctl")))
 	{
@@ -145,14 +162,21 @@ int AI_gov_ioctl_init(void)
 		KERNEL_ERROR_MSG(
 						"[IOCTL] AI_Governor: Error initializing char device."
 						" Aborting!\n");
+
 		return PTR_ERR(dev_ret);
 	}
+
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] IOctl dev device created \n");
 
 	initialized = 1;
 
 	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Char device initialized! \n");
 	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Device name: %s\n",
 			dev_name(dev_ret));
+
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] IOctl FINISHED INIT \n");
 
 	return 0;
 }
@@ -162,7 +186,7 @@ int AI_gov_ioctl_exit(void)
 	initialized = 0;
 	device_destroy(cl, dev);
 	class_destroy(cl);
-	cdev_del(&c_dev);
+cdev_del(&c_dev);
 	unregister_chrdev_region(dev, AI_minorCount);
 
 	KERNEL_ERROR_MSG("[IOCTL] AI_Governor: IOCTL closed\n");

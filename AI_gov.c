@@ -74,6 +74,7 @@ struct cpufreq_AI_gov_tunables *tuned_parameters_AI = NULL;
 struct AI_gov_info* AI_gov;
 struct phase_profiles* AI_gov_profiles;
 bool profiles_initd = false;
+bool ioctl_initd = false;
 
 //HARDWARE
 
@@ -528,9 +529,12 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			policy->governor_data = tunables;
 
 			//initialize char device and phases
-			if ((error_ret = AI_gov_ioctl_init()) < 0)
-				KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: "
+			if(ioctl_initd == false){
+				if ((error_ret = AI_gov_ioctl_init()) < 0)
+					KERNEL_ERROR_MSG("[GOVERNOR] AI_Governor: "
 						"Error initializing char device! Code: %d\n", error_ret);
+				ioctl_initd = true;
+			}
 
 			KERNEL_DEBUG_MSG(
 					" [GOVERNOR] AI_Governor: finished initialization\n");
