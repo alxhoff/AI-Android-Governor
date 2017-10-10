@@ -79,8 +79,9 @@ bool profiles_initd = false;
 bool ioctl_initd = false;
 
 //TIMER
-void cpufreq_AI_governor_timer_resched(unsigned long expires)
+void cpufreq_AI_governor_timer_resched(void)
 {
+	unsigned long expires;
 	unsigned long flags;
 	// load cpu 0
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, 0);
@@ -125,7 +126,9 @@ void cpufreq_AI_governor_timer(unsigned long data) {
 	//KERNEL_DEBUG_MSG(" [GOVERNOR] Timer expired\n");
 	wake_up_process(tunables->speedchange_task);
 
-	cpufreq_AI_governor_timer_resched(tunables->timer_rate);
+//	KERNEL_DEBUG_MSG(" [GOVERNOR] IN TIMER \n");
+
+	cpufreq_AI_governor_timer_resched();
 	exit: up_read(&pcpu->enable_sem);
 	return;
 }
@@ -149,9 +152,12 @@ static void cpufreq_AI_governor_timer_start(
 	}
 
 	pcpu->cpu_timer.expires = expires;
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] YO expires set \n");
+
 	add_timer_on(&pcpu->cpu_timer, cpu);
 
-	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start end \n");
+	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start finished \n");
 }
 
 
@@ -160,7 +166,9 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
 	unsigned long flags, init = 0;
 
-	while(kthread_should_stop()){
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN TASK \n");
+
+	while(!kthread_should_stop()){
 		set_current_state(TASK_INTERRUPTIBLE);
 		spin_lock_irqsave(&speedchange_cpumask_lock_AI, flags);
 
@@ -194,7 +202,10 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 		AI_coordinator();
 
 		//rearm timer
-		cpufreq_AI_governor_timer_resched(common_tunables_AI->timer_rate);
+		cpufreq_AI_governor_timer_resched();
+
+		KERNEL_DEBUG_MSG(" [GOVERNOR] TIMER RESCHEDULED");
+
 	}
 	return 0;
 }
@@ -253,16 +264,16 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 	return NOTIFY_OK;
 }
 
-static int AI_touch_nb_callback(void)
-{
-	AI_phases_touch_nb();
-	cpufreq_AI_governor_timer_resched(FAST_RESCHEDULE);
-	return 0;
-}
+//static int AI_touch_nb_callback(void)
+//{
+//	AI_phases_touch_nb();
+//	cpufreq_AI_governor_timer_resched(FAST_RESCHEDULE);
+//	return 0;
+//}
 
-static struct notifier_block AI_touch_nb = { .notifier_call =
-		AI_touch_nb_callback,
-};
+//static struct notifier_block AI_touch_nb = { .notifier_call =
+//		AI_touch_nb_callback,
+//};
 
 
 static struct notifier_block cpufreq_notifier_block = { .notifier_call =
@@ -286,8 +297,11 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	case CPUFREQ_GOV_START:
 		mutex_lock(&gov_lock_AI);
 
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO start started \n");
+
+
 		//TODO SAVE INTO STRUCTS
-		freq_table = cpufreq_frequency_get_table(policy->cpu);
+//		freq_table = cpufreq_frequency_get_table(policy->cpu);
 
 		for_each_cpu(j, policy->cpus) {
 			pcpu = &per_cpu(cpuinfo, j);
@@ -300,16 +314,25 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			up_write(&pcpu->enable_sem);
 		}
 
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO pcpu dome \n");
+
 		//TODO Conditional regarding hardware
 		if(tunables && gov_started == 0){
+
+			KERNEL_DEBUG_MSG(
+					" [GOVERNOR] YO in condition \n");
 
 			//create task
 			snprintf(speedchange_task_name, TASK_NAME_LEN,
 					"AI_governor%d\n", policy->cpu);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task name: %s \n", speedchange_task_name);
+
 			tunables->speedchange_task =  kthread_create(
 					cpufreq_AI_governor_speedchange_task, NULL,
 					speedchange_task_name);
+
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task creat run \n");
 
 			//if task errors (THIS CRASHES)
 			if (IS_ERR(tunables->speedchange_task)) {
@@ -318,21 +341,36 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 					return PTR_ERR(tunables->speedchange_task);
 			}
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] Task created \n");
+
 			//if task is set then set priority
 			sched_setscheduler_nocheck(tunables->speedchange_task, SCHED_FIFO,
 											&param);
+
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task schedule \n");
+
 			get_task_struct(tunables->speedchange_task);
+
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO struct got \n");
+
 
 			// kthread_bind(tunables->speedchange_task, policy->cpu);
 			/* NB: wake up so the thread does not look hung to the freezer */
 			wake_up_process(tunables->speedchange_task);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task woke yo \n");
+
 			down_write(&pcpu->enable_sem);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO wrote downz \n");
+
 			cpufreq_AI_governor_timer_start(tunables, 0);
+
+			KERNEL_DEBUG_MSG(
+					" [GOVERNOR] AI_gov: timer started \n");
+
 			up_write(&pcpu->enable_sem);
 
-			//TODO CAN THIS BE MOVED?
 			gov_started = 1;
 		}
 		mutex_unlock(&gov_lock_AI);
@@ -446,7 +484,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	//		}
 
 			if (!policy->governor->initialized) {
-				AI_touch_register_notify(&AI_touch_nb);
+//				AI_touch_register_notify(&AI_touch_nb);
 				//				idle_notifier_register(&cpufreq_AI_governor_idle_nb);
 				//register_hotcpu_notifier(&cpufreq_notifier_block);
 			}
@@ -460,10 +498,9 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 						"Error initializing char device! Code: %d\n", error_ret);
 				ioctl_initd = true;
 			}
-
-			KERNEL_DEBUG_MSG(
-					" [GOVERNOR] AI_Governor: finished initialization\n");
 		}
+		KERNEL_DEBUG_MSG(
+							" [GOVERNOR] AI_Governor: finished initialization\n");
 		break;
 	case CPUFREQ_GOV_POLICY_EXIT:
 
@@ -541,7 +578,7 @@ static int __init cpufreq_gov_AI_init(void)
 
 static void __exit cpufreq_gov_AI_exit(void)
 {
-	AI_touch_unregister_notify(&AI_touch_nb);
+//	AI_touch_unregister_notify(&AI_touch_nb);
 	cpufreq_unregister_governor(&cpufreq_gov_AI);
 }
 

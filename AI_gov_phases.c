@@ -135,6 +135,8 @@ unsigned int exit_AI_init_phase(void)
 
 unsigned int run_AI_init_phase(void)
 {
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] RUNNING INIT");
 	return 0;
 }
 
@@ -215,6 +217,11 @@ unsigned int exit_AI_powersave_phase(void)
 
 unsigned int run_AI_powersave_phase(void)
 {
+	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+	pr_debug("setting to %u kHz because of powersave \n",
+								AI_gov->cpu_freq_policy->min);
+	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
+					CPUFREQ_RELATION_L);
 	return 0;
 }
 
@@ -235,6 +242,11 @@ unsigned int exit_AI_performance_phase(void)
 
 unsigned int run_AI_performance_phase(void)
 {
+	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+	pr_debug("setting to %u kHz because of performance \n",
+										AI_gov->cpu_freq_policy->max);
+	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
+					CPUFREQ_RELATION_H);
 	return 0;
 }
 

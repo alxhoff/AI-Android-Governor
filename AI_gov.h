@@ -27,7 +27,5 @@ extern struct phase_profiles* AI_gov_profiles;
 
 //static int AI_touch_nb_callback(void);
 
-void cpufreq_AI_governor_timer_resched(unsigned long expires);
-
 
 #endif /* AI_GOV_H_ */

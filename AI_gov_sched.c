@@ -42,6 +42,15 @@ static struct AI_cores {
 #define CRITICAL_WORKLOAD_MARGIN_LITTLE 90
 #define CRITICAL_WORKLOAD_MARGIN_BIG 90
 
+struct cpu_load
+{
+	unsigned int frequency;
+	unsigned int load;
+	u64 last_update;
+};
+static DEFINE_PER_CPU(struct cpu_load, cpuload);
+
+
 // avoiding race conditions while updating the data
 //static DEFINE_RWLOCK(hotplug_rwlock);
 static DEFINE_MUTEX(hotplugMutex);
@@ -650,6 +659,43 @@ inline cputime64_t AI_sched_get_cpu_idle_time(unsigned int cpu,
 	return idle_time;
 }
 
+void AI_update_cpu_metric(int cpu, u64 now, u64 delta_idle, u64 delta_time,
+		       struct cpufreq_policy *policy)
+{
+	struct cpu_load *pcpuload = &per_cpu(cpuload, cpu);
+	unsigned int load;
+
+	/*
+	 * Calculate the active time in the previous time window
+	 *
+	 * load = active time / total_time * 100
+	 */
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 1\n");
+
+	if (delta_time <= delta_idle || delta_time == 0)
+		load = 0;
+	else
+		load = div64_u64((100 * (delta_time - delta_idle)), delta_time);
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 2\n");
+
+	pcpuload->load = load;
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 3\n");
+
+	//THIS BREAKS!!!
+	pcpuload->frequency = policy->cur;
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 4\n");
+
+	pcpuload->last_update = now;
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 5\n");
+
+#ifdef CONFIG_CPU_THERMAL_IPA_DEBUG
+	trace_printk("cpu_load: cpu: %d freq: %u load: %u\n", cpu, policy->cur, load);
+#endif
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN LOAD 6\n");
+
+}
+
 int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 	struct cpufreq_AI_governor_tunables *tunables;
 	u64 now = 0;
@@ -667,6 +713,8 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 		return 0;
 	}
 	#endif
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 1\n");
+
 
 	if (pcpu != NULL) {
 		if (&pcpu->policy == NULL) {
@@ -679,6 +727,7 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 		KERNEL_ERROR_MSG(" [PM] AI_Governor: no pcpu \n");
 		return 0;
 	}
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 2\n");
 
 	//if (tunables != NULL) {
 	//	if (&tunables->io_is_busy != NULL) {
@@ -693,17 +742,25 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 	if (&pcpu->time_in_idle != NULL)
 		delta_idle = (unsigned int) (now_idle - pcpu->time_in_idle);
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 3\n");
+
 	if (&pcpu->time_in_idle_timestamp != NULL)
 		delta_time = (unsigned int) (now - pcpu->time_in_idle_timestamp);
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 4\n");
 
 	if (delta_time <= delta_idle)
 		active_time = 0;
 	else
 		active_time = delta_time - delta_idle;
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 5\n");
+
 	//pcpu->cputime_speedadj += active_time * pcpu->policy->cur;
 
-	update_cpu_metric(cpu, now, delta_idle, delta_time, pcpu->policy);
+	AI_update_cpu_metric(cpu, now, delta_idle, delta_time, pcpu->policy);
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 6\n");
 
 	//	if (cpu == A15C0)
 	//		KERNEL_ERROR_MSG(" [PM] AI_Governor: cpu %d, cpu, now_idle %llu, pcpu->time_in_idle %llu, now %llu, pcpu->time_in_idle_timestamp %llu\n",
@@ -712,8 +769,12 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 	if (&pcpu->time_in_idle != NULL)
 		pcpu->time_in_idle = now_idle;
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 7\n");
+
 	if (&pcpu->time_in_idle_timestamp != NULL)
 		pcpu->time_in_idle_timestamp = now;
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 8\n");
 
 	return cpu_load_metric_get_per_core(cpu);
 }
