@@ -140,8 +140,7 @@ int main(int argc, char *argv[])
 		e_set_p,
 		e_clr,
 		e_get_v,
-		e_set_v,
-		e_set
+		e_set_v
 	}command;
 
 	if(argc == 1){
@@ -154,13 +153,13 @@ int main(int argc, char *argv[])
 			command = e_set_p;
 		}
 		else if (strcmp(argv[1], "-clr") == 0){
-			command = e_set;
+			command = e_clr;
 		}
 		else if (strcmp(argv[1], "-gv") == 0){
-			command = e_set;
+			command = e_get_v;
 		}
 		else if (strcmp(argv[1], "-sv") == 0){
-			command = e_set;
+			command = e_set_v;
 		}
 		else{
 			fprintf(stderr, "Usage: %s [-gp (get phase) | -sp (set phase) | -clr (clear "

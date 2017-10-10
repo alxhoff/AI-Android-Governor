@@ -18,7 +18,7 @@
 
 signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var);
 unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var);
-signed int AI_gov_ioctl_clear_phase(enum PHASE_ENUM phase);
+signed int AI_gov_ioctl_clear_phase();
 char *device_node(struct device *dev, umode_t *mode);
 
 static dev_t dev;
@@ -66,12 +66,7 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 	}
 		break;
 	case GOVERNOR_CLR_PHASE_VARIABLES:{
-		unsigned long g;
-		enum PHASE_ENUM phase;
-		if(copy_from_user(&g, (unsigned long*)arg, sizeof(unsigned long)))
-			return -EACCES;
-		phase = (enum PHASE_ENUM)g;
-		AI_gov_ioctl_clear_phase(phase);
+		AI_gov_ioctl_clear_phase();
 	}
 		break;
 	case GOVERNOR_SET_PHASE_VARIABLE:{
@@ -207,13 +202,13 @@ int AI_gov_close(struct inode *i, struct file *f)
 
 unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
 {
-	if(var->phase != AI_gov->phase) return -EACCES;
+	var->phase = AI_gov->phase;
 
-	switch(var->phase){
+	switch(AI_gov->phase){
 		case AI_init:
 			switch(var->variable_index){
 			case 0:
-				return GET_ATTRIBUTES(AI_init)->initialized;
+				var->variable_value =  GET_ATTRIBUTES(AI_init)->initialized;
 				break;
 			default:
 				break;
@@ -294,10 +289,9 @@ unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
 
 signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var)
 {
-	//TODO current profile phase == aig_gov phase check?
-	if(var.phase != AI_gov->phase) return -EACCES;
+	var.phase = AI_gov->phase;
 
-	switch(var.phase){
+	switch(AI_gov->phase){
 		case AI_init:
 			switch(var.variable_index){
 			case 0:
@@ -380,11 +374,9 @@ signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var)
 	return 0;
 }
 
-signed int AI_gov_ioctl_clear_phase(enum PHASE_ENUM phase)
+signed int AI_gov_ioctl_clear_phase(void)
 {
-	if(phase != AI_gov->phase) return -EACCES;
-
-	switch(phase){
+	switch(AI_gov->phase){
 	case AI_init:
 		GET_ATTRIBUTES(AI_init)->initialized = 0;
 		break;

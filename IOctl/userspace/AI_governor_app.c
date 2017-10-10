@@ -77,15 +77,7 @@ void set_phase(int fd)
 
 void clr_phase_variables(int fd)
 {
-	int v;
-	enum PHASE_ENUM g;
-
-	printf("Enter phase to clear: ");
-	scanf("%d", &v);
-	getchar();
-	g = v;
-
-	if(ioctl(fd, GOVERNOR_CLR_PHASE_VARIABLES, &g) == -1)
+	if(ioctl(fd, GOVERNOR_CLR_PHASE_VARIABLES) == -1)
 		perror("AI_gov_apps ioctl clr phase variables");
 }
 
@@ -94,10 +86,6 @@ void set_phase_variable(int fd)
 	int v;
 	struct AI_gov_ioctl_phase_variable g;
 
-	printf("Enter phase to modify: ");
-	scanf("%d", &v);
-	getchar();
-	g.phase = (enum PHASE_ENUM)v;
 	printf("Enter variable index: ");
 	scanf("%d", &v);
 	getchar();
@@ -116,8 +104,14 @@ void set_phase_variable(int fd)
 
 void get_phase_variable(int fd)
 {
+	int v;
 	struct AI_gov_ioctl_phase_variable g;
 
+	printf("Enter variable index: ");
+	scanf("%d", &v);
+	getchar();
+	g.variable_index = (unsigned char)v;
+	
 	if(ioctl(fd, GOVERNOR_GET_PHASE_VARIABLE, &g) == -1)
 		perror("AI_gov_apps profile set");
 	else
@@ -134,8 +128,7 @@ int main(int argc, char *argv[])
 		e_set_p,
 		e_clr,
 		e_get_v,
-		e_set_v,
-		e_set
+		e_set_v
 	}command;
 
 	if(argc == 1){
@@ -150,13 +143,13 @@ int main(int argc, char *argv[])
 			command = e_set_p;
 		}
 		else if (strcmp(argv[1], "-clr") == 0){
-			command = e_set;
+			command = e_clr;
 		}
 		else if (strcmp(argv[1], "-gv") == 0){
-			command = e_set;
+			command = e_get_v;
 		}
 		else if (strcmp(argv[1], "-sv") == 0){
-			command = e_set;
+			command = e_set_v;
 		}
 		else{
 			fprintf(stderr, "Usage: %s [-gp (get phase) | -sp (set phase) | -clr (clear "
