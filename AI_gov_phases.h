@@ -10,8 +10,6 @@
 
 #include "test_flags.h"
 
-#define AI_GOV_NUM_OF_PHASES
-
 #define GET_ATTRIBUTES_W_PROFILE(phase, defaults) \
 		((struct phase_##phase##_attributes*)defaults->profile_attributes)
 

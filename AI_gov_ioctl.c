@@ -18,7 +18,7 @@
 
 signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var);
 unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var);
-signed int AI_gov_ioctl_clear_phase();
+signed int AI_gov_ioctl_clear_phase(void);
 char *device_node(struct device *dev, umode_t *mode);
 
 static dev_t dev;
@@ -199,6 +199,8 @@ int AI_gov_close(struct inode *i, struct file *f)
 {
 	return 0;
 }
+
+//TODO MACROS FOR IOCTL
 
 unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
 {

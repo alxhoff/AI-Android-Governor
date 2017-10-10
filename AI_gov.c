@@ -50,6 +50,9 @@
 #include "AI_gov_task_handling.h"
 #include "AI_gov_sysfs.h"
 
+#define DEINIT_PHASE_KOBJECT(PHASE)	\
+				temp_phase = AI_phases_get_name(#PHASE); \
+				kobject_del(temp_phase->kobj); \
 
 #ifndef AID_SYSTEM
 #define AID_SYSTEM	(1000)
@@ -163,26 +166,35 @@ void AI_coordinator(void)
 //	uint32_t big_freq = AI_gov->hardware->big_freq;
 //#endif
 
-//	switch(AI_gov->phase){
-//	case AI_init:
-//		break;
-//	case AI_framerate:
-//		break;
-//	case AI_priority:
-//		break;
-//	case AI_time:
-//		break;
-//	case AI_powersave:
-//		break;
-//	case AI_performance:
-//		break;
-//	case AI_response:
-//		break;
-//	case AI_exit:
-//		break;
-//	default:
-//		break;
-//	}
+	switch(AI_gov->phase){
+	case AI_init:
+		break;
+	case AI_framerate:
+		break;
+	case AI_priority:
+		break;
+	case AI_time:
+		break;
+	case AI_powersave:
+		//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+		pr_debug("setting to %u kHz because of powersave \n",
+									AI_gov->cpu_freq_policy->min);
+		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
+						CPUFREQ_RELATION_L);
+		break;
+	case AI_performance:
+		pr_debug("setting to %u kHz because of performance \n",
+											AI_gov->cpu_freq_policy->max);
+		__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
+						CPUFREQ_RELATION_H);
+		break;
+	case AI_response:
+		break;
+	case AI_exit:
+		break;
+	default:
+		break;
+	}
 }
 
 static int cpufreq_AI_governor_speedchange_task(void* data){
@@ -452,65 +464,22 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 
 			if(!profiles_initd){
 				//AIGOV INIT
-				KERNEL_DEBUG_MSG("[GOVERNOR] STARTING AI_GOV_INIT\n");
-
 				rc = AI_gov_init(&AI_gov);
 
 				if(rc) KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_gov_init failed: %d\n", rc);
 
-				KERNEL_DEBUG_MSG("[GOVERNOR] FINISHED AI_GOV_INIT\n");
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] YO 1: %d \n", AI_gov->phase);
-
-				//HERE ADD INIT FLAG
-
-				KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED INIT PROFILES \n");
+				AI_gov->cpu_freq_policy = policy;
 
 				rc = AI_phases_init_profiles();
 
 				if(rc) KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_phases_init_profiles failed: %d\n", rc);
 
-				KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED INIT PROFILES \n");
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] YO 2: %d \n", AI_gov->phase);
-
-
-
-				KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SYSFS INIT \n");
-
 				rc = AI_gov_sysfs_init();
-
-				//THIS IS NULL VVV
-				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
-									(void*)AI_gov->current_profile);
 
 				if(rc) KERNEL_DEBUG_MSG(
 						"[GOVERNOR] AI_gov_sysfs_init failed: %d\n", rc);
-
-				KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SYSFS INIT");
-
-				KERNEL_DEBUG_MSG("[GOVERNOR] YO 3: %d \n", AI_gov->phase);
-
-
-
-//				KERNEL_DEBUG_MSG( "[GOVERNOR] STARTED SETTING TEST PROFILE \n");
-//
-//				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
-//									(void*)AI_gov->current_profile);
-//
-//				AI_gov_sysfs_load_profile(AI_exit);
-//
-//				KERNEL_DEBUG_MSG( "[GOVERNOR] FINISHED SETTING TEST PROFILE \n");
-//
-//				KERNEL_DEBUG_MSG("[GOVERNOR] YO 4: %d \n", AI_gov->phase);
-//
-//				KERNEL_DEBUG_MSG("[GOVERNOR] YO profile name: %s \n",
-//						AI_gov->current_profile->phase_name);
-//
-//				KERNEL_DEBUG_MSG("[GOVERNOR] HERE AI_gov->current profile pointing to: %p \n",
-//							(void*)AI_gov->current_profile);
 
 				profiles_initd = true;
 			}
@@ -554,9 +523,9 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 //				}
 
 				//TODO ADD DEINIT
-//				sysfs_remove_group(AI_get_governor_parent_kobj(policy),
-//						AI_get_sysfs_attr());
-//
+				struct phase_profile* temp_phase;
+				FOR_EACH_PHASE(DEINIT_PHASE_KOBJECT);
+
 				tuned_parameters_AI = kzalloc(sizeof(*tunables), GFP_KERNEL);
 				if (!tuned_parameters_AI) {
 					pr_err("%s: POLICY_EXIT: kzalloc failed\n", __func__);

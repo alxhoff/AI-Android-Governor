@@ -74,6 +74,8 @@ struct AI_gov_info{
 
 	int test;
 
+	struct cpufreq_policy* cpu_freq_policy;
+
 	struct kobject*		kobj;
 	struct completion*	kobj_unregister;
 };

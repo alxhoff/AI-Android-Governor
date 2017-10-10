@@ -26,10 +26,6 @@ struct AI_gov_ioctl_phase_variable{
 	unsigned long variable_value;
 };
 
-static dev_t dev;
-static struct cdev c_dev;
-static struct class *cl;
-
 extern struct file_operations AI_governor_fops;
 
 #define GOVERNOR_GET_PHASE _IOR('g', 1, unsigned long)
