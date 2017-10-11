@@ -135,8 +135,6 @@ unsigned int exit_AI_init_phase(void)
 
 unsigned int run_AI_init_phase(void)
 {
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] RUNNING INIT");
 	return 0;
 }
 

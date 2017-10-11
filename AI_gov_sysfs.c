@@ -724,8 +724,6 @@ struct attribute_group *AI_get_sysfs_attr(void)
 	return &AI_gov_attr_group_gov_sys;
 }
 
-
-
 void debug_profile(struct phase_profile* profile)
 {
 	if(profile->phase >= AI_init && profile->phase < AI_END)
