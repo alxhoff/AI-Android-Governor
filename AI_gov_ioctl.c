@@ -314,6 +314,31 @@ signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var)
 				break;
 			}
 			break;
+		case AI_ondemand:
+			switch(var.variable_index){
+			case 0:
+				GET_ATTRIBUTES(AI_ondemand)->sampling_rate = var.variable_value;
+				break;
+			case 1:
+				GET_ATTRIBUTES(AI_ondemand)->io_is_busy = var.variable_value;
+				break;
+			case 2:
+				GET_ATTRIBUTES(AI_ondemand)->up_threshold = var.variable_value;
+				break;
+			case 3:
+				GET_ATTRIBUTES(AI_ondemand)->sampling_down_factor = var.variable_value;
+				break;
+			case 4:
+				GET_ATTRIBUTES(AI_ondemand)->ignore_nice_load = var.variable_value;
+				break;
+			case 5:
+				GET_ATTRIBUTES(AI_ondemand)->powersave_bias = var.variable_value;
+				break;
+			case 6:
+				GET_ATTRIBUTES(AI_ondemand)->sampling_rate_min = var.variable_value;
+				break;
+			}
+			break;
 		case AI_priority:
 			switch(var.variable_index){
 			case 0:

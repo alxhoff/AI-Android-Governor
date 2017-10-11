@@ -1,0 +1,227 @@
+\hypertarget{AI__gov_8c}{}\section{/home/alxhoff/odroid\+\_\+4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov.c File Reference}
+\label{AI__gov_8c}\index{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov.\+c@{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov.\+c}}
+{\ttfamily \#include $<$asm/uaccess.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kobject.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel\+\_\+stat.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpufreq.\+h$>$}\newline
+{\ttfamily \#include $<$linux/init.\+h$>$}\newline
+{\ttfamily \#include $<$linux/module.\+h$>$}\newline
+{\ttfamily \#include $<$linux/mutex.\+h$>$}\newline
+{\ttfamily \#include $<$linux/percpu-\/defs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/slab.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sysfs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/tick.\+h$>$}\newline
+{\ttfamily \#include $<$linux/types.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpu.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpumask.\+h$>$}\newline
+{\ttfamily \#include $<$linux/moduleparam.\+h$>$}\newline
+{\ttfamily \#include $<$linux/rwsem.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sched.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sched/rt.\+h$>$}\newline
+{\ttfamily \#include $<$linux/time.\+h$>$}\newline
+{\ttfamily \#include $<$linux/timer.\+h$>$}\newline
+{\ttfamily \#include $<$linux/workqueue.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kthread.\+h$>$}\newline
+{\ttfamily \#include $<$asm/cputime.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}cpu\+\_\+load\+\_\+metric.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sched.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+ioctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+power\+\_\+manager.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+task\+\_\+handling.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+touch\+\_\+notifier.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sysfs.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{AI__gov_8c_ab73faf6e60c3d2f1ae55158d5f4696e7}{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}(P\+H\+A\+SE)
+\item 
+\#define \hyperlink{AI__gov_8c_a5959f00bd7033c23c1a3c72fcb3fc9a4}{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}~(1000)
+\item 
+\#define \hyperlink{AI__gov_8c_a6011f9944c2ff47a49418d1350e4fa93}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}~(20 $\ast$ U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+M\+S\+EC)
+\item 
+\#define \hyperlink{AI__gov_8c_a34e7d2fcba8c2d8945797a95f0d6950c}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}~90
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched} (void)
+\item 
+void \hyperlink{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer} (unsigned long data)
+\item 
+\hyperlink{AI__gov_8c_ae8fba27f74b098ef69b2046388cb4187}{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR} (\char`\"{}Tobias Fuchs $<$tobias.\+fuchs@tum.\+de$>$\char`\"{})
+\item 
+\hyperlink{AI__gov_8c_af88beb5c81427d975cfe8e037b81162f}{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR} (\char`\"{}Nadja Peters $<$peters@rcs.\+ei.\+tum.\+de$>$\char`\"{})
+\item 
+\hyperlink{AI__gov_8c_a909f6d5da0e222e311699cc140b80103}{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR} (\char`\"{}Alex Hoffman $<$alxhoff@gmail.\+com$>$\char`\"{})
+\item 
+\hyperlink{AI__gov_8c_a9b20030f71870940b8c136f338e3305f}{M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON} (\char`\"{}C\+P\+Ufreq policy governor \textquotesingle{}AI\textquotesingle{}\char`\"{})
+\item 
+\hyperlink{AI__gov_8c_ad94b36675e7eb067ea3ce6ff9e244a44}{M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE} (\char`\"{}G\+PL\char`\"{})
+\item 
+\hyperlink{AI__gov_8c_a5498ff730b28578fcb08a4ae84f3c0c1}{module\+\_\+init} (cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init)
+\item 
+\hyperlink{AI__gov_8c_a0a027f0698f83606033e96573eab57e9}{module\+\_\+exit} (cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$ \hyperlink{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}{common\+\_\+tunables\+\_\+\+AI}
+\item 
+struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$ \hyperlink{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}{tuned\+\_\+parameters\+\_\+\+AI} = N\+U\+LL
+\item 
+struct \hyperlink{structAI__gov__info}{A\+I\+\_\+gov\+\_\+info} $\ast$ \hyperlink{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}{A\+I\+\_\+gov}
+\item 
+struct phase\+\_\+profiles $\ast$ \hyperlink{AI__gov_8c_aaa65ccb1911688401a62ada3b6df0147}{A\+I\+\_\+gov\+\_\+profiles}
+\item 
+bool \hyperlink{AI__gov_8c_ac119eb310007378a0e5dc060602ce66c}{profiles\+\_\+initd} = false
+\item 
+bool \hyperlink{AI__gov_8c_abda9d595ebe2d5ff3270e7ee4a731846}{ioctl\+\_\+initd} = false
+\item 
+uint8\+\_\+t \hyperlink{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}{A\+I\+\_\+shutdown\+Cpu}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{AI__gov_8c_a5959f00bd7033c23c1a3c72fcb3fc9a4}\label{AI__gov_8c_a5959f00bd7033c23c1a3c72fcb3fc9a4}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM@{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}}
+\index{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM@{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}{AID\_SYSTEM}}
+{\footnotesize\ttfamily \#define A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM~(1000)}
+
+\mbox{\Hypertarget{AI__gov_8c_a34e7d2fcba8c2d8945797a95f0d6950c}\label{AI__gov_8c_a34e7d2fcba8c2d8945797a95f0d6950c}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}{DEFAULT\_TARGET\_LOAD}}
+{\footnotesize\ttfamily \#define D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD~90}
+
+\mbox{\Hypertarget{AI__gov_8c_a6011f9944c2ff47a49418d1350e4fa93}\label{AI__gov_8c_a6011f9944c2ff47a49418d1350e4fa93}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}{DEFAULT\_TIMER\_RATE}}
+{\footnotesize\ttfamily \#define D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE~(20 $\ast$ U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+M\+S\+EC)}
+
+\mbox{\Hypertarget{AI__gov_8c_ab73faf6e60c3d2f1ae55158d5f4696e7}\label{AI__gov_8c_ab73faf6e60c3d2f1ae55158d5f4696e7}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT@{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}}
+\index{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT@{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}{DEINIT\_PHASE\_KOBJECT}}
+{\footnotesize\ttfamily \#define D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT(\begin{DoxyParamCaption}\item[{}]{P\+H\+A\+SE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+temp\_phase = \hyperlink{AI__gov__phases_8c_a1dbde0e214b9beaba120040a0474f2cf}{AI\_phases\_get\_name}(#PHASE); \(\backslash\)
+                kobject\_del(temp\_phase->kobj); \(\backslash\)
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}\label{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer()}{cpufreq\_AI\_governor\_timer()}}
+{\footnotesize\ttfamily void cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer (\begin{DoxyParamCaption}\item[{unsigned long}]{data }\end{DoxyParamCaption})}
+
+Timer which is called when power management should be re-\/evaluated
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ required parameter, not used \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}\label{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched()}{cpufreq\_AI\_governor\_timer\_resched()}}
+{\footnotesize\ttfamily void cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_ae8fba27f74b098ef69b2046388cb4187}\label{AI__gov_8c_ae8fba27f74b098ef69b2046388cb4187}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}}
+\index{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+O\+R()}{MODULE\_AUTHOR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR (\begin{DoxyParamCaption}\item[{\char`\"{}Tobias Fuchs $<$tobias.\+fuchs@tum.\+de$>$\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_af88beb5c81427d975cfe8e037b81162f}\label{AI__gov_8c_af88beb5c81427d975cfe8e037b81162f}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}}
+\index{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+O\+R()}{MODULE\_AUTHOR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR (\begin{DoxyParamCaption}\item[{\char`\"{}Nadja Peters $<$peters@rcs.\+ei.\+tum.\+de$>$\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_a909f6d5da0e222e311699cc140b80103}\label{AI__gov_8c_a909f6d5da0e222e311699cc140b80103}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}}
+\index{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR@{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+O\+R()}{MODULE\_AUTHOR()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR (\begin{DoxyParamCaption}\item[{\char`\"{}Alex Hoffman $<$alxhoff@gmail.\+com$>$\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_a9b20030f71870940b8c136f338e3305f}\label{AI__gov_8c_a9b20030f71870940b8c136f338e3305f}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON@{M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON}}
+\index{M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON@{M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+O\+N()}{MODULE\_DESCRIPTION()}}
+{\footnotesize\ttfamily M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON (\begin{DoxyParamCaption}\item[{\char`\"{}C\+P\+Ufreq policy governor \textquotesingle{}AI\textquotesingle{}\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_a0a027f0698f83606033e96573eab57e9}\label{AI__gov_8c_a0a027f0698f83606033e96573eab57e9}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!module\+\_\+exit@{module\+\_\+exit}}
+\index{module\+\_\+exit@{module\+\_\+exit}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{module\+\_\+exit()}{module\_exit()}}
+{\footnotesize\ttfamily module\+\_\+exit (\begin{DoxyParamCaption}\item[{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_a5498ff730b28578fcb08a4ae84f3c0c1}\label{AI__gov_8c_a5498ff730b28578fcb08a4ae84f3c0c1}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!module\+\_\+init@{module\+\_\+init}}
+\index{module\+\_\+init@{module\+\_\+init}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{module\+\_\+init()}{module\_init()}}
+{\footnotesize\ttfamily module\+\_\+init (\begin{DoxyParamCaption}\item[{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov_8c_ad94b36675e7eb067ea3ce6ff9e244a44}\label{AI__gov_8c_ad94b36675e7eb067ea3ce6ff9e244a44}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE@{M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE}}
+\index{M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE@{M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+S\+E()}{MODULE\_LICENSE()}}
+{\footnotesize\ttfamily M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE (\begin{DoxyParamCaption}\item[{\char`\"{}G\+PL\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}\label{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+gov@{A\+I\+\_\+gov}}
+\index{A\+I\+\_\+gov@{A\+I\+\_\+gov}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov}{AI\_gov}}
+{\footnotesize\ttfamily struct \hyperlink{structAI__gov__info}{A\+I\+\_\+gov\+\_\+info}$\ast$ A\+I\+\_\+gov}
+
+\mbox{\Hypertarget{AI__gov_8c_aaa65ccb1911688401a62ada3b6df0147}\label{AI__gov_8c_aaa65ccb1911688401a62ada3b6df0147}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+gov\+\_\+profiles@{A\+I\+\_\+gov\+\_\+profiles}}
+\index{A\+I\+\_\+gov\+\_\+profiles@{A\+I\+\_\+gov\+\_\+profiles}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+profiles}{AI\_gov\_profiles}}
+{\footnotesize\ttfamily struct phase\+\_\+profiles$\ast$ A\+I\+\_\+gov\+\_\+profiles}
+
+\mbox{\Hypertarget{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}\label{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+shutdown\+Cpu@{A\+I\+\_\+shutdown\+Cpu}}
+\index{A\+I\+\_\+shutdown\+Cpu@{A\+I\+\_\+shutdown\+Cpu}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+shutdown\+Cpu}{AI\_shutdownCpu}}
+{\footnotesize\ttfamily uint8\+\_\+t A\+I\+\_\+shutdown\+Cpu}
+
+\mbox{\Hypertarget{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}\label{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!common\+\_\+tunables\+\_\+\+AI@{common\+\_\+tunables\+\_\+\+AI}}
+\index{common\+\_\+tunables\+\_\+\+AI@{common\+\_\+tunables\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{common\+\_\+tunables\+\_\+\+AI}{common\_tunables\_AI}}
+{\footnotesize\ttfamily struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}$\ast$ common\+\_\+tunables\+\_\+\+AI}
+
+\mbox{\Hypertarget{AI__gov_8c_abda9d595ebe2d5ff3270e7ee4a731846}\label{AI__gov_8c_abda9d595ebe2d5ff3270e7ee4a731846}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!ioctl\+\_\+initd@{ioctl\+\_\+initd}}
+\index{ioctl\+\_\+initd@{ioctl\+\_\+initd}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{ioctl\+\_\+initd}{ioctl\_initd}}
+{\footnotesize\ttfamily bool ioctl\+\_\+initd = false}
+
+\mbox{\Hypertarget{AI__gov_8c_ac119eb310007378a0e5dc060602ce66c}\label{AI__gov_8c_ac119eb310007378a0e5dc060602ce66c}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!profiles\+\_\+initd@{profiles\+\_\+initd}}
+\index{profiles\+\_\+initd@{profiles\+\_\+initd}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{profiles\+\_\+initd}{profiles\_initd}}
+{\footnotesize\ttfamily bool profiles\+\_\+initd = false}
+
+\mbox{\Hypertarget{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}\label{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!tuned\+\_\+parameters\+\_\+\+AI@{tuned\+\_\+parameters\+\_\+\+AI}}
+\index{tuned\+\_\+parameters\+\_\+\+AI@{tuned\+\_\+parameters\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{tuned\+\_\+parameters\+\_\+\+AI}{tuned\_parameters\_AI}}
+{\footnotesize\ttfamily struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}$\ast$ tuned\+\_\+parameters\+\_\+\+AI = N\+U\+LL}
+

@@ -1,0 +1,138 @@
+\hypertarget{AI__gov__ioctl_8h}{}\section{/home/alxhoff/odroid\+\_\+4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.h File Reference}
+\label{AI__gov__ioctl_8h}\index{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.\+h@{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+{\ttfamily \#include $<$linux/ioctl.\+h$>$}\newline
+{\ttfamily \#include $<$linux/version.\+h$>$}\newline
+{\ttfamily \#include $<$linux/fs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cdev.\+h$>$}\newline
+{\ttfamily \#include $<$linux/device.\+h$>$}\newline
+{\ttfamily \#include $<$linux/errno.\+h$>$}\newline
+{\ttfamily \#include $<$asm/uaccess.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+phases.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_a2e6e540af91e509404b73b30afa26926}{F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR}~0
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_a4d51aa7d2c0f3c731fc0010b23220cd0}{M\+I\+N\+O\+R\+\_\+\+C\+NT}~1
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_ab9e2b4e3e4169165754fe9448c0da824}{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE}~\+\_\+\+I\+OR(\textquotesingle{}g\textquotesingle{}, 1, unsigned long)
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_af9f25c7b387298e4fa74a80e04e68148}{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE}~\+\_\+\+I\+OW(\textquotesingle{}g\textquotesingle{}, 2, unsigned long)
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_a0fe1871b1c2b022daac1c92b325d95a8}{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES}~\+\_\+\+IO(\textquotesingle{}g\textquotesingle{}, 3)
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_ab4874b556475a61e76e09fa983e8bacc}{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}~\+\_\+\+I\+O\+WR(\textquotesingle{}g\textquotesingle{}, 4, struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}$\ast$)
+\item 
+\#define \hyperlink{AI__gov__ioctl_8h_aa7be1bd3a0f3905e94357250bab39cc3}{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}~\+\_\+\+I\+OW(\textquotesingle{}g\textquotesingle{}, 5, struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}$\ast$)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{AI__gov__ioctl_8h_aedf9bd2ac1f8c0fd853c3be262c1dc51}{A\+I\+\_\+gov\+\_\+open} (struct inode $\ast$i, struct file $\ast$f)
+\item 
+int \hyperlink{AI__gov__ioctl_8h_abce04e2319f708bcfcc4671044b041fb}{A\+I\+\_\+gov\+\_\+close} (struct inode $\ast$i, struct file $\ast$f)
+\item 
+long \hyperlink{AI__gov__ioctl_8h_adeadc081a6f7540d6ea0db336a9e0ea1}{A\+I\+\_\+gov\+\_\+ioctl} (struct file $\ast$f, unsigned int cmd, unsigned long arg)
+\item 
+int \hyperlink{AI__gov__ioctl_8h_a6112276b72af9da402d2afbf5b71c7de}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init} (void)
+\item 
+int \hyperlink{AI__gov__ioctl_8h_a2151504be2df435b0ec5fe17fede210f}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit} (void)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct file\+\_\+operations \hyperlink{AI__gov__ioctl_8h_a00eeebcf02fb8ae0315ed5663971c38a}{A\+I\+\_\+governor\+\_\+fops}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a2e6e540af91e509404b73b30afa26926}\label{AI__gov__ioctl_8h_a2e6e540af91e509404b73b30afa26926}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR@{F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR}}
+\index{F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR@{F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR}{FIRST\_MINOR}}
+{\footnotesize\ttfamily \#define F\+I\+R\+S\+T\+\_\+\+M\+I\+N\+OR~0}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a0fe1871b1c2b022daac1c92b325d95a8}\label{AI__gov__ioctl_8h_a0fe1871b1c2b022daac1c92b325d95a8}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES}}
+\index{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES}{GOVERNOR\_CLR\_PHASE\_VARIABLES}}
+{\footnotesize\ttfamily \#define G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+L\+ES~\+\_\+\+IO(\textquotesingle{}g\textquotesingle{}, 3)}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_ab9e2b4e3e4169165754fe9448c0da824}\label{AI__gov__ioctl_8h_ab9e2b4e3e4169165754fe9448c0da824}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE}}
+\index{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE}{GOVERNOR\_GET\_PHASE}}
+{\footnotesize\ttfamily \#define G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE~\+\_\+\+I\+OR(\textquotesingle{}g\textquotesingle{}, 1, unsigned long)}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_ab4874b556475a61e76e09fa983e8bacc}\label{AI__gov__ioctl_8h_ab4874b556475a61e76e09fa983e8bacc}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}}
+\index{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}{GOVERNOR\_GET\_PHASE\_VARIABLE}}
+{\footnotesize\ttfamily \#define G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE~\+\_\+\+I\+O\+WR(\textquotesingle{}g\textquotesingle{}, 4, struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}$\ast$)}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_af9f25c7b387298e4fa74a80e04e68148}\label{AI__gov__ioctl_8h_af9f25c7b387298e4fa74a80e04e68148}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE}}
+\index{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE}{GOVERNOR\_SET\_PHASE}}
+{\footnotesize\ttfamily \#define G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE~\+\_\+\+I\+OW(\textquotesingle{}g\textquotesingle{}, 2, unsigned long)}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_aa7be1bd3a0f3905e94357250bab39cc3}\label{AI__gov__ioctl_8h_aa7be1bd3a0f3905e94357250bab39cc3}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}}
+\index{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE@{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE}{GOVERNOR\_SET\_PHASE\_VARIABLE}}
+{\footnotesize\ttfamily \#define G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE~\+\_\+\+I\+OW(\textquotesingle{}g\textquotesingle{}, 5, struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}$\ast$)}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a4d51aa7d2c0f3c731fc0010b23220cd0}\label{AI__gov__ioctl_8h_a4d51aa7d2c0f3c731fc0010b23220cd0}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!M\+I\+N\+O\+R\+\_\+\+C\+NT@{M\+I\+N\+O\+R\+\_\+\+C\+NT}}
+\index{M\+I\+N\+O\+R\+\_\+\+C\+NT@{M\+I\+N\+O\+R\+\_\+\+C\+NT}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{M\+I\+N\+O\+R\+\_\+\+C\+NT}{MINOR\_CNT}}
+{\footnotesize\ttfamily \#define M\+I\+N\+O\+R\+\_\+\+C\+NT~1}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8h_abce04e2319f708bcfcc4671044b041fb}\label{AI__gov__ioctl_8h_abce04e2319f708bcfcc4671044b041fb}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}}
+\index{A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+close()}{AI\_gov\_close()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+close (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_adeadc081a6f7540d6ea0db336a9e0ea1}\label{AI__gov__ioctl_8h_adeadc081a6f7540d6ea0db336a9e0ea1}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}}
+\index{A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl()}{AI\_gov\_ioctl()}}
+{\footnotesize\ttfamily long A\+I\+\_\+gov\+\_\+ioctl (\begin{DoxyParamCaption}\item[{struct file $\ast$}]{f,  }\item[{unsigned int}]{cmd,  }\item[{unsigned long}]{arg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a2151504be2df435b0ec5fe17fede210f}\label{AI__gov__ioctl_8h_a2151504be2df435b0ec5fe17fede210f}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit()}{AI\_gov\_ioctl\_exit()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a6112276b72af9da402d2afbf5b71c7de}\label{AI__gov__ioctl_8h_a6112276b72af9da402d2afbf5b71c7de}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init()}{AI\_gov\_ioctl\_init()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+ioctl\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8h_aedf9bd2ac1f8c0fd853c3be262c1dc51}\label{AI__gov__ioctl_8h_aedf9bd2ac1f8c0fd853c3be262c1dc51}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}}
+\index{A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+open()}{AI\_gov\_open()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+open (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8h_a00eeebcf02fb8ae0315ed5663971c38a}\label{AI__gov__ioctl_8h_a00eeebcf02fb8ae0315ed5663971c38a}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}!A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}}
+\index{A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}!A\+I\+\_\+gov\+\_\+ioctl.\+h@{A\+I\+\_\+gov\+\_\+ioctl.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+governor\+\_\+fops}{AI\_governor\_fops}}
+{\footnotesize\ttfamily struct file\+\_\+operations A\+I\+\_\+governor\+\_\+fops}
+

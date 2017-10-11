@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['managedcores',['managedCores',['../AI__gov__sched_8c.html#a85aaf126c9a8b8c9012b2277f3c5fe79',1,'AI_gov_sched.c']]],
+  ['max_5ffreq',['max_freq',['../structAI__gov__profile.html#a329f428d588d3b19bb5bbac5001a9c61',1,'AI_gov_profile']]],
+  ['max_5ffreq_5fup_5fthresh',['max_freq_up_thresh',['../structphase__AI__ondemand__attributes.html#ac6b1b31514d92ef65f472480f46f98e1',1,'phase_AI_ondemand_attributes']]],
+  ['max_5ffrequency_5fup_5fthreshold',['MAX_FREQUENCY_UP_THRESHOLD',['../AI__gov__phases_8h.html#a359eab7941c52cf39c7d34b8f1bd2369',1,'AI_gov_phases.h']]],
+  ['max_5fsamp_5fdown_5ffact',['max_samp_down_fact',['../structphase__AI__ondemand__attributes.html#a6ad872936de232da09dacefade6ab2f6',1,'phase_AI_ondemand_attributes']]],
+  ['max_5fsampling_5fdown_5ffactor',['MAX_SAMPLING_DOWN_FACTOR',['../AI__gov__phases_8h.html#a2c642e1b37300c90cf0c33ce7803730e',1,'AI_gov_phases.h']]],
+  ['maximum_5fpriority',['maximum_priority',['../structphase__AI__priority__attributes.html#a5efa1d1cba224f32272e1883f8e27384',1,'phase_AI_priority_attributes::maximum_priority()'],['../AI__gov__phases_8h.html#a846a6e194ab29d2ab24677384de604d0',1,'MAXIMUM_PRIORITY():&#160;AI_gov_phases.h']]],
+  ['micro_5ffreq_5fdown_5fdiff',['micro_freq_down_diff',['../structphase__AI__ondemand__attributes.html#a60429205c426957982c2210b2bbcd412',1,'phase_AI_ondemand_attributes']]],
+  ['micro_5ffreq_5fmin_5fsmp_5frate',['micro_freq_min_smp_rate',['../structphase__AI__ondemand__attributes.html#ac2cc6e690a8b9ef7ed9923b8b0204e0b',1,'phase_AI_ondemand_attributes']]],
+  ['micro_5ffreq_5fup_5fthresh',['micro_freq_up_thresh',['../structphase__AI__ondemand__attributes.html#a8982d06f1c440438dcc72efe585fe3d7',1,'phase_AI_ondemand_attributes']]],
+  ['micro_5ffrequency_5fdown_5fdifferential',['MICRO_FREQUENCY_DOWN_DIFFERENTIAL',['../AI__gov__phases_8h.html#a854a80839fecd84d1e46578a291d2bd2',1,'AI_gov_phases.h']]],
+  ['micro_5ffrequency_5fmin_5fsample_5frate',['MICRO_FREQUENCY_MIN_SAMPLE_RATE',['../AI__gov__phases_8h.html#a4781f59495e6ba2743df8e6067087148',1,'AI_gov_phases.h']]],
+  ['micro_5ffrequency_5fup_5fthreshold',['MICRO_FREQUENCY_UP_THRESHOLD',['../AI__gov__phases_8h.html#a781179ae6fb967625c6fe07106922f50',1,'AI_gov_phases.h']]],
+  ['min_5ffreq',['min_freq',['../structAI__gov__profile.html#a97f43b9adfda1be183ac0632624abff8',1,'AI_gov_profile']]],
+  ['min_5ffreq_5fup_5fthresh',['min_freq_up_thresh',['../structphase__AI__ondemand__attributes.html#a25a454d74fabf8a260c6d9102c61e9e2',1,'phase_AI_ondemand_attributes']]],
+  ['min_5ffrequency_5fup_5fthreshold',['MIN_FREQUENCY_UP_THRESHOLD',['../AI__gov__phases_8h.html#a22c68cd57bee10cf7919967f35922cef',1,'AI_gov_phases.h']]],
+  ['min_5fsample_5ftime',['min_sample_time',['../structcpufreq__AI__gov__tunables.html#a1325f155060e24773ebd3dd4705ec11b',1,'cpufreq_AI_gov_tunables']]],
+  ['minimum_5fpriority',['minimum_priority',['../structphase__AI__priority__attributes.html#adc44b3832777cbe2198eaf47e716418d',1,'phase_AI_priority_attributes::minimum_priority()'],['../AI__gov__phases_8h.html#a10f85a3cc00c157b5358823672961588',1,'MINIMUM_PRIORITY():&#160;AI_gov_phases.h']]],
+  ['minor_5fcnt',['MINOR_CNT',['../AI__gov__ioctl_8h.html#a4d51aa7d2c0f3c731fc0010b23220cd0',1,'AI_gov_ioctl.h']]],
+  ['module_5fauthor',['MODULE_AUTHOR',['../AI__gov_8c.html#ae8fba27f74b098ef69b2046388cb4187',1,'MODULE_AUTHOR(&quot;Tobias Fuchs &lt;tobias.fuchs@tum.de&gt;&quot;):&#160;AI_gov.c'],['../AI__gov_8c.html#af88beb5c81427d975cfe8e037b81162f',1,'MODULE_AUTHOR(&quot;Nadja Peters &lt;peters@rcs.ei.tum.de&gt;&quot;):&#160;AI_gov.c'],['../AI__gov_8c.html#a909f6d5da0e222e311699cc140b80103',1,'MODULE_AUTHOR(&quot;Alex Hoffman &lt;alxhoff@gmail.com&gt;&quot;):&#160;AI_gov.c']]],
+  ['module_5fdescription',['MODULE_DESCRIPTION',['../AI__gov_8c.html#a9b20030f71870940b8c136f338e3305f',1,'AI_gov.c']]],
+  ['module_5fexit',['module_exit',['../AI__gov_8c.html#a0a027f0698f83606033e96573eab57e9',1,'AI_gov.c']]],
+  ['module_5finit',['module_init',['../AI__gov_8c.html#a5498ff730b28578fcb08a4ae84f3c0c1',1,'AI_gov.c']]],
+  ['module_5flicense',['MODULE_LICENSE',['../AI__gov_8c.html#ad94b36675e7eb067ea3ce6ff9e244a44',1,'AI_gov.c']]]
+];

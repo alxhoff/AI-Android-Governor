@@ -1,0 +1,97 @@
+\hypertarget{structcpufreq__AI__gov__tunables}{}\section{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables Struct Reference}
+\label{structcpufreq__AI__gov__tunables}\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+
+
+{\ttfamily \#include $<$A\+I\+\_\+gov\+\_\+types.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structcpufreq__AI__gov__tunables_aa3d244826e696ed22f060f41860b731e}{usage\+\_\+count}
+\item 
+spinlock\+\_\+t \hyperlink{structcpufreq__AI__gov__tunables_a211d535163794567b7a1eac9027a499d}{target\+\_\+loads\+\_\+lock}
+\item 
+unsigned int $\ast$ \hyperlink{structcpufreq__AI__gov__tunables_a611864a1aa6dda665583ffab47ddfdb5}{target\+\_\+loads}
+\item 
+int \hyperlink{structcpufreq__AI__gov__tunables_a0190cac58bd1c734d3afa553612fc5a1}{ntarget\+\_\+loads}
+\item 
+unsigned long \hyperlink{structcpufreq__AI__gov__tunables_a1325f155060e24773ebd3dd4705ec11b}{min\+\_\+sample\+\_\+time}
+\item 
+unsigned long \hyperlink{structcpufreq__AI__gov__tunables_ae2890ab33e5f75ebd016237f0838b913}{timer\+\_\+rate}
+\item 
+bool \hyperlink{structcpufreq__AI__gov__tunables_afdb3833580eb3c6ee9aac606b3637ea2}{io\+\_\+is\+\_\+busy}
+\item 
+const char $\ast$ \hyperlink{structcpufreq__AI__gov__tunables_a7e4a7fe41ccb790c79fa54bf769a72aa}{phase\+\_\+state}
+\item 
+struct task\+\_\+struct $\ast$ \hyperlink{structcpufreq__AI__gov__tunables_a2640e41db04f80501bf4dfe6c0385f24}{speedchange\+\_\+task}
+\item 
+unsigned int $\ast$ \hyperlink{structcpufreq__AI__gov__tunables_a9b403cbf93797824dd7fb98c540cfcf3}{policy}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_afdb3833580eb3c6ee9aac606b3637ea2}\label{structcpufreq__AI__gov__tunables_afdb3833580eb3c6ee9aac606b3637ea2}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!io\+\_\+is\+\_\+busy@{io\+\_\+is\+\_\+busy}}
+\index{io\+\_\+is\+\_\+busy@{io\+\_\+is\+\_\+busy}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{io\+\_\+is\+\_\+busy}{io\_is\_busy}}
+{\footnotesize\ttfamily bool cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::io\+\_\+is\+\_\+busy}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a1325f155060e24773ebd3dd4705ec11b}\label{structcpufreq__AI__gov__tunables_a1325f155060e24773ebd3dd4705ec11b}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!min\+\_\+sample\+\_\+time@{min\+\_\+sample\+\_\+time}}
+\index{min\+\_\+sample\+\_\+time@{min\+\_\+sample\+\_\+time}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{min\+\_\+sample\+\_\+time}{min\_sample\_time}}
+{\footnotesize\ttfamily unsigned long cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::min\+\_\+sample\+\_\+time}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a0190cac58bd1c734d3afa553612fc5a1}\label{structcpufreq__AI__gov__tunables_a0190cac58bd1c734d3afa553612fc5a1}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!ntarget\+\_\+loads@{ntarget\+\_\+loads}}
+\index{ntarget\+\_\+loads@{ntarget\+\_\+loads}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{ntarget\+\_\+loads}{ntarget\_loads}}
+{\footnotesize\ttfamily int cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::ntarget\+\_\+loads}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a7e4a7fe41ccb790c79fa54bf769a72aa}\label{structcpufreq__AI__gov__tunables_a7e4a7fe41ccb790c79fa54bf769a72aa}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!phase\+\_\+state@{phase\+\_\+state}}
+\index{phase\+\_\+state@{phase\+\_\+state}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{phase\+\_\+state}{phase\_state}}
+{\footnotesize\ttfamily const char$\ast$ cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::phase\+\_\+state}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a9b403cbf93797824dd7fb98c540cfcf3}\label{structcpufreq__AI__gov__tunables_a9b403cbf93797824dd7fb98c540cfcf3}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!policy@{policy}}
+\index{policy@{policy}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{policy}{policy}}
+{\footnotesize\ttfamily unsigned int$\ast$ cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::policy}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a2640e41db04f80501bf4dfe6c0385f24}\label{structcpufreq__AI__gov__tunables_a2640e41db04f80501bf4dfe6c0385f24}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!speedchange\+\_\+task@{speedchange\+\_\+task}}
+\index{speedchange\+\_\+task@{speedchange\+\_\+task}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{speedchange\+\_\+task}{speedchange\_task}}
+{\footnotesize\ttfamily struct task\+\_\+struct$\ast$ cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::speedchange\+\_\+task}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a611864a1aa6dda665583ffab47ddfdb5}\label{structcpufreq__AI__gov__tunables_a611864a1aa6dda665583ffab47ddfdb5}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!target\+\_\+loads@{target\+\_\+loads}}
+\index{target\+\_\+loads@{target\+\_\+loads}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{target\+\_\+loads}{target\_loads}}
+{\footnotesize\ttfamily unsigned int$\ast$ cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::target\+\_\+loads}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_a211d535163794567b7a1eac9027a499d}\label{structcpufreq__AI__gov__tunables_a211d535163794567b7a1eac9027a499d}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!target\+\_\+loads\+\_\+lock@{target\+\_\+loads\+\_\+lock}}
+\index{target\+\_\+loads\+\_\+lock@{target\+\_\+loads\+\_\+lock}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{target\+\_\+loads\+\_\+lock}{target\_loads\_lock}}
+{\footnotesize\ttfamily spinlock\+\_\+t cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::target\+\_\+loads\+\_\+lock}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_ae2890ab33e5f75ebd016237f0838b913}\label{structcpufreq__AI__gov__tunables_ae2890ab33e5f75ebd016237f0838b913}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!timer\+\_\+rate@{timer\+\_\+rate}}
+\index{timer\+\_\+rate@{timer\+\_\+rate}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{timer\+\_\+rate}{timer\_rate}}
+{\footnotesize\ttfamily unsigned long cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::timer\+\_\+rate}
+
+\mbox{\Hypertarget{structcpufreq__AI__gov__tunables_aa3d244826e696ed22f060f41860b731e}\label{structcpufreq__AI__gov__tunables_aa3d244826e696ed22f060f41860b731e}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}!usage\+\_\+count@{usage\+\_\+count}}
+\index{usage\+\_\+count@{usage\+\_\+count}!cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables@{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables}}
+\subsubsection{\texorpdfstring{usage\+\_\+count}{usage\_count}}
+{\footnotesize\ttfamily int cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables\+::usage\+\_\+count}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\hyperlink{AI__gov__types_8h}{A\+I\+\_\+gov\+\_\+types.\+h}\end{DoxyCompactItemize}

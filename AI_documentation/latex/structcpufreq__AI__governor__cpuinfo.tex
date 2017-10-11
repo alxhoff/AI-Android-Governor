@@ -1,0 +1,137 @@
+\hypertarget{structcpufreq__AI__governor__cpuinfo}{}\section{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo Struct Reference}
+\label{structcpufreq__AI__governor__cpuinfo}\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+
+
+{\ttfamily \#include $<$A\+I\+\_\+gov\+\_\+types.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+struct timer\+\_\+list \hyperlink{structcpufreq__AI__governor__cpuinfo_a9d3787cd4f9ba35254402479d7f34f0a}{cpu\+\_\+timer}
+\item 
+struct timer\+\_\+list \hyperlink{structcpufreq__AI__governor__cpuinfo_a14b7938eb7221e94229b1f9c6b7b8a1f}{cpu\+\_\+slack\+\_\+timer}
+\item 
+spinlock\+\_\+t \hyperlink{structcpufreq__AI__governor__cpuinfo_a1132ad97064982f61f59538498fecb24}{load\+\_\+lock}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_ab196cbf0137c70954e5f029b70beddc6}{time\+\_\+in\+\_\+idle}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_a4ea049a3cafcfe8660cbff66ef300076}{time\+\_\+in\+\_\+idle\+\_\+timestamp}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_a95be4af65c3cde04b0b7540b857b86a0}{cputime\+\_\+speedadj}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_a940271c8dea7b49ef28959ced8b1c89a}{cputime\+\_\+speedadj\+\_\+timestamp}
+\item 
+struct cpufreq\+\_\+policy $\ast$ \hyperlink{structcpufreq__AI__governor__cpuinfo_a01a250c811378215d7939e345d4eb3c2}{policy}
+\item 
+struct cpufreq\+\_\+frequency\+\_\+table $\ast$ \hyperlink{structcpufreq__AI__governor__cpuinfo_a510ff58666a5b9ec73f796a1cf5f64a9}{freq\+\_\+table}
+\item 
+unsigned int \hyperlink{structcpufreq__AI__governor__cpuinfo_aee1b90281966dfbefcf2baa00b75deff}{target\+\_\+freq}
+\item 
+unsigned int \hyperlink{structcpufreq__AI__governor__cpuinfo_ae40feda085e9ef8cb7b18d3a4150a314}{floor\+\_\+freq}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_acd1311c4762ce6545c7bd363065ed2f3}{floor\+\_\+validate\+\_\+time}
+\item 
+u64 \hyperlink{structcpufreq__AI__governor__cpuinfo_a42483387ecb4f48073ea912d8cfa203a}{hispeed\+\_\+validate\+\_\+time}
+\item 
+struct rw\+\_\+semaphore \hyperlink{structcpufreq__AI__governor__cpuinfo_af852bb902bb2091547a97b3f1384dc68}{enable\+\_\+sem}
+\item 
+int \hyperlink{structcpufreq__AI__governor__cpuinfo_a76845b450e1f8d444596477834ce1383}{governor\+\_\+enabled}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a14b7938eb7221e94229b1f9c6b7b8a1f}\label{structcpufreq__AI__governor__cpuinfo_a14b7938eb7221e94229b1f9c6b7b8a1f}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!cpu\+\_\+slack\+\_\+timer@{cpu\+\_\+slack\+\_\+timer}}
+\index{cpu\+\_\+slack\+\_\+timer@{cpu\+\_\+slack\+\_\+timer}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{cpu\+\_\+slack\+\_\+timer}{cpu\_slack\_timer}}
+{\footnotesize\ttfamily struct timer\+\_\+list cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::cpu\+\_\+slack\+\_\+timer}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a9d3787cd4f9ba35254402479d7f34f0a}\label{structcpufreq__AI__governor__cpuinfo_a9d3787cd4f9ba35254402479d7f34f0a}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!cpu\+\_\+timer@{cpu\+\_\+timer}}
+\index{cpu\+\_\+timer@{cpu\+\_\+timer}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{cpu\+\_\+timer}{cpu\_timer}}
+{\footnotesize\ttfamily struct timer\+\_\+list cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::cpu\+\_\+timer}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a95be4af65c3cde04b0b7540b857b86a0}\label{structcpufreq__AI__governor__cpuinfo_a95be4af65c3cde04b0b7540b857b86a0}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!cputime\+\_\+speedadj@{cputime\+\_\+speedadj}}
+\index{cputime\+\_\+speedadj@{cputime\+\_\+speedadj}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{cputime\+\_\+speedadj}{cputime\_speedadj}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::cputime\+\_\+speedadj}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a940271c8dea7b49ef28959ced8b1c89a}\label{structcpufreq__AI__governor__cpuinfo_a940271c8dea7b49ef28959ced8b1c89a}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!cputime\+\_\+speedadj\+\_\+timestamp@{cputime\+\_\+speedadj\+\_\+timestamp}}
+\index{cputime\+\_\+speedadj\+\_\+timestamp@{cputime\+\_\+speedadj\+\_\+timestamp}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{cputime\+\_\+speedadj\+\_\+timestamp}{cputime\_speedadj\_timestamp}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::cputime\+\_\+speedadj\+\_\+timestamp}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_af852bb902bb2091547a97b3f1384dc68}\label{structcpufreq__AI__governor__cpuinfo_af852bb902bb2091547a97b3f1384dc68}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!enable\+\_\+sem@{enable\+\_\+sem}}
+\index{enable\+\_\+sem@{enable\+\_\+sem}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{enable\+\_\+sem}{enable\_sem}}
+{\footnotesize\ttfamily struct rw\+\_\+semaphore cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::enable\+\_\+sem}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_ae40feda085e9ef8cb7b18d3a4150a314}\label{structcpufreq__AI__governor__cpuinfo_ae40feda085e9ef8cb7b18d3a4150a314}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!floor\+\_\+freq@{floor\+\_\+freq}}
+\index{floor\+\_\+freq@{floor\+\_\+freq}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{floor\+\_\+freq}{floor\_freq}}
+{\footnotesize\ttfamily unsigned int cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::floor\+\_\+freq}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_acd1311c4762ce6545c7bd363065ed2f3}\label{structcpufreq__AI__governor__cpuinfo_acd1311c4762ce6545c7bd363065ed2f3}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!floor\+\_\+validate\+\_\+time@{floor\+\_\+validate\+\_\+time}}
+\index{floor\+\_\+validate\+\_\+time@{floor\+\_\+validate\+\_\+time}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{floor\+\_\+validate\+\_\+time}{floor\_validate\_time}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::floor\+\_\+validate\+\_\+time}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a510ff58666a5b9ec73f796a1cf5f64a9}\label{structcpufreq__AI__governor__cpuinfo_a510ff58666a5b9ec73f796a1cf5f64a9}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!freq\+\_\+table@{freq\+\_\+table}}
+\index{freq\+\_\+table@{freq\+\_\+table}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{freq\+\_\+table}{freq\_table}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+frequency\+\_\+table$\ast$ cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::freq\+\_\+table}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a76845b450e1f8d444596477834ce1383}\label{structcpufreq__AI__governor__cpuinfo_a76845b450e1f8d444596477834ce1383}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!governor\+\_\+enabled@{governor\+\_\+enabled}}
+\index{governor\+\_\+enabled@{governor\+\_\+enabled}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{governor\+\_\+enabled}{governor\_enabled}}
+{\footnotesize\ttfamily int cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::governor\+\_\+enabled}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a42483387ecb4f48073ea912d8cfa203a}\label{structcpufreq__AI__governor__cpuinfo_a42483387ecb4f48073ea912d8cfa203a}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!hispeed\+\_\+validate\+\_\+time@{hispeed\+\_\+validate\+\_\+time}}
+\index{hispeed\+\_\+validate\+\_\+time@{hispeed\+\_\+validate\+\_\+time}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{hispeed\+\_\+validate\+\_\+time}{hispeed\_validate\_time}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::hispeed\+\_\+validate\+\_\+time}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a1132ad97064982f61f59538498fecb24}\label{structcpufreq__AI__governor__cpuinfo_a1132ad97064982f61f59538498fecb24}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!load\+\_\+lock@{load\+\_\+lock}}
+\index{load\+\_\+lock@{load\+\_\+lock}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{load\+\_\+lock}{load\_lock}}
+{\footnotesize\ttfamily spinlock\+\_\+t cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::load\+\_\+lock}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a01a250c811378215d7939e345d4eb3c2}\label{structcpufreq__AI__governor__cpuinfo_a01a250c811378215d7939e345d4eb3c2}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!policy@{policy}}
+\index{policy@{policy}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{policy}{policy}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+policy$\ast$ cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::policy}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_aee1b90281966dfbefcf2baa00b75deff}\label{structcpufreq__AI__governor__cpuinfo_aee1b90281966dfbefcf2baa00b75deff}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!target\+\_\+freq@{target\+\_\+freq}}
+\index{target\+\_\+freq@{target\+\_\+freq}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{target\+\_\+freq}{target\_freq}}
+{\footnotesize\ttfamily unsigned int cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::target\+\_\+freq}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_ab196cbf0137c70954e5f029b70beddc6}\label{structcpufreq__AI__governor__cpuinfo_ab196cbf0137c70954e5f029b70beddc6}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!time\+\_\+in\+\_\+idle@{time\+\_\+in\+\_\+idle}}
+\index{time\+\_\+in\+\_\+idle@{time\+\_\+in\+\_\+idle}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{time\+\_\+in\+\_\+idle}{time\_in\_idle}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::time\+\_\+in\+\_\+idle}
+
+\mbox{\Hypertarget{structcpufreq__AI__governor__cpuinfo_a4ea049a3cafcfe8660cbff66ef300076}\label{structcpufreq__AI__governor__cpuinfo_a4ea049a3cafcfe8660cbff66ef300076}} 
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}!time\+\_\+in\+\_\+idle\+\_\+timestamp@{time\+\_\+in\+\_\+idle\+\_\+timestamp}}
+\index{time\+\_\+in\+\_\+idle\+\_\+timestamp@{time\+\_\+in\+\_\+idle\+\_\+timestamp}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}}
+\subsubsection{\texorpdfstring{time\+\_\+in\+\_\+idle\+\_\+timestamp}{time\_in\_idle\_timestamp}}
+{\footnotesize\ttfamily u64 cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo\+::time\+\_\+in\+\_\+idle\+\_\+timestamp}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\hyperlink{AI__gov__types_8h}{A\+I\+\_\+gov\+\_\+types.\+h}\end{DoxyCompactItemize}

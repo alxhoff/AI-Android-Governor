@@ -1,0 +1,575 @@
+\hypertarget{AI__gov__sysfs_8c}{}\section{/home/alxhoff/odroid\+\_\+4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+sysfs.c File Reference}
+\label{AI__gov__sysfs_8c}\index{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+sysfs.\+c@{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+{\ttfamily \#include $<$linux/slab.\+h$>$}\newline
+{\ttfamily \#include $<$linux/string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sysfs.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+phases.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a09be1539901f817b2de474b6349afbd8}{G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE}~\hyperlink{AI__gov__phases_8h_a1dbde0e214b9beaba120040a0474f2cf}{A\+I\+\_\+phases\+\_\+get\+\_\+name}(\hyperlink{AI__gov__phases_8h_a97f3fc1ceb1f2afbc650b5694e5e13fb}{P\+H\+A\+S\+E\+\_\+\+S\+T\+R\+I\+N\+GS}\mbox{[}\hyperlink{AI__gov_8h_a4eaf8dff28e6d0aa16c537c410702ab7}{A\+I\+\_\+gov}-\/$>$phase\mbox{]})
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_af6d93ac30cc39f342f406aed7fc3136d}{show\+\_\+gov\+\_\+pol\+\_\+sys}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a3fc38ed21fd3820366203125800f2c9d}{store\+\_\+gov\+\_\+pol\+\_\+sys}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_ad14fbd1d43fc2b5d10e731ccf0ecd1a7}{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}{gov\+\_\+sys\+\_\+attr\+\_\+rw}(\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a79853b341b4f1a3d53f8c2a611676ae4}{gov\+\_\+pol\+\_\+attr\+\_\+rw}(\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a592d824af8c74a35a7c6027b40e5d44e}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}(\+\_\+name)~\hyperlink{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}{gov\+\_\+sys\+\_\+attr\+\_\+rw}(\+\_\+name); \textbackslash{}
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a99e0a2a262dba2b472cd31db7f098686}{show\+\_\+gov\+\_\+sys\+\_\+hardware}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a01e10bc99168231907533271bcff43d1}{store\+\_\+gov\+\_\+sys\+\_\+hardware}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a2777259473934867ec95108745de9bfc}{show\+\_\+store\+\_\+gov\+\_\+hardware}(file\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a6d6b5c838f98f5c9235fcb3139e88101}{gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware}(\+\_\+name)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_aa225ffe285db0bf45a7b96c3e4ebff57}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}(\+\_\+name)~\hyperlink{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}{gov\+\_\+sys\+\_\+attr\+\_\+rw}(\+\_\+name);
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a89eb2fe419e8ff4d9aed4279dafd90d2}{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS}(P\+R\+O\+F\+I\+LE,  A\+T\+T\+RS)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_ae5e9c6ca004b9b7b6c3bc20e74f89238}{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY}(P\+R\+O\+F\+I\+LE,  A\+T\+T\+RS)~\&P\+R\+O\+F\+I\+LE\#\#\+\_\+\#\#A\+T\+T\+RS\#\#\+\_\+gov\+\_\+sys.\+attr,
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a51bca8445fa7a53647a68ebddf908581}{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY}(P\+R\+O\+F\+I\+LE)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a85b9e2590052f7e1942c1aae57ba3fd7}{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP}(P\+R\+O\+F\+I\+LE)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_a57000bd00d2c1c165e313608c8122e18}{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}(P\+R\+O\+F\+I\+LE)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_ac3f316f4d26820271d25b638ebaff1b2}{I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}~\hyperlink{AI__gov__phases_8c_aadba574350dd5bd4ec662a8714b727b5}{F\+O\+R\+\_\+\+E\+A\+C\+H\+\_\+\+P\+H\+A\+SE}(\hyperlink{AI__gov__sysfs_8c_a57000bd00d2c1c165e313608c8122e18}{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP})
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_ae9bcf103f4120460a841c1baf691c4bc}{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}(P\+H\+A\+SE)
+\item 
+\#define \hyperlink{AI__gov__sysfs_8c_af87b46c9f151637970d69e272832efcd}{A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}~\hyperlink{AI__gov__phases_8c_aadba574350dd5bd4ec662a8714b727b5}{F\+O\+R\+\_\+\+E\+A\+C\+H\+\_\+\+P\+H\+A\+SE}(\hyperlink{AI__gov__sysfs_8c_ae9bcf103f4120460a841c1baf691c4bc}{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+ssize\+\_\+t \hyperlink{AI__gov__sysfs_8c_acfefa9c7a940aac67e542c6d5e38bc54}{show\+\_\+phase\+\_\+state} (struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$tunables, char $\ast$buf)
+\item 
+ssize\+\_\+t \hyperlink{AI__gov__sysfs_8c_a261b26f8c59caffa4cfd73dcc47741b4}{store\+\_\+phase\+\_\+state} (struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$tunables, const char $\ast$buf, size\+\_\+t count)
+\item 
+ssize\+\_\+t \hyperlink{AI__gov__sysfs_8c_a23c2ebb694ec3b1e488e23cf7eb03b15}{show\+\_\+prev\+\_\+phase} (struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$tunables, char $\ast$buf)
+\item 
+ssize\+\_\+t \hyperlink{AI__gov__sysfs_8c_a194fd1806c8dc73efcf5e0ca8e082946}{store\+\_\+prev\+\_\+phase} (struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$tunables, const char $\ast$buf, size\+\_\+t count)
+\item 
+\hyperlink{AI__gov__sysfs_8c_ac6889ed959484e7c141275b5992707e0}{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys} (timer\+\_\+rate)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a42f7503889960826667adbb27728ef7a}{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys} (io\+\_\+is\+\_\+busy)
+\item 
+\hyperlink{AI__gov__sysfs_8c_ae9aa5e2fdd62a9b3ef5adea9542ea357}{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys} (phase\+\_\+state)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a4dea98914726159c3381809dc8643399}{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys} (prev\+\_\+phase)
+\item 
+\hyperlink{AI__gov__sysfs_8c_ae6c4f32a5d12ef9046b095834ecc7795}{show\+\_\+store\+\_\+gov\+\_\+hardware} (is\+\_\+big\+\_\+little)
+\item 
+\hyperlink{AI__gov__sysfs_8c_abf51c244229ad6997f73b7e7aba10912}{show\+\_\+store\+\_\+gov\+\_\+hardware} (cpu\+\_\+count)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a0158cdaed98b75d9e6385b030eb4bdcf}{show\+\_\+store\+\_\+gov\+\_\+hardware} (little\+\_\+freq)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a2e588e6503f534e78051d0a418752363}{show\+\_\+store\+\_\+gov\+\_\+hardware} (big\+\_\+state)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a53c7fa4bebef02512a6ba3d63edf2601}{show\+\_\+store\+\_\+gov\+\_\+hardware} (big\+\_\+freq)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a0a211e10d71adf95a7b18772ccea83cb}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw} (timer\+\_\+rate)
+\item 
+\hyperlink{AI__gov__sysfs_8c_aab14dbdd4811b56add340d94e07b3b49}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw} (io\+\_\+is\+\_\+busy)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a394c2aebd0e2304ae3115a06ba6a6f86}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw} (phase\+\_\+state)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a08151c827812f0e37d7d4dd6426f5e2b}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw} (prev\+\_\+phase)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a7a1f43b860e0af77bdc8991817806823}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware} (is\+\_\+big\+\_\+little)
+\item 
+\hyperlink{AI__gov__sysfs_8c_ad941789cd9ea862212780ccfcf7707e1}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware} (cpu\+\_\+count)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a869fc8a87f72b84742f138d05fc8af2f}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware} (little\+\_\+freq)
+\item 
+\hyperlink{AI__gov__sysfs_8c_ae99f0384a18b606cb71aff199e7803a5}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware} (big\+\_\+state)
+\item 
+\hyperlink{AI__gov__sysfs_8c_a19b854dcdc320de09a21d392715a6e40}{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware} (big\+\_\+freq)
+\item 
+struct attribute\+\_\+group $\ast$ \hyperlink{AI__gov__sysfs_8c_a2313a5be64ef6093bd0b8a7d67c3f523}{A\+I\+\_\+get\+\_\+sysfs\+\_\+attr} (void)
+\item 
+void \hyperlink{AI__gov__sysfs_8c_a92f78f23bbb0a5dad8194d6f45ee1c23}{debug\+\_\+profile} (struct \hyperlink{structphase__profile}{phase\+\_\+profile} $\ast$profile)
+\item 
+signed int \hyperlink{AI__gov__sysfs_8c_ad78ce9ea02c1bcef0405d1dc397aef0f}{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles} (void)
+\item 
+signed int \hyperlink{AI__gov__sysfs_8c_a40965b5547715e142d972171cfe2d945}{A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase} (void)
+\item 
+signed int \hyperlink{AI__gov__sysfs_8c_a8bd3d49ab2020b7a1197b2d15233da4c}{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init} (void)
+\item 
+struct kobject $\ast$ \hyperlink{AI__gov__sysfs_8c_aa012f940832ecf1376443f2fb599b52e}{A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj} (struct cpufreq\+\_\+policy $\ast$policy)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{AI__gov__sysfs_8c_a557a2240475d71db04304cf629382a11}{A\+I\+\_\+gov\+\_\+sysfs} \mbox{[}$\,$\mbox{]}
+\item 
+struct attribute\+\_\+group \hyperlink{AI__gov__sysfs_8c_a7d6b44ba38c8f79d82bb8d1e62a59dee}{A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware}
+\item 
+const char $\ast$ \hyperlink{AI__gov__sysfs_8c_a17316e661a421b3b05139f5f2eaf2cac}{A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ae9bcf103f4120460a841c1baf691c4bc}\label{AI__gov__sysfs_8c_ae9bcf103f4120460a841c1baf691c4bc}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP@{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}}
+\index{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP@{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}{ATTACH\_SINGLE\_SYSFS\_GROUP}}
+{\footnotesize\ttfamily \#define A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP(\begin{DoxyParamCaption}\item[{}]{P\+H\+A\+SE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+sysfs\_init = \hyperlink{AI__gov__phases_8c_a1dbde0e214b9beaba120040a0474f2cf}{AI\_phases\_get\_name}(\hyperlink{AI__gov__phases_8c_a97f3fc1ceb1f2afbc650b5694e5e13fb}{PHASE\_STRINGS}[PHASE]); \(\backslash\)
+    sysfs\_init->sysfs\_attr\_grp = &AI\_gov\_attrs\_group\_##PHASE##\_gov\_sys; \(\backslash\)
+    sysfs\_init->kobj = kobject\_create\_and\_add(\textcolor{stringliteral}{"profile"}, \hyperlink{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}{AI\_gov}->\hyperlink{structAI__gov__info_a7311e0f47b502f0aef667416ee3beed2}{kobj}); \(\backslash\)
+    if(sysfs\_init->kobj == NULL)\{ \(\backslash\)
+        KERNEL\_ERROR\_MSG( \(\backslash\)
+                \textcolor{stringliteral}{"[SYSFS] AI\_Governor: Init sysfs group couldn't init kobject for"} \(\backslash\)
+                    \textcolor{stringliteral}{"profile %s \(\backslash\)n"}, sysfs\_init->phase\_name); \(\backslash\)
+        return -ENOMEM; \(\backslash\)
+    \}\(\backslash\)
+    KERNEL\_DEBUG\_MSG( \textcolor{stringliteral}{"[GOVERNOR] kobject created for %s \(\backslash\)n"} \(\backslash\)
+        , sysfs\_init->phase\_name); \(\backslash\)
+    ret = sysfs\_create\_group(sysfs\_init->kobj, \(\backslash\)
+            sysfs\_init->sysfs\_attr\_grp);    \(\backslash\)
+    kobject\_del(sysfs\_init->kobj);
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_af87b46c9f151637970d69e272832efcd}\label{AI__gov__sysfs_8c_af87b46c9f151637970d69e272832efcd}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS@{A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}}
+\index{A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS@{A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}{ATTACH\_SYSFS\_GROUPS}}
+{\footnotesize\ttfamily \#define A\+T\+T\+A\+C\+H\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS~\hyperlink{AI__gov__phases_8c_aadba574350dd5bd4ec662a8714b727b5}{F\+O\+R\+\_\+\+E\+A\+C\+H\+\_\+\+P\+H\+A\+SE}(\hyperlink{AI__gov__sysfs_8c_ae9bcf103f4120460a841c1baf691c4bc}{A\+T\+T\+A\+C\+H\+\_\+\+S\+I\+N\+G\+L\+E\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a51bca8445fa7a53647a68ebddf908581}\label{AI__gov__sysfs_8c_a51bca8445fa7a53647a68ebddf908581}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY}}
+\index{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY}{ATTRB\_INIT\_ATTR\_ARRAY}}
+{\footnotesize\ttfamily \#define A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+AY(\begin{DoxyParamCaption}\item[{}]{P\+R\+O\+F\+I\+LE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keyword}{struct }attribute *AI\_gov\_attrs\_##PROFILE##\_gov\_sys[] = \{ \(\backslash\)
+            SYSFS\_##PROFILE##\_ATTRIBS(\hyperlink{AI__gov__sysfs_8c_ae5e9c6ca004b9b7b6c3bc20e74f89238}{ATTRB\_INIT\_ATTR\_ARRAY\_ENTRY})                                   
+      \(\backslash\)
+            NULL,                                                               \(\backslash\)
+        \};
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ae5e9c6ca004b9b7b6c3bc20e74f89238}\label{AI__gov__sysfs_8c_ae5e9c6ca004b9b7b6c3bc20e74f89238}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY}}
+\index{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY}{ATTRB\_INIT\_ATTR\_ARRAY\_ENTRY}}
+{\footnotesize\ttfamily \#define A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+R\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+E\+N\+T\+RY(\begin{DoxyParamCaption}\item[{}]{P\+R\+O\+F\+I\+LE,  }\item[{}]{A\+T\+T\+RS }\end{DoxyParamCaption})~\&P\+R\+O\+F\+I\+LE\#\#\+\_\+\#\#A\+T\+T\+RS\#\#\+\_\+gov\+\_\+sys.\+attr,}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a89eb2fe419e8ff4d9aed4279dafd90d2}\label{AI__gov__sysfs_8c_a89eb2fe419e8ff4d9aed4279dafd90d2}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS}}
+\index{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS}{ATTRB\_INIT\_ATTRS}}
+{\footnotesize\ttfamily \#define A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+A\+T\+T\+RS(\begin{DoxyParamCaption}\item[{}]{P\+R\+O\+F\+I\+LE,  }\item[{}]{A\+T\+T\+RS }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} ssize\_t show\_##PROFILE##\_##ATTRS##\_gov\_sys                                   \(\backslash\)
+        (\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keywordtype}{char} *buf)           \(\backslash\)
+            \{                                                               \(\backslash\)
+                return show\_##PROFILE##\_##ATTRS##\_attribute(buf);                       \(\backslash\)
+            \}                                                               \(\backslash\)
+    static ssize\_t store\_##PROFILE##\_##ATTRS##\_gov\_sys                              \(\backslash\)
+        (\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *buf,     \(\backslash\)
+                size\_t count)                                               \(\backslash\)
+            \{                                                               \(\backslash\)
+                return store\_##PROFILE##\_##ATTRS##\_attribute(buf, count);               \(\backslash\)
+            \}                                                               \(\backslash\)
+    static \textcolor{keyword}{struct }global\_attr PROFILE##\_##ATTRS##\_gov\_sys =                             \(\backslash\)
+        \_\_ATTR(ATTRS, 0644, show\_##PROFILE##\_##ATTRS##\_gov\_sys,             \(\backslash\)
+                store\_##PROFILE##\_##ATTRS##\_gov\_sys);
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a85b9e2590052f7e1942c1aae57ba3fd7}\label{AI__gov__sysfs_8c_a85b9e2590052f7e1942c1aae57ba3fd7}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP}}
+\index{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP@{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP}{ATTRB\_INIT\_GRP}}
+{\footnotesize\ttfamily \#define A\+T\+T\+R\+B\+\_\+\+I\+N\+I\+T\+\_\+\+G\+RP(\begin{DoxyParamCaption}\item[{}]{P\+R\+O\+F\+I\+LE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keyword}{struct }attribute\_group AI\_gov\_attrs\_group\_##PROFILE##\_gov\_sys = \{ \(\backslash\)
+            .attrs = AI\_gov\_attrs\_##PROFILE##\_gov\_sys,                  \(\backslash\)
+            .name = NULL,                               \(\backslash\)
+            \};
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a09be1539901f817b2de474b6349afbd8}\label{AI__gov__sysfs_8c_a09be1539901f817b2de474b6349afbd8}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE@{G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE}}
+\index{G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE@{G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE}{GET\_CURRENT\_PROFILE}}
+{\footnotesize\ttfamily \#define G\+E\+T\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+F\+I\+LE~\hyperlink{AI__gov__phases_8h_a1dbde0e214b9beaba120040a0474f2cf}{A\+I\+\_\+phases\+\_\+get\+\_\+name}(\hyperlink{AI__gov__phases_8h_a97f3fc1ceb1f2afbc650b5694e5e13fb}{P\+H\+A\+S\+E\+\_\+\+S\+T\+R\+I\+N\+GS}\mbox{[}\hyperlink{AI__gov_8h_a4eaf8dff28e6d0aa16c537c410702ab7}{A\+I\+\_\+gov}-\/$>$phase\mbox{]})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a79853b341b4f1a3d53f8c2a611676ae4}\label{AI__gov__sysfs_8c_a79853b341b4f1a3d53f8c2a611676ae4}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+pol\+\_\+attr\+\_\+rw}{gov\_pol\_attr\_rw}}
+{\footnotesize\ttfamily \#define gov\+\_\+pol\+\_\+attr\+\_\+rw(\begin{DoxyParamCaption}\item[{}]{\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keyword}{struct }freq\_attr \_name##\_gov\_pol =               \(\backslash\)
+\_\_ATTR(\_name, 0644, show\_##\_name##\_gov\_pol, store\_##\_name##\_gov\_pol)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}\label{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+attr\+\_\+rw}{gov\_sys\_attr\_rw}}
+{\footnotesize\ttfamily \#define gov\+\_\+sys\+\_\+attr\+\_\+rw(\begin{DoxyParamCaption}\item[{}]{\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keyword}{struct }global\_attr \_name##\_gov\_sys =             \(\backslash\)
+\_\_ATTR(\_name, 0644, show\_##\_name##\_gov\_sys, store\_##\_name##\_gov\_sys)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a6d6b5c838f98f5c9235fcb3139e88101}\label{AI__gov__sysfs_8c_a6d6b5c838f98f5c9235fcb3139e88101}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware}{gov\_sys\_attr\_rw\_hardware}}
+{\footnotesize\ttfamily \#define gov\+\_\+sys\+\_\+attr\+\_\+rw\+\_\+hardware(\begin{DoxyParamCaption}\item[{}]{\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keyword}{struct }global\_attr \_name##\_gov\_sys =             \(\backslash\)
+\_\_ATTR(\_name, 0644, show\_##\_name##\_gov\_sys, store\_##\_name##\_gov\_sys)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a592d824af8c74a35a7c6027b40e5d44e}\label{AI__gov__sysfs_8c_a592d824af8c74a35a7c6027b40e5d44e}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}{gov\_sys\_pol\_attr\_rw}}
+{\footnotesize\ttfamily \#define gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw(\begin{DoxyParamCaption}\item[{}]{\+\_\+name }\end{DoxyParamCaption})~\hyperlink{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}{gov\+\_\+sys\+\_\+attr\+\_\+rw}(\+\_\+name); \textbackslash{}}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_aa225ffe285db0bf45a7b96c3e4ebff57}\label{AI__gov__sysfs_8c_aa225ffe285db0bf45a7b96c3e4ebff57}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}{gov\_sys\_pol\_attr\_rw\_hardware}}
+{\footnotesize\ttfamily \#define gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware(\begin{DoxyParamCaption}\item[{}]{\+\_\+name }\end{DoxyParamCaption})~\hyperlink{AI__gov__sysfs_8c_aeccce8293ec3c7504a0bb7e07f26fa56}{gov\+\_\+sys\+\_\+attr\+\_\+rw}(\+\_\+name);}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ac3f316f4d26820271d25b638ebaff1b2}\label{AI__gov__sysfs_8c_ac3f316f4d26820271d25b638ebaff1b2}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS@{I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}}
+\index{I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS@{I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS}{INIT\_ALL\_SYSFS\_GROUPS}}
+{\footnotesize\ttfamily \#define I\+N\+I\+T\+\_\+\+A\+L\+L\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+U\+PS~\hyperlink{AI__gov__phases_8c_aadba574350dd5bd4ec662a8714b727b5}{F\+O\+R\+\_\+\+E\+A\+C\+H\+\_\+\+P\+H\+A\+SE}(\hyperlink{AI__gov__sysfs_8c_a57000bd00d2c1c165e313608c8122e18}{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a57000bd00d2c1c165e313608c8122e18}\label{AI__gov__sysfs_8c_a57000bd00d2c1c165e313608c8122e18}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP@{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}}
+\index{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP@{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP}{INIT\_SYSFS\_GROUP}}
+{\footnotesize\ttfamily \#define I\+N\+I\+T\+\_\+\+S\+Y\+S\+F\+S\+\_\+\+G\+R\+O\+UP(\begin{DoxyParamCaption}\item[{}]{P\+R\+O\+F\+I\+LE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+SYSFS\_##PROFILE##\_ATTRIBS(\hyperlink{AI__gov__sysfs_8c_a89eb2fe419e8ff4d9aed4279dafd90d2}{ATTRB\_INIT\_ATTRS})         \(\backslash\)
+    ATTRB\_INIT\_ATTR\_ARRAY(PROFILE)  \(\backslash\)
+    ATTRB\_INIT\_GRP(PROFILE)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_af6d93ac30cc39f342f406aed7fc3136d}\label{AI__gov__sysfs_8c_af6d93ac30cc39f342f406aed7fc3136d}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+gov\+\_\+pol\+\_\+sys}{show\_gov\_pol\_sys}}
+{\footnotesize\ttfamily \#define show\+\_\+gov\+\_\+pol\+\_\+sys(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} ssize\_t show\_##file\_name##\_gov\_sys               \(\backslash\)
+(\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keywordtype}{char} *buf)       \(\backslash\)
+\{                                   \(\backslash\)
+    return show\_##file\_name(\hyperlink{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}{common\_tunables\_AI}, buf);         \(\backslash\)
+\}                                   \(\backslash\)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a99e0a2a262dba2b472cd31db7f098686}\label{AI__gov__sysfs_8c_a99e0a2a262dba2b472cd31db7f098686}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+gov\+\_\+sys\+\_\+hardware@{show\+\_\+gov\+\_\+sys\+\_\+hardware}}
+\index{show\+\_\+gov\+\_\+sys\+\_\+hardware@{show\+\_\+gov\+\_\+sys\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+gov\+\_\+sys\+\_\+hardware}{show\_gov\_sys\_hardware}}
+{\footnotesize\ttfamily \#define show\+\_\+gov\+\_\+sys\+\_\+hardware(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} ssize\_t show\_##file\_name##\_gov\_sys               \(\backslash\)
+(\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keywordtype}{char} *buf)       \(\backslash\)
+\{                                   \(\backslash\)
+    return show\_##file\_name(\hyperlink{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}{AI\_gov}->\hyperlink{structAI__gov__info_a19aa2fc9d88145a9d27e30e2a4cdd3aa}{hardware}, buf);           \(\backslash\)
+\}                                   \(\backslash\)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a2777259473934867ec95108745de9bfc}\label{AI__gov__sysfs_8c_a2777259473934867ec95108745de9bfc}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware}{show\_store\_gov\_hardware}}
+{\footnotesize\ttfamily \#define show\+\_\+store\+\_\+gov\+\_\+hardware(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{AI__gov__sysfs_8c_a99e0a2a262dba2b472cd31db7f098686}{show\_gov\_sys\_hardware}(file\_name);                      \(\backslash\)
+store\_gov\_sys\_hardware(file\_name)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ad14fbd1d43fc2b5d10e731ccf0ecd1a7}\label{AI__gov__sysfs_8c_ad14fbd1d43fc2b5d10e731ccf0ecd1a7}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}{show\_store\_gov\_pol\_sys}}
+{\footnotesize\ttfamily \#define show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{AI__gov__sysfs_8c_af6d93ac30cc39f342f406aed7fc3136d}{show\_gov\_pol\_sys}(file\_name);                        \(\backslash\)
+store\_gov\_pol\_sys(file\_name)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a3fc38ed21fd3820366203125800f2c9d}\label{AI__gov__sysfs_8c_a3fc38ed21fd3820366203125800f2c9d}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!store\+\_\+gov\+\_\+pol\+\_\+sys@{store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{store\+\_\+gov\+\_\+pol\+\_\+sys@{store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{store\+\_\+gov\+\_\+pol\+\_\+sys}{store\_gov\_pol\_sys}}
+{\footnotesize\ttfamily \#define store\+\_\+gov\+\_\+pol\+\_\+sys(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} ssize\_t store\_##file\_name##\_gov\_sys              \(\backslash\)
+(\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *buf,     \(\backslash\)
+    size\_t count)                           \(\backslash\)
+\{                                   \(\backslash\)
+    return store\_##file\_name(\hyperlink{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}{common\_tunables\_AI}, buf, count);     \(\backslash\)
+\}                                   \(\backslash\)
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a01e10bc99168231907533271bcff43d1}\label{AI__gov__sysfs_8c_a01e10bc99168231907533271bcff43d1}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!store\+\_\+gov\+\_\+sys\+\_\+hardware@{store\+\_\+gov\+\_\+sys\+\_\+hardware}}
+\index{store\+\_\+gov\+\_\+sys\+\_\+hardware@{store\+\_\+gov\+\_\+sys\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{store\+\_\+gov\+\_\+sys\+\_\+hardware}{store\_gov\_sys\_hardware}}
+{\footnotesize\ttfamily \#define store\+\_\+gov\+\_\+sys\+\_\+hardware(\begin{DoxyParamCaption}\item[{}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} ssize\_t store\_##file\_name##\_gov\_sys              \(\backslash\)
+(\textcolor{keyword}{struct }kobject *kobj, \textcolor{keyword}{struct }attribute *attr, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *buf,     \(\backslash\)
+    size\_t count)                           \(\backslash\)
+\{                                   \(\backslash\)
+    return store\_##file\_name(\hyperlink{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}{AI\_gov}->\hyperlink{structAI__gov__info_a19aa2fc9d88145a9d27e30e2a4cdd3aa}{hardware}, buf, count);       \(\backslash\)
+\}                                   \(\backslash\)
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_aa012f940832ecf1376443f2fb599b52e}\label{AI__gov__sysfs_8c_aa012f940832ecf1376443f2fb599b52e}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj@{A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj}}
+\index{A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj@{A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj()}{AI\_get\_gov\_parent\_kobj()}}
+{\footnotesize\ttfamily struct kobject$\ast$ A\+I\+\_\+get\+\_\+gov\+\_\+parent\+\_\+kobj (\begin{DoxyParamCaption}\item[{struct cpufreq\+\_\+policy $\ast$}]{policy }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a2313a5be64ef6093bd0b8a7d67c3f523}\label{AI__gov__sysfs_8c_a2313a5be64ef6093bd0b8a7d67c3f523}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+get\+\_\+sysfs\+\_\+attr@{A\+I\+\_\+get\+\_\+sysfs\+\_\+attr}}
+\index{A\+I\+\_\+get\+\_\+sysfs\+\_\+attr@{A\+I\+\_\+get\+\_\+sysfs\+\_\+attr}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+get\+\_\+sysfs\+\_\+attr()}{AI\_get\_sysfs\_attr()}}
+{\footnotesize\ttfamily struct attribute\+\_\+group$\ast$ A\+I\+\_\+get\+\_\+sysfs\+\_\+attr (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a40965b5547715e142d972171cfe2d945}\label{AI__gov__sysfs_8c_a40965b5547715e142d972171cfe2d945}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase}}
+\index{A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase()}{AI\_gov\_sysfs\_actualize\_phase()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+sysfs\+\_\+actualize\+\_\+phase (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a8bd3d49ab2020b7a1197b2d15233da4c}\label{AI__gov__sysfs_8c_a8bd3d49ab2020b7a1197b2d15233da4c}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+sysfs\+\_\+init@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init}}
+\index{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init()}{AI\_gov\_sysfs\_init()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+sysfs\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ad78ce9ea02c1bcef0405d1dc397aef0f}\label{AI__gov__sysfs_8c_ad78ce9ea02c1bcef0405d1dc397aef0f}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles}}
+\index{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles()}{AI\_gov\_sysfs\_init\_profiles()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+sysfs\+\_\+init\+\_\+profiles (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a92f78f23bbb0a5dad8194d6f45ee1c23}\label{AI__gov__sysfs_8c_a92f78f23bbb0a5dad8194d6f45ee1c23}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!debug\+\_\+profile@{debug\+\_\+profile}}
+\index{debug\+\_\+profile@{debug\+\_\+profile}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{debug\+\_\+profile()}{debug\_profile()}}
+{\footnotesize\ttfamily void debug\+\_\+profile (\begin{DoxyParamCaption}\item[{struct \hyperlink{structphase__profile}{phase\+\_\+profile} $\ast$}]{profile }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a0a211e10d71adf95a7b18772ccea83cb}\label{AI__gov__sysfs_8c_a0a211e10d71adf95a7b18772ccea83cb}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw()}{gov\_sys\_pol\_attr\_rw()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw (\begin{DoxyParamCaption}\item[{timer\+\_\+rate}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_aab14dbdd4811b56add340d94e07b3b49}\label{AI__gov__sysfs_8c_aab14dbdd4811b56add340d94e07b3b49}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw()}{gov\_sys\_pol\_attr\_rw()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw (\begin{DoxyParamCaption}\item[{io\+\_\+is\+\_\+busy}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a394c2aebd0e2304ae3115a06ba6a6f86}\label{AI__gov__sysfs_8c_a394c2aebd0e2304ae3115a06ba6a6f86}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw()}{gov\_sys\_pol\_attr\_rw()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw (\begin{DoxyParamCaption}\item[{phase\+\_\+state}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a08151c827812f0e37d7d4dd6426f5e2b}\label{AI__gov__sysfs_8c_a08151c827812f0e37d7d4dd6426f5e2b}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw()}{gov\_sys\_pol\_attr\_rw()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw (\begin{DoxyParamCaption}\item[{prev\+\_\+phase}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a7a1f43b860e0af77bdc8991817806823}\label{AI__gov__sysfs_8c_a7a1f43b860e0af77bdc8991817806823}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware()}{gov\_sys\_pol\_attr\_rw\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware (\begin{DoxyParamCaption}\item[{is\+\_\+big\+\_\+little}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ad941789cd9ea862212780ccfcf7707e1}\label{AI__gov__sysfs_8c_ad941789cd9ea862212780ccfcf7707e1}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware()}{gov\_sys\_pol\_attr\_rw\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware (\begin{DoxyParamCaption}\item[{cpu\+\_\+count}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a869fc8a87f72b84742f138d05fc8af2f}\label{AI__gov__sysfs_8c_a869fc8a87f72b84742f138d05fc8af2f}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware()}{gov\_sys\_pol\_attr\_rw\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware (\begin{DoxyParamCaption}\item[{little\+\_\+freq}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ae99f0384a18b606cb71aff199e7803a5}\label{AI__gov__sysfs_8c_ae99f0384a18b606cb71aff199e7803a5}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware()}{gov\_sys\_pol\_attr\_rw\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware (\begin{DoxyParamCaption}\item[{big\+\_\+state}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a19b854dcdc320de09a21d392715a6e40}\label{AI__gov__sysfs_8c_a19b854dcdc320de09a21d392715a6e40}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}}
+\index{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware@{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware()}{gov\_sys\_pol\_attr\_rw\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily gov\+\_\+sys\+\_\+pol\+\_\+attr\+\_\+rw\+\_\+hardware (\begin{DoxyParamCaption}\item[{big\+\_\+freq}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_acfefa9c7a940aac67e542c6d5e38bc54}\label{AI__gov__sysfs_8c_acfefa9c7a940aac67e542c6d5e38bc54}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+phase\+\_\+state@{show\+\_\+phase\+\_\+state}}
+\index{show\+\_\+phase\+\_\+state@{show\+\_\+phase\+\_\+state}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+phase\+\_\+state()}{show\_phase\_state()}}
+{\footnotesize\ttfamily ssize\+\_\+t show\+\_\+phase\+\_\+state (\begin{DoxyParamCaption}\item[{struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$}]{tunables,  }\item[{char $\ast$}]{buf }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a23c2ebb694ec3b1e488e23cf7eb03b15}\label{AI__gov__sysfs_8c_a23c2ebb694ec3b1e488e23cf7eb03b15}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+prev\+\_\+phase@{show\+\_\+prev\+\_\+phase}}
+\index{show\+\_\+prev\+\_\+phase@{show\+\_\+prev\+\_\+phase}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+prev\+\_\+phase()}{show\_prev\_phase()}}
+{\footnotesize\ttfamily ssize\+\_\+t show\+\_\+prev\+\_\+phase (\begin{DoxyParamCaption}\item[{struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$}]{tunables,  }\item[{char $\ast$}]{buf }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ae6c4f32a5d12ef9046b095834ecc7795}\label{AI__gov__sysfs_8c_ae6c4f32a5d12ef9046b095834ecc7795}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware()}{show\_store\_gov\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+hardware (\begin{DoxyParamCaption}\item[{is\+\_\+big\+\_\+little}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_abf51c244229ad6997f73b7e7aba10912}\label{AI__gov__sysfs_8c_abf51c244229ad6997f73b7e7aba10912}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware()}{show\_store\_gov\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+hardware (\begin{DoxyParamCaption}\item[{cpu\+\_\+count}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a0158cdaed98b75d9e6385b030eb4bdcf}\label{AI__gov__sysfs_8c_a0158cdaed98b75d9e6385b030eb4bdcf}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware()}{show\_store\_gov\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+hardware (\begin{DoxyParamCaption}\item[{little\+\_\+freq}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a2e588e6503f534e78051d0a418752363}\label{AI__gov__sysfs_8c_a2e588e6503f534e78051d0a418752363}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware()}{show\_store\_gov\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+hardware (\begin{DoxyParamCaption}\item[{big\+\_\+state}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a53c7fa4bebef02512a6ba3d63edf2601}\label{AI__gov__sysfs_8c_a53c7fa4bebef02512a6ba3d63edf2601}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}}
+\index{show\+\_\+store\+\_\+gov\+\_\+hardware@{show\+\_\+store\+\_\+gov\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+hardware()}{show\_store\_gov\_hardware()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+hardware (\begin{DoxyParamCaption}\item[{big\+\_\+freq}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ac6889ed959484e7c141275b5992707e0}\label{AI__gov__sysfs_8c_ac6889ed959484e7c141275b5992707e0}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys()}{show\_store\_gov\_pol\_sys()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys (\begin{DoxyParamCaption}\item[{timer\+\_\+rate}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a42f7503889960826667adbb27728ef7a}\label{AI__gov__sysfs_8c_a42f7503889960826667adbb27728ef7a}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys()}{show\_store\_gov\_pol\_sys()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys (\begin{DoxyParamCaption}\item[{io\+\_\+is\+\_\+busy}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_ae9aa5e2fdd62a9b3ef5adea9542ea357}\label{AI__gov__sysfs_8c_ae9aa5e2fdd62a9b3ef5adea9542ea357}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys()}{show\_store\_gov\_pol\_sys()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys (\begin{DoxyParamCaption}\item[{phase\+\_\+state}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a4dea98914726159c3381809dc8643399}\label{AI__gov__sysfs_8c_a4dea98914726159c3381809dc8643399}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}}
+\index{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys@{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys()}{show\_store\_gov\_pol\_sys()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily show\+\_\+store\+\_\+gov\+\_\+pol\+\_\+sys (\begin{DoxyParamCaption}\item[{prev\+\_\+phase}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a261b26f8c59caffa4cfd73dcc47741b4}\label{AI__gov__sysfs_8c_a261b26f8c59caffa4cfd73dcc47741b4}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!store\+\_\+phase\+\_\+state@{store\+\_\+phase\+\_\+state}}
+\index{store\+\_\+phase\+\_\+state@{store\+\_\+phase\+\_\+state}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{store\+\_\+phase\+\_\+state()}{store\_phase\_state()}}
+{\footnotesize\ttfamily ssize\+\_\+t store\+\_\+phase\+\_\+state (\begin{DoxyParamCaption}\item[{struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$}]{tunables,  }\item[{const char $\ast$}]{buf,  }\item[{size\+\_\+t}]{count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a194fd1806c8dc73efcf5e0ca8e082946}\label{AI__gov__sysfs_8c_a194fd1806c8dc73efcf5e0ca8e082946}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!store\+\_\+prev\+\_\+phase@{store\+\_\+prev\+\_\+phase}}
+\index{store\+\_\+prev\+\_\+phase@{store\+\_\+prev\+\_\+phase}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{store\+\_\+prev\+\_\+phase()}{store\_prev\_phase()}}
+{\footnotesize\ttfamily ssize\+\_\+t store\+\_\+prev\+\_\+phase (\begin{DoxyParamCaption}\item[{struct \hyperlink{structcpufreq__AI__gov__tunables}{cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables} $\ast$}]{tunables,  }\item[{const char $\ast$}]{buf,  }\item[{size\+\_\+t}]{count }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a7d6b44ba38c8f79d82bb8d1e62a59dee}\label{AI__gov__sysfs_8c_a7d6b44ba38c8f79d82bb8d1e62a59dee}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware@{A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware}}
+\index{A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware@{A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware}{AI\_gov\_attrs\_grp\_hardware}}
+{\footnotesize\ttfamily struct attribute\+\_\+group A\+I\+\_\+gov\+\_\+attrs\+\_\+grp\+\_\+hardware}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+        .attrs = AI\_gov\_attrs\_hardware,
+        .name = NULL,
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a557a2240475d71db04304cf629382a11}\label{AI__gov__sysfs_8c_a557a2240475d71db04304cf629382a11}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+sysfs@{A\+I\+\_\+gov\+\_\+sysfs}}
+\index{A\+I\+\_\+gov\+\_\+sysfs@{A\+I\+\_\+gov\+\_\+sysfs}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+sysfs}{AI\_gov\_sysfs}}
+{\footnotesize\ttfamily const char$\ast$ A\+I\+\_\+gov\+\_\+sysfs\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+    \textcolor{stringliteral}{"timer\_rate"},
+    \textcolor{stringliteral}{"io\_is\_busy"},
+    \textcolor{stringliteral}{"phase\_state"},
+    \textcolor{stringliteral}{"prev\_phase"}
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__sysfs_8c_a17316e661a421b3b05139f5f2eaf2cac}\label{AI__gov__sysfs_8c_a17316e661a421b3b05139f5f2eaf2cac}} 
+\index{A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}!A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware}}
+\index{A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware@{A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware}!A\+I\+\_\+gov\+\_\+sysfs.\+c@{A\+I\+\_\+gov\+\_\+sysfs.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware}{AI\_gov\_sysfs\_hardware}}
+{\footnotesize\ttfamily const char$\ast$ A\+I\+\_\+gov\+\_\+sysfs\+\_\+hardware\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+    \textcolor{stringliteral}{"is\_big\_little"},
+    \textcolor{stringliteral}{"cpu\_count"},
+    \textcolor{stringliteral}{"little\_freq"},
+
+    \textcolor{stringliteral}{"big\_state"},
+    \textcolor{stringliteral}{"big\_freq"},
+
+\}
+\end{DoxyCode}

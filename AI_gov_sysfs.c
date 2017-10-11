@@ -71,6 +71,9 @@ ssize_t show_phase_state(
 		case AI_framerate:
 			return sprintf(buf, "%s\n", "AI_framerate");
 			break;
+		case AI_ondemand:
+			return sprintf(buf, "%s\n", "AI_ondemand");
+			break;
 		case AI_priority:
 			return sprintf(buf, "%s\n", "AI_priority");
 			break;
@@ -98,48 +101,41 @@ ssize_t store_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables,const char *buf,
 		size_t count) {
 
-	KERNEL_DEBUG_MSG(
-					"[GOVERNOR] Storing phase %s\n",buf);
-
 	if(strcmp(buf, "AI_init\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_init);
 	}else if(strcmp(buf, "AI_framerate\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_framerate);
+	}else if(strcmp(buf, "AI_ondemand\n") == 0){
+		KERNEL_ERROR_MSG(
+			"[GOVERNOR] STORING STATE: %s \n", buf);
+		AI_gov_sysfs_load_profile(AI_ondemand);
 	}else if(strcmp(buf, "AI_priority\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_priority);
 	}else if(strcmp(buf, "AI_time\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_time);
 	}else if(strcmp(buf, "AI_powersave\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_powersave);
 	}else if(strcmp(buf, "AI_performance\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_performance);
 	}else if(strcmp(buf, "AI_response\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_response);
 	}else if(strcmp(buf, "AI_exit\n") == 0){
 		KERNEL_ERROR_MSG(
-						"[GOVERNOR] STORING STATE: %s \n",
-								buf);
+			"[GOVERNOR] STORING STATE: %s \n", buf);
 		AI_gov_sysfs_load_profile(AI_exit);
 	}
 
@@ -159,6 +155,9 @@ ssize_t show_prev_phase(
 			break;
 		case AI_framerate:
 			return sprintf(buf, "%s\n", "AI_framerate");
+			break;
+		case AI_ondemand:
+			return sprintf(buf, "%s\n", "AI_ondemand");
 			break;
 		case AI_priority:
 			return sprintf(buf, "%s\n", "AI_priority");
@@ -723,6 +722,8 @@ struct attribute_group *AI_get_sysfs_attr(void)
 {
 	return &AI_gov_attr_group_gov_sys;
 }
+
+
 
 void debug_profile(struct phase_profile* profile)
 {

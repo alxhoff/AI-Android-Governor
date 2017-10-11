@@ -153,6 +153,8 @@ static void cpufreq_AI_governor_timer_start(
 
 	pcpu->cpu_timer.expires = expires;
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] YO expires set \n");
+
 	add_timer_on(&pcpu->cpu_timer, cpu);
 
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start finished \n");
@@ -163,6 +165,8 @@ static void cpufreq_AI_governor_timer_start(
 static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
 	unsigned long flags, init = 0;
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN TASK \n");
 
 	while(!kthread_should_stop()){
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -199,6 +203,8 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 
 		//rearm timer
 		cpufreq_AI_governor_timer_resched();
+
+		KERNEL_DEBUG_MSG(" [GOVERNOR] TIMER RESCHEDULED");
 
 	}
 	return 0;
@@ -291,6 +297,9 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	case CPUFREQ_GOV_START:
 		mutex_lock(&gov_lock_AI);
 
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO start started \n");
+
+
 		//TODO SAVE INTO STRUCTS
 //		freq_table = cpufreq_frequency_get_table(policy->cpu);
 
@@ -305,16 +314,25 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			up_write(&pcpu->enable_sem);
 		}
 
+		KERNEL_DEBUG_MSG("[GOVERNOR] YO pcpu dome \n");
+
 		//TODO Conditional regarding hardware
 		if(tunables && gov_started == 0){
+
+			KERNEL_DEBUG_MSG(
+					" [GOVERNOR] YO in condition \n");
 
 			//create task
 			snprintf(speedchange_task_name, TASK_NAME_LEN,
 					"AI_governor%d\n", policy->cpu);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task name: %s \n", speedchange_task_name);
+
 			tunables->speedchange_task =  kthread_create(
 					cpufreq_AI_governor_speedchange_task, NULL,
 					speedchange_task_name);
+
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task creat run \n");
 
 			//if task errors (THIS CRASHES)
 			if (IS_ERR(tunables->speedchange_task)) {
@@ -323,19 +341,33 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 					return PTR_ERR(tunables->speedchange_task);
 			}
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] Task created \n");
+
 			//if task is set then set priority
 			sched_setscheduler_nocheck(tunables->speedchange_task, SCHED_FIFO,
 											&param);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task schedule \n");
+
 			get_task_struct(tunables->speedchange_task);
+
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO struct got \n");
+
 
 			// kthread_bind(tunables->speedchange_task, policy->cpu);
 			/* NB: wake up so the thread does not look hung to the freezer */
 			wake_up_process(tunables->speedchange_task);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO task woke yo \n");
+
 			down_write(&pcpu->enable_sem);
 
+			KERNEL_DEBUG_MSG("[GOVERNOR] YO wrote downz \n");
+
 			cpufreq_AI_governor_timer_start(tunables, 0);
+
+			KERNEL_DEBUG_MSG(
+					" [GOVERNOR] AI_gov: timer started \n");
 
 			up_write(&pcpu->enable_sem);
 

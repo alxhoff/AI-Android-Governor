@@ -41,35 +41,34 @@ static short ring_buffer_initialized = 0;
 
 void AI_coordinator(void)
 {
-//	int i = 0;
-//	unsigned int total_workload = 0;
-//	unsigned flags, workload[8];
-//	struct cpufreq_AI_governor_cpuinfo *pcpu_tmp = 0;
+	int i = 0;
+	unsigned int total_workload = 0;
+	unsigned flags, workload[8];
+	struct cpufreq_AI_governor_cpuinfo *pcpu_tmp = 0;
 //	static enum PHASE_ENUM current_phase;
 //	enum PHASE_ENUM previous_phase;
 
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR");
 
-	//TODO workload calculation fix
+	for_each_online_cpu(i) {
+			pcpu_tmp = &per_cpu(cpuinfo, i);
+			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 1");
 
-//	for_each_online_cpu(i) {
-//			pcpu_tmp = &per_cpu(cpuinfo, i);
-//			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 1");
-//
-//			spin_lock_irqsave(&pcpu_tmp->load_lock, flags);
-//			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 2");
-//
-//			workload[i] = AI_sched_update_load(i, pcpu_tmp);
-//			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 3");
-//
-//			total_workload += workload[i];
-//			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 4");
-//
-//			AI_tasks_add_data_to_ringbuffer(&(AI_workload_history_cpus[i]), workload[i]);
-//			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 5");
-//
-//			spin_unlock_irqrestore(&pcpu_tmp->load_lock, flags);
-//	}
+			spin_lock_irqsave(&pcpu_tmp->load_lock, flags);
+			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 2");
+
+			workload[i] = AI_sched_update_load(i, pcpu_tmp);
+			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 3");
+
+			total_workload += workload[i];
+			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 4");
+
+			AI_tasks_add_data_to_ringbuffer(&(AI_workload_history_cpus[i]), workload[i]);
+			KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR 5");
+
+			spin_unlock_irqrestore(&pcpu_tmp->load_lock, flags);
+	}
 
 	//TASK HANDLING HERE
 
@@ -81,8 +80,13 @@ void AI_coordinator(void)
 //#endif
 
 	//RUN CURRENT PHASE
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR BEFORE RUN");
+
 
 	if(AI_gov->current_profile->run != NULL) AI_gov->current_profile->run();
+
+
+	KERNEL_DEBUG_MSG(" [GOVERNOR] IN COORDINATOR AFTER RUN");
 
 //	switch(AI_gov->phase){
 //	case AI_init:

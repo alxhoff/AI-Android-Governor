@@ -1,0 +1,133 @@
+\hypertarget{AI__gov__ioctl_8c}{}\section{/home/alxhoff/odroid\+\_\+4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.c File Reference}
+\label{AI__gov__ioctl_8c}\index{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.\+c@{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+{\ttfamily \#include $<$linux/fs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpumask.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+ioctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}test\+\_\+flags.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+phases.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sysfs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+signed int \hyperlink{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable} (struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} var)
+\item 
+unsigned int \hyperlink{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable} (struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} $\ast$var)
+\item 
+signed int \hyperlink{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase} (void)
+\item 
+char $\ast$ \hyperlink{AI__gov__ioctl_8c_abfdec97f1d9fc09ba9a83b552685f6c2}{device\+\_\+node} (struct device $\ast$dev, umode\+\_\+t $\ast$mode)
+\item 
+long \hyperlink{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}{A\+I\+\_\+gov\+\_\+ioctl} (struct file $\ast$f, unsigned int cmd, unsigned long arg)
+\item 
+int \hyperlink{AI__gov__ioctl_8c_a6112276b72af9da402d2afbf5b71c7de}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init} (void)
+\item 
+int \hyperlink{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit} (void)
+\item 
+int \hyperlink{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}{A\+I\+\_\+gov\+\_\+open} (struct inode $\ast$i, struct file $\ast$f)
+\item 
+int \hyperlink{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}{A\+I\+\_\+gov\+\_\+close} (struct inode $\ast$i, struct file $\ast$f)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const unsigned \hyperlink{AI__gov__ioctl_8c_adb180b9acab27a834b1d191b2ee1f39f}{A\+I\+\_\+baseminor} = 0
+\item 
+const unsigned \hyperlink{AI__gov__ioctl_8c_a4a9b77eb24590cec68a0b899808b608f}{A\+I\+\_\+minor\+Count} = 1
+\item 
+struct file\+\_\+operations \hyperlink{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}{A\+I\+\_\+governor\+\_\+fops}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}\label{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}}
+\index{A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+close()}{AI\_gov\_close()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+close (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}\label{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}}
+\index{A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl()}{AI\_gov\_ioctl()}}
+{\footnotesize\ttfamily long A\+I\+\_\+gov\+\_\+ioctl (\begin{DoxyParamCaption}\item[{struct file $\ast$}]{f,  }\item[{unsigned int}]{cmd,  }\item[{unsigned long}]{arg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}\label{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase()}{AI\_gov\_ioctl\_clear\_phase()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}\label{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit()}{AI\_gov\_ioctl\_exit()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}\label{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable()}{AI\_gov\_ioctl\_get\_variable()}}
+{\footnotesize\ttfamily unsigned int A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable (\begin{DoxyParamCaption}\item[{struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} $\ast$}]{var }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a6112276b72af9da402d2afbf5b71c7de}\label{AI__gov__ioctl_8c_a6112276b72af9da402d2afbf5b71c7de}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init()}{AI\_gov\_ioctl\_init()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+ioctl\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}\label{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable()}{AI\_gov\_ioctl\_set\_variable()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable (\begin{DoxyParamCaption}\item[{struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}}]{var }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}\label{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}}
+\index{A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+open()}{AI\_gov\_open()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+open (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_abfdec97f1d9fc09ba9a83b552685f6c2}\label{AI__gov__ioctl_8c_abfdec97f1d9fc09ba9a83b552685f6c2}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!device\+\_\+node@{device\+\_\+node}}
+\index{device\+\_\+node@{device\+\_\+node}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{device\+\_\+node()}{device\_node()}}
+{\footnotesize\ttfamily char $\ast$ device\+\_\+node (\begin{DoxyParamCaption}\item[{struct device $\ast$}]{dev,  }\item[{umode\+\_\+t $\ast$}]{mode }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_adb180b9acab27a834b1d191b2ee1f39f}\label{AI__gov__ioctl_8c_adb180b9acab27a834b1d191b2ee1f39f}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+baseminor@{A\+I\+\_\+baseminor}}
+\index{A\+I\+\_\+baseminor@{A\+I\+\_\+baseminor}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+baseminor}{AI\_baseminor}}
+{\footnotesize\ttfamily const unsigned A\+I\+\_\+baseminor = 0}
+
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}\label{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}}
+\index{A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+governor\+\_\+fops}{AI\_governor\_fops}}
+{\footnotesize\ttfamily struct file\+\_\+operations A\+I\+\_\+governor\+\_\+fops}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=
+\{
+    .owner = THIS\_MODULE,
+    .open = \hyperlink{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}{AI\_gov\_open},
+    .release = \hyperlink{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}{AI\_gov\_close},
+
+
+
+        .unlocked\_ioctl = \hyperlink{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}{AI\_gov\_ioctl}
+
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a4a9b77eb24590cec68a0b899808b608f}\label{AI__gov__ioctl_8c_a4a9b77eb24590cec68a0b899808b608f}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+minor\+Count@{A\+I\+\_\+minor\+Count}}
+\index{A\+I\+\_\+minor\+Count@{A\+I\+\_\+minor\+Count}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+minor\+Count}{AI\_minorCount}}
+{\footnotesize\ttfamily const unsigned A\+I\+\_\+minor\+Count = 1}
+

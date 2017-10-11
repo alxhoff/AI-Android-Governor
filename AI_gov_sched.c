@@ -15,7 +15,7 @@
 #include <linux/tick.h>
 #include <linux/time.h>
 #include <asm/cputime.h>
-//#include "cpu_load_metric.h"
+#include "cpu_load_metric.h"
 
 #include "AI_gov_sched.h"
 #include "test_flags.h"
@@ -659,16 +659,6 @@ inline cputime64_t AI_sched_get_cpu_idle_time(unsigned int cpu,
 	return idle_time;
 }
 
-unsigned int AI_cpu_load_metric_get_per_core(int cpu)
-{
-	struct cpu_load *pcpuload = &per_cpu(cpuload, cpu);
-
-	if (pcpuload != 0)
-		return pcpuload->load;
-	else
-		return 0;
-}
-
 void AI_update_cpu_metric(int cpu, u64 now, u64 delta_idle, u64 delta_time,
 		       struct cpufreq_policy *policy)
 {
@@ -786,5 +776,5 @@ int AI_sched_update_load(int cpu, struct cpufreq_AI_governor_cpuinfo *pcpu) {
 
 	KERNEL_DEBUG_MSG(" [GOVERNOR] IN UPDATE 8\n");
 
-	return AI_cpu_load_metric_get_per_core(cpu);
+	return cpu_load_metric_get_per_core(cpu);
 }
