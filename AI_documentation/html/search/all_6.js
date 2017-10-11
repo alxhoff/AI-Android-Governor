@@ -1,20 +1,4 @@
 var searchData=
 [
-  ['generate_5fenum',['GENERATE_ENUM',['../AI__gov__phases_8h.html#aed8760364c7992625d06c93d12b2496d',1,'AI_gov_phases.h']]],
-  ['generate_5fprofiles',['GENERATE_PROFILES',['../AI__gov__phases_8c.html#acf8b7ca7bb3f1da4f137828f93cb1623',1,'AI_gov_phases.c']]],
-  ['generate_5fstring',['GENERATE_STRING',['../AI__gov__phases_8h.html#adf58d994c35f18ec84b628d8321f52e5',1,'AI_gov_phases.h']]],
-  ['get_5fattributes',['GET_ATTRIBUTES',['../AI__gov__phases_8h.html#a7d6f5b44bf5625cd6fac5b8e995090a9',1,'AI_gov_phases.h']]],
-  ['get_5fattributes_5fw_5fprofile',['GET_ATTRIBUTES_W_PROFILE',['../AI__gov__phases_8h.html#aafea78a2f65d8080109ddbdb6581f1c3',1,'AI_gov_phases.h']]],
-  ['get_5fcurrent_5fprofile',['GET_CURRENT_PROFILE',['../AI__gov__sysfs_8c.html#a09be1539901f817b2de474b6349afbd8',1,'AI_gov_sysfs.c']]],
-  ['gov_5fpol_5fattr_5frw',['gov_pol_attr_rw',['../AI__gov__sysfs_8c.html#a79853b341b4f1a3d53f8c2a611676ae4',1,'AI_gov_sysfs.c']]],
-  ['gov_5fsys_5fattr_5frw',['gov_sys_attr_rw',['../AI__gov__sysfs_8c.html#aeccce8293ec3c7504a0bb7e07f26fa56',1,'AI_gov_sysfs.c']]],
-  ['gov_5fsys_5fattr_5frw_5fhardware',['gov_sys_attr_rw_hardware',['../AI__gov__sysfs_8c.html#a6d6b5c838f98f5c9235fcb3139e88101',1,'AI_gov_sysfs.c']]],
-  ['gov_5fsys_5fpol_5fattr_5frw',['gov_sys_pol_attr_rw',['../AI__gov__sysfs_8c.html#a592d824af8c74a35a7c6027b40e5d44e',1,'gov_sys_pol_attr_rw():&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a0a211e10d71adf95a7b18772ccea83cb',1,'gov_sys_pol_attr_rw(timer_rate):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#aab14dbdd4811b56add340d94e07b3b49',1,'gov_sys_pol_attr_rw(io_is_busy):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a394c2aebd0e2304ae3115a06ba6a6f86',1,'gov_sys_pol_attr_rw(phase_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a08151c827812f0e37d7d4dd6426f5e2b',1,'gov_sys_pol_attr_rw(prev_phase):&#160;AI_gov_sysfs.c']]],
-  ['gov_5fsys_5fpol_5fattr_5frw_5fhardware',['gov_sys_pol_attr_rw_hardware',['../AI__gov__sysfs_8c.html#aa225ffe285db0bf45a7b96c3e4ebff57',1,'gov_sys_pol_attr_rw_hardware():&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a7a1f43b860e0af77bdc8991817806823',1,'gov_sys_pol_attr_rw_hardware(is_big_little):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ad941789cd9ea862212780ccfcf7707e1',1,'gov_sys_pol_attr_rw_hardware(cpu_count):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a869fc8a87f72b84742f138d05fc8af2f',1,'gov_sys_pol_attr_rw_hardware(little_freq):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ae99f0384a18b606cb71aff199e7803a5',1,'gov_sys_pol_attr_rw_hardware(big_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a19b854dcdc320de09a21d392715a6e40',1,'gov_sys_pol_attr_rw_hardware(big_freq):&#160;AI_gov_sysfs.c']]],
-  ['governor_5fclr_5fphase_5fvariables',['GOVERNOR_CLR_PHASE_VARIABLES',['../AI__gov__ioctl_8h.html#a0fe1871b1c2b022daac1c92b325d95a8',1,'AI_gov_ioctl.h']]],
-  ['governor_5fenabled',['governor_enabled',['../structcpufreq__AI__governor__cpuinfo.html#a76845b450e1f8d444596477834ce1383',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['governor_5fget_5fphase',['GOVERNOR_GET_PHASE',['../AI__gov__ioctl_8h.html#ab9e2b4e3e4169165754fe9448c0da824',1,'AI_gov_ioctl.h']]],
-  ['governor_5fget_5fphase_5fvariable',['GOVERNOR_GET_PHASE_VARIABLE',['../AI__gov__ioctl_8h.html#ab4874b556475a61e76e09fa983e8bacc',1,'AI_gov_ioctl.h']]],
-  ['governor_5fset_5fphase',['GOVERNOR_SET_PHASE',['../AI__gov__ioctl_8h.html#af9f25c7b387298e4fa74a80e04e68148',1,'AI_gov_ioctl.h']]],
-  ['governor_5fset_5fphase_5fvariable',['GOVERNOR_SET_PHASE_VARIABLE',['../AI__gov__ioctl_8h.html#aa7be1bd3a0f3905e94357250bab39cc3',1,'AI_gov_ioctl.h']]]
+  ['profiles_5finitd',['profiles_initd',['../group__initialisation__flags.html#gac119eb310007378a0e5dc060602ce66c',1,'AI_gov.c']]]
 ];

@@ -1,23 +1,5 @@
 var searchData=
 [
-  ['enable_5fsem',['enable_sem',['../structcpufreq__AI__governor__cpuinfo.html#af852bb902bb2091547a97b3f1384dc68',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['enter',['enter',['../structphase__profile.html#a53beff5bbbc84cbb5c3e5e1dd48593c1',1,'phase_profile']]],
-  ['enter_5fai_5fexit_5fphase',['enter_AI_exit_phase',['../AI__gov__phases_8c.html#a31721cdeeac61d3fd2784ffa362e8c3a',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5fframerate_5fphase',['enter_AI_framerate_phase',['../AI__gov__phases_8c.html#a90ff9fa182b94d1aae86d5fa66b3aeb0',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5finit_5fphase',['enter_AI_init_phase',['../AI__gov__phases_8c.html#a0e1368f0c31e5eca7cf2eacb84a1a426',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5fperformance_5fphase',['enter_AI_performance_phase',['../AI__gov__phases_8c.html#a941d3a0068309626010a099c01b67645',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5fpowersave_5fphase',['enter_AI_powersave_phase',['../AI__gov__phases_8c.html#af7784d81e13e0fe9e15b2fa2002ed5b5',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5fpriority_5fphase',['enter_AI_priority_phase',['../AI__gov__phases_8c.html#a29bc2053775769341c5ce4cb36bc88d2',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5fresponse_5fphase',['enter_AI_response_phase',['../AI__gov__phases_8c.html#a542b61105ff06fddc65d04076fd21b51',1,'AI_gov_phases.c']]],
-  ['enter_5fai_5ftime_5fphase',['enter_AI_time_phase',['../AI__gov__phases_8c.html#aa1242148a42e9f88ff07b03d5920c4c8',1,'AI_gov_phases.c']]],
-  ['exit',['exit',['../structphase__profile.html#a9c942d0c12f12afd5503ddd40498dd5d',1,'phase_profile']]],
-  ['exit_5fai_5fexit_5fphase',['exit_AI_exit_phase',['../AI__gov__phases_8c.html#ac0e1dc9b48fd6559087b234400fe1960',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5fframerate_5fphase',['exit_AI_framerate_phase',['../AI__gov__phases_8c.html#a32e701467822bc27478c216b7da06ec8',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5finit_5fphase',['exit_AI_init_phase',['../AI__gov__phases_8c.html#a98bab61b394f3485b919280ea9af876f',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5fperformance_5fphase',['exit_AI_performance_phase',['../AI__gov__phases_8c.html#a4a3bcbc98761324798a6db394d7ca003',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5fpowersave_5fphase',['exit_AI_powersave_phase',['../AI__gov__phases_8c.html#a306c8c8d89a5e8f726977fab0a911524',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5fpriority_5fphase',['exit_AI_priority_phase',['../AI__gov__phases_8c.html#ad0d0b1ac3bd2b368ecb4d534c85a0a71',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5fresponse_5fphase',['exit_AI_response_phase',['../AI__gov__phases_8c.html#a1d39d9724fbcc5a756fbdaf6c8da4d2e',1,'AI_gov_phases.c']]],
-  ['exit_5fai_5ftime_5fphase',['exit_AI_time_phase',['../AI__gov__phases_8c.html#a39d61c87ab6af0d46b6ed0f46c16fb0f',1,'AI_gov_phases.c']]],
-  ['export_5fsymbol_5fgpl',['EXPORT_SYMBOL_GPL',['../AI__touch__notifier_8c.html#ae20fbf541327f644e19f3170ef16cc64',1,'EXPORT_SYMBOL_GPL(AI_touch_register_notify):&#160;AI_touch_notifier.c'],['../AI__touch__notifier_8c.html#a35cf432ccd94a1e1acc7c3db6fe8d9fd',1,'EXPORT_SYMBOL_GPL(AI_touch_unregister_notify):&#160;AI_touch_notifier.c']]]
+  ['gov_5flock_5fai',['gov_lock_AI',['../AI__gov_8c.html#a7f23aad72589316ea348c69c3a65addd',1,'AI_gov.c']]],
+  ['gov_5fstarted',['gov_started',['../group__initialisation__flags.html#ga108454816c9d72eb1b7865c6b8055a4f',1,'AI_gov.c']]]
 ];

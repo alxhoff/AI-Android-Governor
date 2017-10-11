@@ -18,10 +18,5 @@ var searchData=
   ['min_5ffrequency_5fup_5fthreshold',['MIN_FREQUENCY_UP_THRESHOLD',['../AI__gov__phases_8h.html#a22c68cd57bee10cf7919967f35922cef',1,'AI_gov_phases.h']]],
   ['min_5fsample_5ftime',['min_sample_time',['../structcpufreq__AI__gov__tunables.html#a1325f155060e24773ebd3dd4705ec11b',1,'cpufreq_AI_gov_tunables']]],
   ['minimum_5fpriority',['minimum_priority',['../structphase__AI__priority__attributes.html#adc44b3832777cbe2198eaf47e716418d',1,'phase_AI_priority_attributes::minimum_priority()'],['../AI__gov__phases_8h.html#a10f85a3cc00c157b5358823672961588',1,'MINIMUM_PRIORITY():&#160;AI_gov_phases.h']]],
-  ['minor_5fcnt',['MINOR_CNT',['../AI__gov__ioctl_8h.html#a4d51aa7d2c0f3c731fc0010b23220cd0',1,'AI_gov_ioctl.h']]],
-  ['module_5fauthor',['MODULE_AUTHOR',['../AI__gov_8c.html#ae8fba27f74b098ef69b2046388cb4187',1,'MODULE_AUTHOR(&quot;Tobias Fuchs &lt;tobias.fuchs@tum.de&gt;&quot;):&#160;AI_gov.c'],['../AI__gov_8c.html#af88beb5c81427d975cfe8e037b81162f',1,'MODULE_AUTHOR(&quot;Nadja Peters &lt;peters@rcs.ei.tum.de&gt;&quot;):&#160;AI_gov.c'],['../AI__gov_8c.html#a909f6d5da0e222e311699cc140b80103',1,'MODULE_AUTHOR(&quot;Alex Hoffman &lt;alxhoff@gmail.com&gt;&quot;):&#160;AI_gov.c']]],
-  ['module_5fdescription',['MODULE_DESCRIPTION',['../AI__gov_8c.html#a9b20030f71870940b8c136f338e3305f',1,'AI_gov.c']]],
-  ['module_5fexit',['module_exit',['../AI__gov_8c.html#a0a027f0698f83606033e96573eab57e9',1,'AI_gov.c']]],
-  ['module_5finit',['module_init',['../AI__gov_8c.html#a5498ff730b28578fcb08a4ae84f3c0c1',1,'AI_gov.c']]],
-  ['module_5flicense',['MODULE_LICENSE',['../AI__gov_8c.html#ad94b36675e7eb067ea3ce6ff9e244a44',1,'AI_gov.c']]]
+  ['minor_5fcnt',['MINOR_CNT',['../AI__gov__ioctl_8h.html#a4d51aa7d2c0f3c731fc0010b23220cd0',1,'AI_gov_ioctl.h']]]
 ];

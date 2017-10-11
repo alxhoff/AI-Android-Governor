@@ -1,3 +1,9 @@
+/**
+ * @file AI_gov.c
+ * @author Alex Hoffman
+ * @date 11 Oct 2017
+ */
+
 #include <asm/uaccess.h>
 
 #include <linux/kobject.h>
@@ -50,17 +56,16 @@
 #include "AI_gov_task_handling.h"
 #include "AI_gov_sysfs.h"
 
-#define DEINIT_PHASE_KOBJECT(PHASE)	\
-				temp_phase = AI_phases_get_name(#PHASE); \
-				kobject_del(temp_phase->kobj); \
+//TODO fix this doxy
+
 
 #ifndef AID_SYSTEM
 #define AID_SYSTEM	(1000)
 #endif
 
 #define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
-
 #define DEFAULT_TARGET_LOAD 90
+
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
 static DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
@@ -69,26 +74,55 @@ static cpumask_t speedchange_cpumask_AI;
 static spinlock_t speedchange_cpumask_lock_AI;
 static struct mutex gov_lock_AI;
 
-static bool gov_started = 0;
+extern uint8_t AI_shutdownCpu;
 
 struct cpufreq_AI_gov_tunables *common_tunables_AI;
 struct cpufreq_AI_gov_tunables *tuned_parameters_AI = NULL;
 struct AI_gov_info* AI_gov;
-struct phase_profiles* AI_gov_profiles;
+
+/**
+* @defgroup initialisation_flags Initialisation flags
+*
+* These variables are used to make sure that the various subsystems that
+* the governor uses are only called once during governor initialisation.
+* This is as the governor initialised once per core and this can be hazardous
+* to various subsystems such as Sysfs.
+*/
+/** 
+* @brief Governor task initialisation flag
+*
+* Makes sure that the governor task is only created and initialised once
+*
+* @ingroup initialisation_flags
+*/
+static bool gov_started = 0;
+/** 
+* @brief Profile initialisation flag
+*
+* Makes sure that the phase profiles and more specifically their sysfs kobjects
+* are only initialised once
+*
+* @ingroup initialisation_flags
+*/
 bool profiles_initd = false;
+/** 
+* @brief IOcontrol initialisation flag
+* @ingroup initialisation_flags
+*/
 bool ioctl_initd = false;
 
-//TIMER
+/**
+ * @brief Called to reschedule the main task's time upon expiration
+ *
+ **/
 void cpufreq_AI_governor_timer_resched(void)
 {
 	unsigned long expires;
 	unsigned long flags;
-	// load cpu 0
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, 0);
 	struct cpufreq_AI_gov_tunables *tunables =
 			pcpu->policy->governor_data;
 
-	// rearm the timer
 	if (!tunables->speedchange_task)
 		return;
 
@@ -106,7 +140,7 @@ void cpufreq_AI_governor_timer_resched(void)
 }
 
 /**
- * Timer which is called when power management should be
+ * @brief Timer which is called when power management should be
  * re-evaluated
  *
  * @param data - required parameter, not used
@@ -133,10 +167,15 @@ void cpufreq_AI_governor_timer(unsigned long data) {
 	return;
 }
 
-/* The caller shall take enable_sem write semaphore to avoid any timer race.
- * The cpu_timer and cpu_slack_timer must be deactivated when calling this
- * function.
- */
+/**
+* @brief Start routine for AI governor's main task timer.
+*
+* The period that is used to reschedule the main task's timer can be set
+* by modifying the timer_rate in the cpufreq_AI_gov_tunables structure
+* passed to the function.
+
+@return void
+*/
 static void cpufreq_AI_governor_timer_start(
 	struct cpufreq_AI_gov_tunables *tunables, int cpu) {
 	struct cpufreq_AI_governor_cpuinfo *pcpu = &per_cpu(cpuinfo, cpu);
@@ -153,20 +192,32 @@ static void cpufreq_AI_governor_timer_start(
 
 	pcpu->cpu_timer.expires = expires;
 
-	KERNEL_DEBUG_MSG(" [GOVERNOR] YO expires set \n");
-
 	add_timer_on(&pcpu->cpu_timer, cpu);
 
 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: timer start finished \n");
 }
 
 
-
+/**
+ * @brief Main task of the AI governor.
+ *
+ * Task is responsible for rescheduling itself as well as updating the CPU's
+ * frequencies and or status in relation to the currently active backend logic.
+ * Also invokes the CPU frequency values to be recalculated such that they can
+ * be applied during the next execution of the task.
+ *
+ * @param data - required parameter, not used
+ *
+ * @return On sucess returns 0
+ **/
 static int cpufreq_AI_governor_speedchange_task(void* data){
 	cpumask_t tmp_mask;
-	unsigned long flags, init = 0;
-
-	KERNEL_DEBUG_MSG(" [GOVERNOR] IN TASK \n");
+	unsigned long flags;
+	/* 
+	* Initialisation flag to ensure that all active CPU's have an initial
+	* frequency assigned to them.
+	*/
+	unsigned long init = 0;
 
 	while(!kthread_should_stop()){
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -191,7 +242,6 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 		if(init == 0){
 #ifdef CPU_IS_BIG_LITTLE
 			//update both cores
-
 #else
 			//update single core
 #endif
@@ -203,14 +253,10 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 
 		//rearm timer
 		cpufreq_AI_governor_timer_resched();
-
-		KERNEL_DEBUG_MSG(" [GOVERNOR] TIMER RESCHEDULED");
-
 	}
 	return 0;
 }
 
-extern uint8_t AI_shutdownCpu;
 
 #ifdef CONFIG_ANDROID
 static void change_sysfs_owner(struct cpufreq_policy *policy)
@@ -239,6 +285,7 @@ static inline void change_sysfs_owner(struct cpufreq_policy *policy) {
 }
 #endif
 
+
 static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 		unsigned long action, void *hcpu) {
 	unsigned int cpu = (unsigned long) hcpu;
@@ -264,6 +311,7 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 	return NOTIFY_OK;
 }
 
+
 //static int AI_touch_nb_callback(void)
 //{
 //	AI_phases_touch_nb();
@@ -276,9 +324,19 @@ static int cpufreq_AI_governor_notifier(struct notifier_block *nfb,
 //};
 
 
+
 static struct notifier_block cpufreq_notifier_block = { .notifier_call =
 		cpufreq_AI_governor_notifier, };
 
+/**
+* @brief The main routine of the governor. 
+*
+* The governor enters and exits through the cases within this function.
+*
+* @param policy
+* @param event
+* @return On sucess returns 0
+*/
 static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 					unsigned int event)
 {
@@ -294,11 +352,11 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	//TODO CHECK FOR CPUS
 
 	switch (event) {
+		/// - Start:
+		/// Called after the governor has been initialized.
+		/// Creates task, sets task priority and starts task.
 	case CPUFREQ_GOV_START:
 		mutex_lock(&gov_lock_AI);
-
-		KERNEL_DEBUG_MSG("[GOVERNOR] YO start started \n");
-
 
 		//TODO SAVE INTO STRUCTS
 //		freq_table = cpufreq_frequency_get_table(policy->cpu);
@@ -314,25 +372,16 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 			up_write(&pcpu->enable_sem);
 		}
 
-		KERNEL_DEBUG_MSG("[GOVERNOR] YO pcpu dome \n");
-
 		//TODO Conditional regarding hardware
 		if(tunables && gov_started == 0){
-
-			KERNEL_DEBUG_MSG(
-					" [GOVERNOR] YO in condition \n");
 
 			//create task
 			snprintf(speedchange_task_name, TASK_NAME_LEN,
 					"AI_governor%d\n", policy->cpu);
 
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO task name: %s \n", speedchange_task_name);
-
 			tunables->speedchange_task =  kthread_create(
 					cpufreq_AI_governor_speedchange_task, NULL,
 					speedchange_task_name);
-
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO task creat run \n");
 
 			//if task errors (THIS CRASHES)
 			if (IS_ERR(tunables->speedchange_task)) {
@@ -341,33 +390,19 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 					return PTR_ERR(tunables->speedchange_task);
 			}
 
-			KERNEL_DEBUG_MSG("[GOVERNOR] Task created \n");
-
 			//if task is set then set priority
 			sched_setscheduler_nocheck(tunables->speedchange_task, SCHED_FIFO,
 											&param);
 
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO task schedule \n");
-
 			get_task_struct(tunables->speedchange_task);
-
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO struct got \n");
-
 
 			// kthread_bind(tunables->speedchange_task, policy->cpu);
 			/* NB: wake up so the thread does not look hung to the freezer */
 			wake_up_process(tunables->speedchange_task);
 
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO task woke yo \n");
-
 			down_write(&pcpu->enable_sem);
 
-			KERNEL_DEBUG_MSG("[GOVERNOR] YO wrote downz \n");
-
 			cpufreq_AI_governor_timer_start(tunables, 0);
-
-			KERNEL_DEBUG_MSG(
-					" [GOVERNOR] AI_gov: timer started \n");
 
 			up_write(&pcpu->enable_sem);
 
@@ -375,6 +410,10 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		}
 		mutex_unlock(&gov_lock_AI);
 		break;
+		/// - Stop:
+		/// Called when the governor is stopping.
+		/// Retsponsible for deinitialising the governor's task and 
+		/// removing timers
 	case CPUFREQ_GOV_STOP:
 		AI_sched_removeCoresFromManaged(0x0F << (policy->cpu / 4) * 4);
 
@@ -415,6 +454,10 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		break;
 	case CPUFREQ_GOV_LIMITS:
 		break;
+		/// - Init:
+		/// Called when the governor is loaded into the kernel.
+		/// Initialises governor subsystems and sets up the governor's
+		/// HERE
 	case CPUFREQ_GOV_POLICY_INIT:
 
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
@@ -540,57 +583,68 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	return 0;
 }
 
-#ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
-static
-#endif
-struct cpufreq_governor cpufreq_gov_AI = {
-	.name		= "AI",
-	.governor	= cpufreq_governor_AI,
-	.owner		= THIS_MODULE,
-};
 
-static int __init cpufreq_gov_AI_init(void)
-{
-	unsigned int i;
-	struct cpufreq_AI_governor_cpuinfo *pcpu;
+// #ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
+// static
+// #endif
+// struct cpufreq_governor cpufreq_gov_AI = {
+// 	.name		= "AI",
+// 	.governor	= cpufreq_governor_AI,
+// 	.owner		= THIS_MODULE,
+// };
 
-	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: entering init routine\n");
 
-	/* Initalize per-cpu timers */
-	// do we really need per-core timers?
-	// The function iterates through all eight cores
-	for_each_possible_cpu(i) {
-		pcpu = &per_cpu(cpuinfo, i);
-		init_timer_deferrable(&pcpu->cpu_timer);
-		pcpu->cpu_timer.function = cpufreq_AI_governor_timer;
-		pcpu->cpu_timer.data = i;
-		//		init_timer(&pcpu->cpu_slack_timer);
-		spin_lock_init(&pcpu->load_lock);
-		init_rwsem(&pcpu->enable_sem);
-		KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: init, show i: %d \n", i);
-	}
+// static int __init cpufreq_gov_AI_init(void)
+// {
+// 	unsigned int i;
+// 	struct cpufreq_AI_governor_cpuinfo *pcpu;
 
-	spin_lock_init(&speedchange_cpumask_lock_AI);
-	mutex_init(&gov_lock_AI);
+// 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: entering init routine\n");
 
-	return cpufreq_register_governor(&cpufreq_gov_AI);
-}
+// 	/* Initalize per-cpu timers */
+// 	// do we really need per-core timers?
+// 	// The function iterates through all eight cores
+// 	for_each_possible_cpu(i) {
+// 		pcpu = &per_cpu(cpuinfo, i);
+// 		init_timer_deferrable(&pcpu->cpu_timer);
+// 		pcpu->cpu_timer.function = cpufreq_AI_governor_timer;
+// 		pcpu->cpu_timer.data = i;
+// 		//		init_timer(&pcpu->cpu_slack_timer);
+// 		spin_lock_init(&pcpu->load_lock);
+// 		init_rwsem(&pcpu->enable_sem);
+// 		KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: init, show i: %d \n", i);
+// 	}
 
-static void __exit cpufreq_gov_AI_exit(void)
-{
-//	AI_touch_unregister_notify(&AI_touch_nb);
-	cpufreq_unregister_governor(&cpufreq_gov_AI);
-}
+// 	spin_lock_init(&speedchange_cpumask_lock_AI);
+// 	mutex_init(&gov_lock_AI);
 
-MODULE_AUTHOR("Tobias Fuchs <tobias.fuchs@tum.de>");
-MODULE_AUTHOR("Nadja Peters <peters@rcs.ei.tum.de>");
-MODULE_AUTHOR("Alex Hoffman <alxhoff@gmail.com>");
-MODULE_DESCRIPTION("CPUfreq policy governor 'AI'");
-MODULE_LICENSE("GPL");
+// 	return cpufreq_register_governor(&cpufreq_gov_AI);
+// }
 
-#ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
-fs_initcall(cpufreq_gov_AI_init);
-#else
-module_init(cpufreq_gov_AI_init);
-#endif
-module_exit(cpufreq_gov_AI_exit);
+
+// static void __exit cpufreq_gov_AI_exit(void)
+// {
+// //	AI_touch_unregister_notify(&AI_touch_nb);
+// 	cpufreq_unregister_governor(&cpufreq_gov_AI);
+// }
+
+// /// @private
+// MODULE_AUTHOR("Alex Hoffman <alxhoff@gmail.com>");
+// /// @private
+// MODULE_AUTHOR("Tobias Fuchs <tobias.fuchs@tum.de>");
+// /// @private
+// MODULE_AUTHOR("Nadja Peters <peters@rcs.ei.tum.de>");
+// /// @private
+// MODULE_DESCRIPTION("CPUfreq policy governor 'AI'");
+// /// @private
+// MODULE_LICENSE("GPL");
+
+// #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
+// /// @private
+// fs_initcall(cpufreq_gov_AI_init);
+// #else
+// /// @private
+// module_init(cpufreq_gov_AI_init);
+// #endif
+// /// @private
+// module_exit(cpufreq_gov_AI_exit);

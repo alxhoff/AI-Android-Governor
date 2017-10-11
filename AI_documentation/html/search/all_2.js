@@ -1,21 +1,6 @@
 var searchData=
 [
-  ['common_5ftunables_5fai',['common_tunables_AI',['../AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d',1,'common_tunables_AI():&#160;AI_gov.c'],['../AI__gov_8h.html#ab400a826323d8042be869ddfe2612f5d',1,'common_tunables_AI():&#160;AI_gov.c']]],
-  ['cpu_5fcount',['cpu_count',['../structAI__gov__cur__HW.html#a3a422f9944001793ba8c86b0c3ec655e',1,'AI_gov_cur_HW']]],
-  ['cpu_5ffreq_5fpolicy',['cpu_freq_policy',['../structAI__gov__info.html#a27175daa0e6c1cf7ac0f3c006ac26d91',1,'AI_gov_info']]],
-  ['cpu_5fload',['cpu_load',['../structcpu__load.html',1,'']]],
-  ['cpu_5fnone',['CPU_NONE',['../AI__gov__sched_8h.html#a3ac5dacfa8f265b28dbd564cc8a6a5f2a22d6c4c737baaae462768769a1114f94',1,'AI_gov_sched.h']]],
-  ['cpu_5fslack_5ftimer',['cpu_slack_timer',['../structcpufreq__AI__governor__cpuinfo.html#a14b7938eb7221e94229b1f9c6b7b8a1f',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['cpu_5ftimer',['cpu_timer',['../structcpufreq__AI__governor__cpuinfo.html#a9d3787cd4f9ba35254402479d7f34f0a',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['cpufreq_5fai_5fgov_5ftunables',['cpufreq_AI_gov_tunables',['../structcpufreq__AI__gov__tunables.html',1,'']]],
-  ['cpufreq_5fai_5fgovernor_5fcpuinfo',['cpufreq_AI_governor_cpuinfo',['../structcpufreq__AI__governor__cpuinfo.html',1,'']]],
-  ['cpufreq_5fai_5fgovernor_5ftimer',['cpufreq_AI_governor_timer',['../AI__gov_8c.html#ac7ff18e45659a37eeaebf592bce781b7',1,'AI_gov.c']]],
-  ['cpufreq_5fai_5fgovernor_5ftimer_5fresched',['cpufreq_AI_governor_timer_resched',['../AI__gov_8c.html#a74a33e69b5fd7d7323cf659283343cff',1,'AI_gov.c']]],
-  ['cputime_5fspeedadj',['cputime_speedadj',['../structcpufreq__AI__governor__cpuinfo.html#a95be4af65c3cde04b0b7540b857b86a0',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['cputime_5fspeedadj_5ftimestamp',['cputime_speedadj_timestamp',['../structcpufreq__AI__governor__cpuinfo.html#a940271c8dea7b49ef28959ced8b1c89a',1,'cpufreq_AI_governor_cpuinfo']]],
-  ['critical_5fworkload_5fmargin_5fbig',['CRITICAL_WORKLOAD_MARGIN_BIG',['../AI__gov__sched_8c.html#a66c3a0b4a51d2cea895f3f43dcbc4ef0',1,'AI_gov_sched.c']]],
-  ['critical_5fworkload_5fmargin_5flittle',['CRITICAL_WORKLOAD_MARGIN_LITTLE',['../AI__gov__sched_8c.html#aabce74a3586ace48ede51b50c6e84ce7',1,'AI_gov_sched.c']]],
-  ['current_5fframe_5frate',['current_frame_rate',['../structAI__gov__profile.html#a1b82b11b00535d99ddc3cba59d8bc6f3',1,'AI_gov_profile']]],
-  ['current_5fframetate',['current_frametate',['../structphase__AI__framerate__attributes.html#af6a096739a087a0de642e66228cd1c63',1,'phase_AI_framerate_attributes']]],
-  ['current_5fprofile',['current_profile',['../structAI__gov__info.html#a2bdc847cd8cc28498eb10ec414240cd1',1,'AI_gov_info']]]
+  ['default_5ftarget_5floads_5fai',['default_target_loads_AI',['../AI__gov_8c.html#af4d33865dc30728c8959ffb76c27bd5b',1,'AI_gov.c']]],
+  ['define_5fper_5fcpu',['DEFINE_PER_CPU',['../AI__gov_8c.html#a9c0c63364890b395b2165c79ac9f0ce2',1,'AI_gov.c']]],
+  ['deinit_5fphase_5fkobject',['DEINIT_PHASE_KOBJECT',['../AI__gov_8h.html#ab73faf6e60c3d2f1ae55158d5f4696e7',1,'AI_gov.h']]]
 ];

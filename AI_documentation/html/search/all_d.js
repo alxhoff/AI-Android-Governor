@@ -25,5 +25,5 @@ var searchData=
   ['profile_5fattributes',['profile_attributes',['../structphase__profile.html#a0c77f4be0f8286275e0bf6583b1d5c20',1,'phase_profile']]],
   ['profile_5fcount',['profile_count',['../structAI__gov__info.html#a0f2824df051724dda4bd5b10e80aa24d',1,'AI_gov_info']]],
   ['profile_5fhead',['profile_head',['../structAI__gov__info.html#a0030b57a8687673d1fdc807147dcb3cd',1,'AI_gov_info']]],
-  ['profiles_5finitd',['profiles_initd',['../AI__gov_8c.html#ac119eb310007378a0e5dc060602ce66c',1,'AI_gov.c']]]
+  ['profiles_5finitd',['profiles_initd',['../group__initialisation__flags.html#gac119eb310007378a0e5dc060602ce66c',1,'AI_gov.c']]]
 ];

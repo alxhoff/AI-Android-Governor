@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AI_governor: /home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov.h File Reference</title>
+<title>AI_governor API: /home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,9 +21,10 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">AI_governor
+   <div id="projectname">AI_governor API
    &#160;<span id="projectnumber">1.0</span>
    </div>
+   <div id="projectbrief">A userspace application interfacable API for power optermisation of CPU usage</div>
   </td>
  </tr>
  </tbody>
@@ -66,15 +67,19 @@ $(function() {
 <div class="title">/home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Main routines for the AI governor.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;linux/timer.h&gt;</code><br />
 <code>#include &lt;linux/rwsem.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="AI__gov__hardware_8h_source.html">AI_gov_hardware.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="AI__gov__types_8h_source.html">AI_gov_types.h</a>&quot;</code><br />
+<code>#include &quot;AI_gov_types.h&quot;</code><br />
 </div>
 <p><a href="AI__gov_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:ab73faf6e60c3d2f1ae55158d5f4696e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#ab73faf6e60c3d2f1ae55158d5f4696e7">DEINIT_PHASE_KOBJECT</a>(PHASE)</td></tr>
+<tr class="separator:ab73faf6e60c3d2f1ae55158d5f4696e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2676c8b65bc70137399d1621578e8f81"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#a2676c8b65bc70137399d1621578e8f81">TASK_NAME_LEN</a>&#160;&#160;&#160;15</td></tr>
 <tr class="separator:a2676c8b65bc70137399d1621578e8f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa505a89207f058c60ee8c4902b84cf11"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#aa505a89207f058c60ee8c4902b84cf11">FAST_RESCHEDULE</a>&#160;&#160;&#160;(2 * USEC_PER_MSEC)</td></tr>
@@ -82,16 +87,37 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ab400a826323d8042be869ddfe2612f5d"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structcpufreq__AI__gov__tunables.html">cpufreq_AI_gov_tunables</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></td></tr>
+<tr class="memitem:ab400a826323d8042be869ddfe2612f5d"><td class="memItemLeft" align="right" valign="top">struct cpufreq_AI_gov_tunables *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></td></tr>
 <tr class="separator:ab400a826323d8042be869ddfe2612f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7035c7c859e98a1d1e5e634d785532b6"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structcpufreq__AI__gov__tunables.html">cpufreq_AI_gov_tunables</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#a7035c7c859e98a1d1e5e634d785532b6">tuned_parameters_AI</a></td></tr>
+<tr class="memitem:a7035c7c859e98a1d1e5e634d785532b6"><td class="memItemLeft" align="right" valign="top">struct cpufreq_AI_gov_tunables *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#a7035c7c859e98a1d1e5e634d785532b6">tuned_parameters_AI</a></td></tr>
 <tr class="separator:a7035c7c859e98a1d1e5e634d785532b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4eaf8dff28e6d0aa16c537c410702ab7"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structAI__gov__info.html">AI_gov_info</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></td></tr>
+<tr class="memitem:a4eaf8dff28e6d0aa16c537c410702ab7"><td class="memItemLeft" align="right" valign="top">struct AI_gov_info *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></td></tr>
+<tr class="memdesc:a4eaf8dff28e6d0aa16c537c410702ab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main global data struct of the AI_gov.  <a href="#a4eaf8dff28e6d0aa16c537c410702ab7">More...</a><br /></td></tr>
 <tr class="separator:a4eaf8dff28e6d0aa16c537c410702ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa65ccb1911688401a62ada3b6df0147"><td class="memItemLeft" align="right" valign="top">struct phase_profiles *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov_8h.html#aaa65ccb1911688401a62ada3b6df0147">AI_gov_profiles</a></td></tr>
-<tr class="separator:aaa65ccb1911688401a62ada3b6df0147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Main routines for the AI governor. </p>
+<dl class="section author"><dt>Author</dt><dd>Alex Hoffman </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>11 October 2017 The AI governor enters and exits use throughn the routines outlines within the file. All backend logic is initialized from this file, timers, tasks etc. </dd></dl>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ab73faf6e60c3d2f1ae55158d5f4696e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab73faf6e60c3d2f1ae55158d5f4696e7">&#9670;&nbsp;</a></span>DEINIT_PHASE_KOBJECT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEINIT_PHASE_KOBJECT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PHASE</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">temp_phase = AI_phases_get_name(#PHASE); \</div><div class="line">                kobject_del(temp_phase-&gt;kobj); \</div></div><!-- fragment -->
+</div>
+</div>
 <a id="aa505a89207f058c60ee8c4902b84cf11"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa505a89207f058c60ee8c4902b84cf11">&#9670;&nbsp;</a></span>FAST_RESCHEDULE</h2>
 
@@ -128,24 +154,13 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structAI__gov__info.html">AI_gov_info</a>* AI_gov</td>
+          <td class="memname">struct AI_gov_info* AI_gov</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="aaa65ccb1911688401a62ada3b6df0147"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa65ccb1911688401a62ada3b6df0147">&#9670;&nbsp;</a></span>AI_gov_profiles</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct phase_profiles* AI_gov_profiles</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>The main global data struct of the AI_gov. </p>
+<p>The global AI_gov data structure stores all important information relating to the governor, its state and its profiles. It also contans a number of pointers to important system structs. </p>
 
 </div>
 </div>
@@ -156,7 +171,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structcpufreq__AI__gov__tunables.html">cpufreq_AI_gov_tunables</a>* common_tunables_AI</td>
+          <td class="memname">struct cpufreq_AI_gov_tunables* common_tunables_AI</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -170,7 +185,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structcpufreq__AI__gov__tunables.html">cpufreq_AI_gov_tunables</a>* tuned_parameters_AI</td>
+          <td class="memname">struct cpufreq_AI_gov_tunables* tuned_parameters_AI</td>
         </tr>
       </table>
 </div><div class="memdoc">

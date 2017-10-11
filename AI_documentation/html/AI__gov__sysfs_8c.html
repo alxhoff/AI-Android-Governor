@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AI_governor: /home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov_sysfs.c File Reference</title>
+<title>AI_governor API: /home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov_sysfs.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,9 +21,10 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">AI_governor
+   <div id="projectname">AI_governor API
    &#160;<span id="projectnumber">1.0</span>
    </div>
+   <div id="projectbrief">A userspace application interfacable API for power optermisation of CPU usage</div>
   </td>
  </tr>
  </tbody>
@@ -203,7 +204,7 @@ Variables</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">sysfs_init = <a class="code" href="AI__gov__phases_8c.html#a1dbde0e214b9beaba120040a0474f2cf">AI_phases_get_name</a>(<a class="code" href="AI__gov__phases_8c.html#a97f3fc1ceb1f2afbc650b5694e5e13fb">PHASE_STRINGS</a>[PHASE]); \</div><div class="line">    sysfs_init-&gt;sysfs_attr_grp = &amp;AI_gov_attrs_group_##PHASE##_gov_sys; \</div><div class="line">    sysfs_init-&gt;kobj = kobject_create_and_add(<span class="stringliteral">&quot;profile&quot;</span>, <a class="code" href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a>-&gt;<a class="code" href="structAI__gov__info.html#a7311e0f47b502f0aef667416ee3beed2">kobj</a>); \</div><div class="line">    if(sysfs_init-&gt;kobj == NULL){ \</div><div class="line">        KERNEL_ERROR_MSG( \</div><div class="line">                <span class="stringliteral">&quot;[SYSFS] AI_Governor: Init sysfs group couldn&#39;t init kobject for&quot;</span> \</div><div class="line">                    <span class="stringliteral">&quot;profile %s \n&quot;</span>, sysfs_init-&gt;phase_name); \</div><div class="line">        return -ENOMEM; \</div><div class="line">    }\</div><div class="line">    KERNEL_DEBUG_MSG( <span class="stringliteral">&quot;[GOVERNOR] kobject created for %s \n&quot;</span> \</div><div class="line">        , sysfs_init-&gt;phase_name); \</div><div class="line">    ret = sysfs_create_group(sysfs_init-&gt;kobj, \</div><div class="line">            sysfs_init-&gt;sysfs_attr_grp);    \</div><div class="line">    kobject_del(sysfs_init-&gt;kobj);</div><div class="ttc" id="AI__gov__phases_8c_html_a97f3fc1ceb1f2afbc650b5694e5e13fb"><div class="ttname"><a href="AI__gov__phases_8c.html#a97f3fc1ceb1f2afbc650b5694e5e13fb">PHASE_STRINGS</a></div><div class="ttdeci">char * PHASE_STRINGS[]</div><div class="ttdef"><b>Definition:</b> AI_gov_phases.c:62</div></div>
 <div class="ttc" id="AI__gov__phases_8c_html_a1dbde0e214b9beaba120040a0474f2cf"><div class="ttname"><a href="AI__gov__phases_8c.html#a1dbde0e214b9beaba120040a0474f2cf">AI_phases_get_name</a></div><div class="ttdeci">struct phase_profile * AI_phases_get_name(char *name)</div><div class="ttdef"><b>Definition:</b> AI_gov_phases.c:293</div></div>
 <div class="ttc" id="structAI__gov__info_html_a7311e0f47b502f0aef667416ee3beed2"><div class="ttname"><a href="structAI__gov__info.html#a7311e0f47b502f0aef667416ee3beed2">AI_gov_info::kobj</a></div><div class="ttdeci">struct kobject * kobj</div><div class="ttdef"><b>Definition:</b> AI_gov_types.h:79</div></div>
-<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdef"><b>Definition:</b> AI_gov.c:76</div></div>
+<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdoc">The main global data struct of the AI_gov. </div><div class="ttdef"><b>Definition:</b> AI_gov.c:84</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -466,7 +467,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t show_##file_name##_gov_sys               \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keywordtype">char</span> *buf)       \</div><div class="line">{                                   \</div><div class="line">    return show_##file_name(<a class="code" href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a>, buf);           \</div><div class="line">}                                   \</div><div class="ttc" id="AI__gov_8c_html_ab400a826323d8042be869ddfe2612f5d"><div class="ttname"><a href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></div><div class="ttdeci">struct cpufreq_AI_gov_tunables * common_tunables_AI</div><div class="ttdef"><b>Definition:</b> AI_gov.c:74</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t show_##file_name##_gov_sys               \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keywordtype">char</span> *buf)       \</div><div class="line">{                                   \</div><div class="line">    return show_##file_name(<a class="code" href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a>, buf);           \</div><div class="line">}                                   \</div><div class="ttc" id="AI__gov_8c_html_ab400a826323d8042be869ddfe2612f5d"><div class="ttname"><a href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></div><div class="ttdeci">struct cpufreq_AI_gov_tunables * common_tunables_AI</div><div class="ttdef"><b>Definition:</b> AI_gov.c:82</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -486,7 +487,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t show_##file_name##_gov_sys               \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keywordtype">char</span> *buf)       \</div><div class="line">{                                   \</div><div class="line">    return show_##file_name(<a class="code" href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a>-&gt;<a class="code" href="structAI__gov__info.html#a19aa2fc9d88145a9d27e30e2a4cdd3aa">hardware</a>, buf);         \</div><div class="line">}                                   \</div><div class="ttc" id="structAI__gov__info_html_a19aa2fc9d88145a9d27e30e2a4cdd3aa"><div class="ttname"><a href="structAI__gov__info.html#a19aa2fc9d88145a9d27e30e2a4cdd3aa">AI_gov_info::hardware</a></div><div class="ttdeci">struct AI_gov_cur_HW * hardware</div><div class="ttdef"><b>Definition:</b> AI_gov_types.h:62</div></div>
-<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdef"><b>Definition:</b> AI_gov.c:76</div></div>
+<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdoc">The main global data struct of the AI_gov. </div><div class="ttdef"><b>Definition:</b> AI_gov.c:84</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -543,7 +544,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t store_##file_name##_gov_sys              \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,     \</div><div class="line">    size_t count)                           \</div><div class="line">{                                   \</div><div class="line">    return store_##file_name(<a class="code" href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a>, buf, count);       \</div><div class="line">}                                   \</div><div class="ttc" id="AI__gov_8c_html_ab400a826323d8042be869ddfe2612f5d"><div class="ttname"><a href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></div><div class="ttdeci">struct cpufreq_AI_gov_tunables * common_tunables_AI</div><div class="ttdef"><b>Definition:</b> AI_gov.c:74</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t store_##file_name##_gov_sys              \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,     \</div><div class="line">    size_t count)                           \</div><div class="line">{                                   \</div><div class="line">    return store_##file_name(<a class="code" href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a>, buf, count);       \</div><div class="line">}                                   \</div><div class="ttc" id="AI__gov_8c_html_ab400a826323d8042be869ddfe2612f5d"><div class="ttname"><a href="AI__gov_8c.html#ab400a826323d8042be869ddfe2612f5d">common_tunables_AI</a></div><div class="ttdeci">struct cpufreq_AI_gov_tunables * common_tunables_AI</div><div class="ttdef"><b>Definition:</b> AI_gov.c:82</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -563,7 +564,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">static</span> ssize_t store_##file_name##_gov_sys              \</div><div class="line">(<span class="keyword">struct </span>kobject *kobj, <span class="keyword">struct </span>attribute *attr, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,     \</div><div class="line">    size_t count)                           \</div><div class="line">{                                   \</div><div class="line">    return store_##file_name(<a class="code" href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a>-&gt;<a class="code" href="structAI__gov__info.html#a19aa2fc9d88145a9d27e30e2a4cdd3aa">hardware</a>, buf, count);     \</div><div class="line">}                                   \</div><div class="ttc" id="structAI__gov__info_html_a19aa2fc9d88145a9d27e30e2a4cdd3aa"><div class="ttname"><a href="structAI__gov__info.html#a19aa2fc9d88145a9d27e30e2a4cdd3aa">AI_gov_info::hardware</a></div><div class="ttdeci">struct AI_gov_cur_HW * hardware</div><div class="ttdef"><b>Definition:</b> AI_gov_types.h:62</div></div>
-<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdef"><b>Definition:</b> AI_gov.c:76</div></div>
+<div class="ttc" id="AI__gov_8c_html_a4eaf8dff28e6d0aa16c537c410702ab7"><div class="ttname"><a href="AI__gov_8c.html#a4eaf8dff28e6d0aa16c537c410702ab7">AI_gov</a></div><div class="ttdeci">struct AI_gov_info * AI_gov</div><div class="ttdoc">The main global data struct of the AI_gov. </div><div class="ttdef"><b>Definition:</b> AI_gov.c:84</div></div>
 </div><!-- fragment -->
 </div>
 </div>

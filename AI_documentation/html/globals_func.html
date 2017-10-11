@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AI_governor: File Members</title>
+<title>AI_governor API: File Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,9 +21,10 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">AI_governor
+   <div id="projectname">AI_governor API
    &#160;<span id="projectnumber">1.0</span>
    </div>
+   <div id="projectbrief">A userspace application interfacable API for power optermisation of CPU usage</div>
   </td>
  </tr>
  </tbody>
@@ -59,422 +60,30 @@ $(function() {
 </div>
 
 <div class="contents">
-&#160;
-
-<h3><a id="index_a"></a>- a -</h3><ul>
-<li>AI_coordinator()
-: <a class="el" href="AI__gov__power__manager_8c.html#a419afdcc651f9ba7899c6da2ea18ea74">AI_gov_power_manager.c</a>
-, <a class="el" href="AI__gov__power__manager_8h.html#a419afdcc651f9ba7899c6da2ea18ea74">AI_gov_power_manager.h</a>
+&#160;<ul>
+<li>change_sysfs_owner()
+: <a class="el" href="AI__gov_8c.html#a0c1b755fd9622facad130b0a89e556a8">AI_gov.c</a>
 </li>
-<li>AI_get_gov_parent_kobj()
-: <a class="el" href="AI__gov__sysfs_8c.html#aa012f940832ecf1376443f2fb599b52e">AI_gov_sysfs.c</a>
+<li>cpufreq_AI_governor_notifier()
+: <a class="el" href="AI__gov_8c.html#ad784464c5a2c24e221d9bc07b429be7b">AI_gov.c</a>
 </li>
-<li>AI_get_governor_parent_kobj()
-: <a class="el" href="AI__gov__sysfs_8h.html#a2a6342d0d0e5b649e082fabf9933ec15">AI_gov_sysfs.h</a>
+<li>cpufreq_AI_governor_speedchange_task()
+: <a class="el" href="AI__gov_8c.html#a6c74124fe447e529443b6f415c843219">AI_gov.c</a>
 </li>
-<li>AI_get_sysfs_attr()
-: <a class="el" href="AI__gov__sysfs_8c.html#a2313a5be64ef6093bd0b8a7d67c3f523">AI_gov_sysfs.c</a>
-, <a class="el" href="AI__gov__sysfs_8h.html#a2313a5be64ef6093bd0b8a7d67c3f523">AI_gov_sysfs.h</a>
-</li>
-<li>AI_gov_change_freq_table()
-: <a class="el" href="AI__gov__hardware_8c.html#ac6eefcd2c948a3444bbff7f3e9cee971">AI_gov_hardware.c</a>
-</li>
-<li>AI_gov_close()
-: <a class="el" href="AI__gov__ioctl_8c.html#abce04e2319f708bcfcc4671044b041fb">AI_gov_ioctl.c</a>
-, <a class="el" href="AI__gov__ioctl_8h.html#abce04e2319f708bcfcc4671044b041fb">AI_gov_ioctl.h</a>
-</li>
-<li>AI_gov_init()
-: <a class="el" href="AI__gov__hardware_8c.html#ad282940880584f7a8034a26ebd0dd2c6">AI_gov_hardware.c</a>
-, <a class="el" href="AI__gov__hardware_8h.html#ad282940880584f7a8034a26ebd0dd2c6">AI_gov_hardware.h</a>
-</li>
-<li>AI_gov_ioctl()
-: <a class="el" href="AI__gov__ioctl_8c.html#adeadc081a6f7540d6ea0db336a9e0ea1">AI_gov_ioctl.c</a>
-, <a class="el" href="AI__gov__ioctl_8h.html#adeadc081a6f7540d6ea0db336a9e0ea1">AI_gov_ioctl.h</a>
-</li>
-<li>AI_gov_ioctl_clear_phase()
-: <a class="el" href="AI__gov__ioctl_8c.html#ad3c05b8f00ba9edfae42b62fa577c3e6">AI_gov_ioctl.c</a>
-</li>
-<li>AI_gov_ioctl_exit()
-: <a class="el" href="AI__gov__ioctl_8h.html#a2151504be2df435b0ec5fe17fede210f">AI_gov_ioctl.h</a>
-, <a class="el" href="AI__gov__ioctl_8c.html#a2151504be2df435b0ec5fe17fede210f">AI_gov_ioctl.c</a>
-</li>
-<li>AI_gov_ioctl_get_variable()
-: <a class="el" href="AI__gov__ioctl_8c.html#a9fcb3dd041402500acce86d1c85c2fab">AI_gov_ioctl.c</a>
-</li>
-<li>AI_gov_ioctl_init()
-: <a class="el" href="AI__gov__ioctl_8c.html#a6112276b72af9da402d2afbf5b71c7de">AI_gov_ioctl.c</a>
-, <a class="el" href="AI__gov__ioctl_8h.html#a6112276b72af9da402d2afbf5b71c7de">AI_gov_ioctl.h</a>
-</li>
-<li>AI_gov_ioctl_set_variable()
-: <a class="el" href="AI__gov__ioctl_8c.html#a707fbdff9028a1060b0ecf425da4a86c">AI_gov_ioctl.c</a>
-</li>
-<li>AI_gov_open()
-: <a class="el" href="AI__gov__ioctl_8c.html#aedf9bd2ac1f8c0fd853c3be262c1dc51">AI_gov_ioctl.c</a>
-, <a class="el" href="AI__gov__ioctl_8h.html#aedf9bd2ac1f8c0fd853c3be262c1dc51">AI_gov_ioctl.h</a>
-</li>
-<li>AI_gov_sysfs_actualize_phase()
-: <a class="el" href="AI__gov__sysfs_8c.html#a40965b5547715e142d972171cfe2d945">AI_gov_sysfs.c</a>
-</li>
-<li>AI_gov_sysfs_init()
-: <a class="el" href="AI__gov__sysfs_8c.html#a8bd3d49ab2020b7a1197b2d15233da4c">AI_gov_sysfs.c</a>
-, <a class="el" href="AI__gov__sysfs_8h.html#a8bd3d49ab2020b7a1197b2d15233da4c">AI_gov_sysfs.h</a>
-</li>
-<li>AI_gov_sysfs_init_profiles()
-: <a class="el" href="AI__gov__sysfs_8c.html#ad78ce9ea02c1bcef0405d1dc397aef0f">AI_gov_sysfs.c</a>
-, <a class="el" href="AI__gov__sysfs_8h.html#ad78ce9ea02c1bcef0405d1dc397aef0f">AI_gov_sysfs.h</a>
-</li>
-<li>AI_gov_sysfs_load_profile()
-: <a class="el" href="AI__gov__phases_8c.html#a7a28b4fe82c3c6770b8ed1b366df6cb8">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__sysfs_8h.html#a7a28b4fe82c3c6770b8ed1b366df6cb8">AI_gov_sysfs.h</a>
-</li>
-<li>AI_phases_add_profile()
-: <a class="el" href="AI__gov__phases_8c.html#a97dd8776f2efab09d7c31dee47ff9ad8">AI_gov_phases.c</a>
-</li>
-<li>AI_phases_enter()
-: <a class="el" href="AI__gov__phases_8h.html#aa47f8c54089ab5064e13791dd3a759ba">AI_gov_phases.h</a>
-</li>
-<li>AI_phases_get_last()
-: <a class="el" href="AI__gov__phases_8c.html#a78c83c27736926976ae326022754bdc7">AI_gov_phases.c</a>
-</li>
-<li>AI_phases_get_name()
-: <a class="el" href="AI__gov__phases_8c.html#a1dbde0e214b9beaba120040a0474f2cf">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__phases_8h.html#a1dbde0e214b9beaba120040a0474f2cf">AI_gov_phases.h</a>
-</li>
-<li>AI_phases_getBrowsingPhase()
-: <a class="el" href="AI__gov__phases_8c.html#a1543c90202be3da1a8f0f60a95db00e9">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__phases_8h.html#a1543c90202be3da1a8f0f60a95db00e9">AI_gov_phases.h</a>
-</li>
-<li>AI_phases_getPrevBrowsingPhase()
-: <a class="el" href="AI__gov__phases_8c.html#a9d783af9f522d9e38147684787e45412">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__phases_8h.html#a9d783af9f522d9e38147684787e45412">AI_gov_phases.h</a>
-</li>
-<li>AI_phases_init_profiles()
-: <a class="el" href="AI__gov__phases_8c.html#a81eb1d74b708a8f09d508a99161258ac">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__phases_8h.html#a81eb1d74b708a8f09d508a99161258ac">AI_gov_phases.h</a>
-</li>
-<li>AI_phases_set_defaults()
-: <a class="el" href="AI__gov__phases_8c.html#a9c8b8fbe7fa7342327838489bd206d65">AI_gov_phases.c</a>
-</li>
-<li>AI_phases_touch_nb()
-: <a class="el" href="AI__gov__phases_8c.html#ac963f6d2e78b425f74017ae011f77b82">AI_gov_phases.c</a>
-, <a class="el" href="AI__gov__phases_8h.html#ac963f6d2e78b425f74017ae011f77b82">AI_gov_phases.h</a>
-</li>
-<li>AI_pm_init_wma_buffers()
-: <a class="el" href="AI__gov__power__manager_8c.html#a42684454edeeefe4ebcd9ddac277fd92">AI_gov_power_manager.c</a>
-, <a class="el" href="AI__gov__power__manager_8h.html#a42684454edeeefe4ebcd9ddac277fd92">AI_gov_power_manager.h</a>
-</li>
-<li>AI_sched_addCoresToManaged()
-: <a class="el" href="AI__gov__sched_8c.html#ae0872037c1581b805b6a63f0c4d39eae">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#ae0872037c1581b805b6a63f0c4d39eae">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_assignFrequency()
-: <a class="el" href="AI__gov__sched_8c.html#a853dce57c392e16ea0b4a1867745dd29">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a853dce57c392e16ea0b4a1867745dd29">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_coreManaged()
-: <a class="el" href="AI__gov__sched_8c.html#a9fb0b7e326b240b42c88d3175712649e">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a9fb0b7e326b240b42c88d3175712649e">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_cpuManaged()
-: <a class="el" href="AI__gov__sched_8c.html#ae99dcefb3cf2aae1d03caa0ea624425b">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#ae99dcefb3cf2aae1d03caa0ea624425b">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_criticalWorkloadPhase()
-: <a class="el" href="AI__gov__sched_8c.html#a9cf1347fd89e3fb67346eb7e6c5e45d3">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a9cf1347fd89e3fb67346eb7e6c5e45d3">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_disableCpu()
-: <a class="el" href="AI__gov__sched_8c.html#ab270c5d58e6920fb2195c8708b025eb4">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#ab270c5d58e6920fb2195c8708b025eb4">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_enableCpu()
-: <a class="el" href="AI__gov__sched_8c.html#ac6efa3f1cf13d425aad72fa0cf9c137b">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#ac6efa3f1cf13d425aad72fa0cf9c137b">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_get_BIG_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a8f500f076f43b7b87b99627910f9bc11">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a8f500f076f43b7b87b99627910f9bc11">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_get_BIG_max_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a451cc7d0b503feecdc89a0e2542ebb1a">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_get_BIG_min_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a29b1be3fcce883b015b49366d91cd021">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_get_BIG_state()
-: <a class="el" href="AI__gov__sched_8c.html#a1f6c36c2feff329d5a252554b977b4b8">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a1f6c36c2feff329d5a252554b977b4b8">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_get_cpu_idle_time()
-: <a class="el" href="AI__gov__sched_8c.html#a8a695745d2baccfdf981ac781a576f0a">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a8a695745d2baccfdf981ac781a576f0a">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_get_LITTLE_freq()
-: <a class="el" href="AI__gov__sched_8c.html#af223f5688a53634aee8a79e1375e278d">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#af223f5688a53634aee8a79e1375e278d">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_get_LITTLE_max_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a0660c7f874526acb2319c43d005644d9">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_get_LITTLE_min_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a2ff0913f5d6251283700216cacd1ceb9">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_get_smoothed_workload()
-: <a class="el" href="AI__gov__sched_8c.html#aac92c29a426c118b7039289698b627bb">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#aac92c29a426c118b7039289698b627bb">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_getCurrentIdleTime()
-: <a class="el" href="AI__gov__sched_8c.html#a849fce82acfc5af400c948027469b27a">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a849fce82acfc5af400c948027469b27a">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_getCurrentNetworkRx()
-: <a class="el" href="AI__gov__sched_8c.html#ae6e31acc1647f5dcee83b746a4bfee7b">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#ae6e31acc1647f5dcee83b746a4bfee7b">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_getCurrentNetworkTx()
-: <a class="el" href="AI__gov__sched_8h.html#a3bcdd4003fae703d56786b31f30e4773">AI_gov_sched.h</a>
-, <a class="el" href="AI__gov__sched_8c.html#a3bcdd4003fae703d56786b31f30e4773">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_getCurrentWorkTime()
-: <a class="el" href="AI__gov__sched_8c.html#afb13f94a5749b120a894baf2bf545f49">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#afb13f94a5749b120a894baf2bf545f49">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_getManagedCores()
-: <a class="el" href="AI__gov__sched_8c.html#a38e2ea4ab79f6dd02ca7bd170ae5f073">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a38e2ea4ab79f6dd02ca7bd170ae5f073">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_pushGroupToCpu()
-: <a class="el" href="AI__gov__sched_8c.html#aff958b084b8971e81e3c95cbcfa78ec5">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#aff958b084b8971e81e3c95cbcfa78ec5">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_pushToCpu()
-: <a class="el" href="AI__gov__sched_8c.html#a61c7e6ea7a0dee758951817dd129f89c">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a61c7e6ea7a0dee758951817dd129f89c">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_removeCoresFromManaged()
-: <a class="el" href="AI__gov__sched_8c.html#a716dd5e080d0ae6c177117e10158b645">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a716dd5e080d0ae6c177117e10158b645">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_set_BIG_freq()
-: <a class="el" href="AI__gov__sched_8c.html#ac34280bc26887b2ed1bc3c64221374fb">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_set_BIG_state()
-: <a class="el" href="AI__gov__sched_8c.html#a82d333aadd794737feb47144d4e36b83">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_set_LITTLE_freq()
-: <a class="el" href="AI__gov__sched_8c.html#a11363c7563481d346125e239c3d9b770">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_setAffinity()
-: <a class="el" href="AI__gov__sched_8c.html#a2199650c5ad1f3bcf8cb562b2f508496">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a2199650c5ad1f3bcf8cb562b2f508496">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_update_load()
-: <a class="el" href="AI__gov__sched_8c.html#a99c300cc6d30e6ed2d02b9a66620dbf0">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a99c300cc6d30e6ed2d02b9a66620dbf0">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_update_workload()
-: <a class="el" href="AI__gov__sched_8c.html#a31a6d27bbe68746affe1483dd21868a9">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a31a6d27bbe68746affe1483dd21868a9">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_update_workload_interactive()
-: <a class="el" href="AI__gov__sched_8c.html#aa0d3fe5ebf3780df5f1c7c60a8237de2">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#aa0d3fe5ebf3780df5f1c7c60a8237de2">AI_gov_sched.h</a>
-</li>
-<li>AI_sched_updateWorkLoadHistory()
-: <a class="el" href="AI__gov__sched_8h.html#a551d8b6f4e86f0b081fcb2c81e83e6f0">AI_gov_sched.h</a>
-, <a class="el" href="AI__gov__sched_8c.html#a551d8b6f4e86f0b081fcb2c81e83e6f0">AI_gov_sched.c</a>
-</li>
-<li>AI_sched_workloadBelowLoadingMargin()
-: <a class="el" href="AI__gov__sched_8c.html#a3e5cb28ba82b807676af5dbe0009a5ac">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#a3e5cb28ba82b807676af5dbe0009a5ac">AI_gov_sched.h</a>
-</li>
-<li>AI_tasks_add_data_to_ringbuffer()
-: <a class="el" href="AI__gov__task__handling_8h.html#ad7e811549a8f3102ed594838fa7cb424">AI_gov_task_handling.h</a>
-, <a class="el" href="AI__gov__task__handling_8c.html#ad7e811549a8f3102ed594838fa7cb424">AI_gov_task_handling.c</a>
-</li>
-<li>AI_tasks_init_ring_buffer()
-: <a class="el" href="AI__gov__task__handling_8c.html#a6f4c4123f7a07e81258052755ad13d29">AI_gov_task_handling.c</a>
-, <a class="el" href="AI__gov__task__handling_8h.html#a6f4c4123f7a07e81258052755ad13d29">AI_gov_task_handling.h</a>
-</li>
-<li>AI_touch_register_notify()
-: <a class="el" href="AI__touch__notifier_8h.html#a4747fb55ce00ccf3129ef65d839a2c7a">AI_touch_notifier.h</a>
-, <a class="el" href="AI__touch__notifier_8c.html#a4747fb55ce00ccf3129ef65d839a2c7a">AI_touch_notifier.c</a>
-</li>
-<li>AI_touch_unregister_notify()
-: <a class="el" href="AI__touch__notifier_8c.html#a90317c55f37b1639a6c7e1e2edbf4ba9">AI_touch_notifier.c</a>
-, <a class="el" href="AI__touch__notifier_8h.html#a90317c55f37b1639a6c7e1e2edbf4ba9">AI_touch_notifier.h</a>
-</li>
-<li>AI_update_cpu_metric()
-: <a class="el" href="AI__gov__sched_8c.html#a7a513a3a2d4f22abc390b2c0943712a9">AI_gov_sched.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_c"></a>- c -</h3><ul>
 <li>cpufreq_AI_governor_timer()
 : <a class="el" href="AI__gov_8c.html#ac7ff18e45659a37eeaebf592bce781b7">AI_gov.c</a>
 </li>
 <li>cpufreq_AI_governor_timer_resched()
 : <a class="el" href="AI__gov_8c.html#a74a33e69b5fd7d7323cf659283343cff">AI_gov.c</a>
 </li>
-</ul>
-
-
-<h3><a id="index_d"></a>- d -</h3><ul>
-<li>debug_profile()
-: <a class="el" href="AI__gov__sysfs_8c.html#a92f78f23bbb0a5dad8194d6f45ee1c23">AI_gov_sysfs.c</a>
+<li>cpufreq_AI_governor_timer_start()
+: <a class="el" href="AI__gov_8c.html#a6163138e10f804142266d259fef07be9">AI_gov.c</a>
+</li>
+<li>cpufreq_governor_AI()
+: <a class="el" href="AI__gov_8c.html#a8d093abb031d9e95b27cd941f0521933">AI_gov.c</a>
 </li>
 <li>DEFINE_PER_CPU()
-: <a class="el" href="AI__gov__power__manager_8c.html#a8844d56d100d8db7e3a43d32f5328061">AI_gov_power_manager.c</a>
-, <a class="el" href="AI__gov__sched_8c.html#a8844d56d100d8db7e3a43d32f5328061">AI_gov_sched.c</a>
-</li>
-<li>device_node()
-: <a class="el" href="AI__gov__ioctl_8c.html#abfdec97f1d9fc09ba9a83b552685f6c2">AI_gov_ioctl.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_e"></a>- e -</h3><ul>
-<li>enter_AI_exit_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a31721cdeeac61d3fd2784ffa362e8c3a">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_framerate_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a90ff9fa182b94d1aae86d5fa66b3aeb0">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_init_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a0e1368f0c31e5eca7cf2eacb84a1a426">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_performance_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a941d3a0068309626010a099c01b67645">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_powersave_phase()
-: <a class="el" href="AI__gov__phases_8c.html#af7784d81e13e0fe9e15b2fa2002ed5b5">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_priority_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a29bc2053775769341c5ce4cb36bc88d2">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_response_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a542b61105ff06fddc65d04076fd21b51">AI_gov_phases.c</a>
-</li>
-<li>enter_AI_time_phase()
-: <a class="el" href="AI__gov__phases_8c.html#aa1242148a42e9f88ff07b03d5920c4c8">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_exit_phase()
-: <a class="el" href="AI__gov__phases_8c.html#ac0e1dc9b48fd6559087b234400fe1960">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_framerate_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a32e701467822bc27478c216b7da06ec8">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_init_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a98bab61b394f3485b919280ea9af876f">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_performance_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a4a3bcbc98761324798a6db394d7ca003">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_powersave_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a306c8c8d89a5e8f726977fab0a911524">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_priority_phase()
-: <a class="el" href="AI__gov__phases_8c.html#ad0d0b1ac3bd2b368ecb4d534c85a0a71">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_response_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a1d39d9724fbcc5a756fbdaf6c8da4d2e">AI_gov_phases.c</a>
-</li>
-<li>exit_AI_time_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a39d61c87ab6af0d46b6ed0f46c16fb0f">AI_gov_phases.c</a>
-</li>
-<li>EXPORT_SYMBOL_GPL()
-: <a class="el" href="AI__touch__notifier_8c.html#ae20fbf541327f644e19f3170ef16cc64">AI_touch_notifier.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_f"></a>- f -</h3><ul>
-<li>FOR_EACH_PHASE()
-: <a class="el" href="AI__gov__phases_8c.html#aadba574350dd5bd4ec662a8714b727b5">AI_gov_phases.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_g"></a>- g -</h3><ul>
-<li>gov_sys_pol_attr_rw()
-: <a class="el" href="AI__gov__sysfs_8c.html#a0a211e10d71adf95a7b18772ccea83cb">AI_gov_sysfs.c</a>
-</li>
-<li>gov_sys_pol_attr_rw_hardware()
-: <a class="el" href="AI__gov__sysfs_8c.html#ad941789cd9ea862212780ccfcf7707e1">AI_gov_sysfs.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_m"></a>- m -</h3><ul>
-<li>MODULE_AUTHOR()
-: <a class="el" href="AI__gov_8c.html#ae8fba27f74b098ef69b2046388cb4187">AI_gov.c</a>
-</li>
-<li>MODULE_DESCRIPTION()
-: <a class="el" href="AI__gov_8c.html#a9b20030f71870940b8c136f338e3305f">AI_gov.c</a>
-</li>
-<li>module_exit()
-: <a class="el" href="AI__gov_8c.html#a0a027f0698f83606033e96573eab57e9">AI_gov.c</a>
-</li>
-<li>module_init()
-: <a class="el" href="AI__gov_8c.html#a5498ff730b28578fcb08a4ae84f3c0c1">AI_gov.c</a>
-</li>
-<li>MODULE_LICENSE()
-: <a class="el" href="AI__gov_8c.html#ad94b36675e7eb067ea3ce6ff9e244a44">AI_gov.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_r"></a>- r -</h3><ul>
-<li>run_AI_exit_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a419deaa6a184d9a065d716d9b08a82d0">AI_gov_phases.c</a>
-</li>
-<li>run_AI_framerate_phase()
-: <a class="el" href="AI__gov__phases_8c.html#ac06aedc91bebb4d075fcf947c4b3eea3">AI_gov_phases.c</a>
-</li>
-<li>run_AI_init_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a6bb4b660e654f63d0ac7516e14552c47">AI_gov_phases.c</a>
-</li>
-<li>run_AI_performance_phase()
-: <a class="el" href="AI__gov__phases_8c.html#ab944292e97a143709134badb5bb37a46">AI_gov_phases.c</a>
-</li>
-<li>run_AI_powersave_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a9c9370b516fe71ae193220f58e7b386e">AI_gov_phases.c</a>
-</li>
-<li>run_AI_priority_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a880561ebeeff8e1b88ba85b14f01d48b">AI_gov_phases.c</a>
-</li>
-<li>run_AI_response_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a0a0b5f5f0651f624b53940e999c7cbb9">AI_gov_phases.c</a>
-</li>
-<li>run_AI_time_phase()
-: <a class="el" href="AI__gov__phases_8c.html#a03f61084843501f07105ba840b4ca344">AI_gov_phases.c</a>
-</li>
-</ul>
-
-
-<h3><a id="index_s"></a>- s -</h3><ul>
-<li>sched_AI_groupLeader()
-: <a class="el" href="AI__gov__sched_8c.html#abc3903ee5abab254623a921dc60bdb52">AI_gov_sched.c</a>
-, <a class="el" href="AI__gov__sched_8h.html#abc3903ee5abab254623a921dc60bdb52">AI_gov_sched.h</a>
-</li>
-<li>show_phase_state()
-: <a class="el" href="AI__gov__sysfs_8c.html#acfefa9c7a940aac67e542c6d5e38bc54">AI_gov_sysfs.c</a>
-</li>
-<li>show_prev_phase()
-: <a class="el" href="AI__gov__sysfs_8c.html#a23c2ebb694ec3b1e488e23cf7eb03b15">AI_gov_sysfs.c</a>
-</li>
-<li>show_store_gov_hardware()
-: <a class="el" href="AI__gov__sysfs_8c.html#a0158cdaed98b75d9e6385b030eb4bdcf">AI_gov_sysfs.c</a>
-</li>
-<li>show_store_gov_pol_sys()
-: <a class="el" href="AI__gov__sysfs_8c.html#ac6889ed959484e7c141275b5992707e0">AI_gov_sysfs.c</a>
-</li>
-<li>store_phase_state()
-: <a class="el" href="AI__gov__sysfs_8c.html#a261b26f8c59caffa4cfd73dcc47741b4">AI_gov_sysfs.c</a>
-</li>
-<li>store_prev_phase()
-: <a class="el" href="AI__gov__sysfs_8c.html#a194fd1806c8dc73efcf5e0ca8e082946">AI_gov_sysfs.c</a>
+: <a class="el" href="AI__gov_8c.html#a9c0c63364890b395b2165c79ac9f0ce2">AI_gov.c</a>
 </li>
 </ul>
 </div><!-- contents -->
