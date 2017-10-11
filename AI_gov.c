@@ -253,6 +253,10 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 
 		//rearm timer
 		cpufreq_AI_governor_timer_resched();
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd3553c07ab93e8d93857c8cc36d1f77bbde53d2
 	}
 	return 0;
 }
