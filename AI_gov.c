@@ -2,8 +2,12 @@
  * @file AI_gov.c
  * @author Alex Hoffman
  * @date 11 Oct 2017
+ * @brief Main routines for the AI governor.
  */
 
+
+/* -- Includes -- */
+/* Kernel includes. */
 #include <asm/uaccess.h>
 
 #include <linux/kobject.h>
@@ -44,6 +48,7 @@
 
 #include <linux/cpufreq.h>
 
+/* Governor includes. */
 #include "AI_gov_hardware.h"
 #include "AI_gov_sched.h"
 #include "AI_gov_ioctl.h"
@@ -56,22 +61,16 @@
 #include "AI_gov_task_handling.h"
 #include "AI_gov_sysfs.h"
 
-//TODO fix this doxy
-
-
-#ifndef AID_SYSTEM
-#define AID_SYSTEM	(1000)
-#endif
-
-#define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
-#define DEFAULT_TARGET_LOAD 90
-
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
 static DEFINE_PER_CPU(struct cpufreq_AI_governor_cpuinfo, cpuinfo);
 
 static cpumask_t speedchange_cpumask_AI;
 static spinlock_t speedchange_cpumask_lock_AI;
+
+/** 
+* @brief Lock to protect the governor's task
+*/
 static struct mutex gov_lock_AI;
 
 extern uint8_t AI_shutdownCpu;
@@ -253,10 +252,6 @@ static int cpufreq_AI_governor_speedchange_task(void* data){
 
 		//rearm timer
 		cpufreq_AI_governor_timer_resched();
-<<<<<<< HEAD
-=======
-
->>>>>>> dd3553c07ab93e8d93857c8cc36d1f77bbde53d2
 	}
 	return 0;
 }
@@ -461,7 +456,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		/// - Init:
 		/// Called when the governor is loaded into the kernel.
 		/// Initialises governor subsystems and sets up the governor's
-		/// HERE
+		/// parameters
 	case CPUFREQ_GOV_POLICY_INIT:
 
 		if(common_tunables_AI && AI_sched_getManagedCores() != 0){
@@ -549,6 +544,9 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 		KERNEL_DEBUG_MSG(
 							" [GOVERNOR] AI_Governor: finished initialization\n");
 		break;
+		/// - Exit:
+		/// Called when the governor is removed from the kernel.
+		/// Saves governor's parameters for future use.
 	case CPUFREQ_GOV_POLICY_EXIT:
 
 		if(policy->cpu == L0){
@@ -587,68 +585,76 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	return 0;
 }
 
+/**
+ * @struct cpufreq_gov_AI
+ * @brief Governor information used when loading governor into kernel
+ */
+#ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
+static
+#endif
+struct cpufreq_governor cpufreq_gov_AI = {
+	.name		= "AI",  //!< Governor name cpufreq_gov_AI#name. 
+	.governor	= cpufreq_governor_AI,  //!< Function managing the governor's states cpufreq_gov_AI#governor. 
+	.owner		= THIS_MODULE,
+};
 
-// #ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
-// static
-// #endif
-// struct cpufreq_governor cpufreq_gov_AI = {
-// 	.name		= "AI",
-// 	.governor	= cpufreq_governor_AI,
-// 	.owner		= THIS_MODULE,
-// };
+/**
+* @brief Called when the governor is loaded into the kernel.
+*/
+static int __init cpufreq_gov_AI_init(void)
+{
+	unsigned int i;
+	struct cpufreq_AI_governor_cpuinfo *pcpu;
 
+	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: entering init routine\n");
 
-// static int __init cpufreq_gov_AI_init(void)
-// {
-// 	unsigned int i;
-// 	struct cpufreq_AI_governor_cpuinfo *pcpu;
+	/* Initalize per-cpu timers */
+	// do we really need per-core timers?
+	// The function iterates through all eight cores
+	for_each_possible_cpu(i) {
+		pcpu = &per_cpu(cpuinfo, i);
+		init_timer_deferrable(&pcpu->cpu_timer);
+		pcpu->cpu_timer.function = cpufreq_AI_governor_timer;
+		pcpu->cpu_timer.data = i;
+		//		init_timer(&pcpu->cpu_slack_timer);
+		spin_lock_init(&pcpu->load_lock);
+		init_rwsem(&pcpu->enable_sem);
+		KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: init, show i: %d \n", i);
+	}
 
-// 	KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: entering init routine\n");
+	spin_lock_init(&speedchange_cpumask_lock_AI);
+	mutex_init(&gov_lock_AI);
 
-// 	/* Initalize per-cpu timers */
-// 	// do we really need per-core timers?
-// 	// The function iterates through all eight cores
-// 	for_each_possible_cpu(i) {
-// 		pcpu = &per_cpu(cpuinfo, i);
-// 		init_timer_deferrable(&pcpu->cpu_timer);
-// 		pcpu->cpu_timer.function = cpufreq_AI_governor_timer;
-// 		pcpu->cpu_timer.data = i;
-// 		//		init_timer(&pcpu->cpu_slack_timer);
-// 		spin_lock_init(&pcpu->load_lock);
-// 		init_rwsem(&pcpu->enable_sem);
-// 		KERNEL_DEBUG_MSG(" [GOVERNOR] AI_Governor: init, show i: %d \n", i);
-// 	}
+	return cpufreq_register_governor(&cpufreq_gov_AI);
+}
 
-// 	spin_lock_init(&speedchange_cpumask_lock_AI);
-// 	mutex_init(&gov_lock_AI);
+/**
+* @brief Called when the governor is removed from the kernel.
+*
+*/
+static void __exit cpufreq_gov_AI_exit(void)
+{
+//	AI_touch_unregister_notify(&AI_touch_nb);
+	cpufreq_unregister_governor(&cpufreq_gov_AI);
+}
 
-// 	return cpufreq_register_governor(&cpufreq_gov_AI);
-// }
+/// @private
+MODULE_AUTHOR("Alex Hoffman <alxhoff@gmail.com>");
+/// @private
+MODULE_AUTHOR("Tobias Fuchs <tobias.fuchs@tum.de>");
+/// @private
+MODULE_AUTHOR("Nadja Peters <peters@rcs.ei.tum.de>");
+/// @private
+MODULE_DESCRIPTION("CPUfreq policy governor 'AI'");
+/// @private
+MODULE_LICENSE("GPL");
 
-
-// static void __exit cpufreq_gov_AI_exit(void)
-// {
-// //	AI_touch_unregister_notify(&AI_touch_nb);
-// 	cpufreq_unregister_governor(&cpufreq_gov_AI);
-// }
-
-// /// @private
-// MODULE_AUTHOR("Alex Hoffman <alxhoff@gmail.com>");
-// /// @private
-// MODULE_AUTHOR("Tobias Fuchs <tobias.fuchs@tum.de>");
-// /// @private
-// MODULE_AUTHOR("Nadja Peters <peters@rcs.ei.tum.de>");
-// /// @private
-// MODULE_DESCRIPTION("CPUfreq policy governor 'AI'");
-// /// @private
-// MODULE_LICENSE("GPL");
-
-// #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
-// /// @private
-// fs_initcall(cpufreq_gov_AI_init);
-// #else
-// /// @private
-// module_init(cpufreq_gov_AI_init);
-// #endif
-// /// @private
-// module_exit(cpufreq_gov_AI_exit);
+#ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_AI
+/// @private
+fs_initcall(cpufreq_gov_AI_init);
+#else
+/// @private
+module_init(cpufreq_gov_AI_init);
+#endif
+/// @private
+module_exit(cpufreq_gov_AI_exit);

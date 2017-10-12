@@ -490,11 +490,137 @@ static ssize_t store_AI_framerate_current_framerate_attribute(const char* buf, s
 	return count;
 }
 
+//ONDEMAND
+static ssize_t show_AI_ondemand_sampling_rate_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->sampling_rate);
+}
+
+static ssize_t store_AI_ondemand_sampling_rate_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->sampling_rate = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_io_is_busy_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->io_is_busy);
+}
+
+static ssize_t store_AI_ondemand_io_is_busy_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->io_is_busy = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_up_threshold_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->up_threshold);
+}
+
+static ssize_t store_AI_ondemand_up_threshold_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->up_threshold = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_sampling_down_factor_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->sampling_down_factor);
+}
+
+static ssize_t store_AI_ondemand_sampling_down_factor_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->sampling_down_factor = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_ignore_nice_load_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->ignore_nice_load);
+}
+
+static ssize_t store_AI_ondemand_ignore_nice_load_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->ignore_nice_load = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_powersave_bias_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->powersave_bias);
+}
+
+static ssize_t store_AI_ondemand_powersave_bias_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->powersave_bias = var;
+
+	return count;
+}
+
+static ssize_t show_AI_ondemand_sampling_rate_min_attribute(char* buf)
+{
+	return sprintf(buf, "%d\n",
+		GET_ATTRIBUTES_W_PROFILE(AI_ondemand, AI_gov->current_profile)->sampling_rate_min);
+}
+
+static ssize_t store_AI_ondemand_sampling_rate_min_attribute(const char* buf, size_t count)
+{
+	int var, ret;
+
+	ret = kstrtoint(buf, 10, &var);
+	if(ret < 0) return ret;
+
+	GET_ATTRIBUTES_W_PROFILE(AI_ondemand,AI_gov->current_profile)->sampling_rate_min = var;
+
+	return count;
+}
 //PRIORITY
 static ssize_t show_AI_priority_priority_scalar_attribute(char* buf)
 {
 	return sprintf(buf, "%d\n",
-		GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->priority_scalar);;
+		GET_ATTRIBUTES_W_PROFILE(AI_priority,AI_gov->current_profile)->priority_scalar);
 }
 
 static ssize_t store_AI_priority_priority_scalar_attribute(const char* buf, size_t count)

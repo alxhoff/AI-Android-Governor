@@ -22,7 +22,13 @@
 
 #include "AI_gov_types.h"
 
+/**
+* @brief 
+*/
 extern struct cpufreq_AI_gov_tunables *common_tunables_AI;
+/**
+* @brief 
+*/
 extern struct cpufreq_AI_gov_tunables *tuned_parameters_AI;
 
 /**
@@ -35,7 +41,7 @@ extern struct cpufreq_AI_gov_tunables *tuned_parameters_AI;
 extern struct AI_gov_info* AI_gov;
 
 /**
-* @def Removes the kobject from sysfs for a specific phase profile
+* @brief Removes the kobject from sysfs for a specific phase profile
 *
 * This macro must have access to a phase_profile* called temp_phase
 * that it will use to get the appropriate kobject for the specified
@@ -46,7 +52,7 @@ extern struct AI_gov_info* AI_gov;
 				kobject_del(temp_phase->kobj); \
 
 /**
-* @def Sets the permissable task name length
+* @brief Sets the permissable task name length
 */
 #define TASK_NAME_LEN 15
 
@@ -54,6 +60,23 @@ extern struct AI_gov_info* AI_gov;
 #define FAST_RESCHEDULE (2 * USEC_PER_MSEC)
 #endif
 
+/**
+* @brief Sysfs owner
+*/
+#ifndef AID_SYSTEM
+#define AID_SYSTEM	(1000)
+#endif
+
+/**
+* @brief Default timer period
+*/
+#define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
+
+/**
+* @brief Governor's default target workload
+*/
+#define DEFAULT_TARGET_LOAD 90
+
 //static int AI_touch_nb_callback(void);
 
-#endif /* AI_GOV_H_ 
+#endif /*  AI_GOV_H_ */ 

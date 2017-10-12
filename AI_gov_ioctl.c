@@ -1,14 +1,22 @@
-/*
- * AI_gov_ioctl.c
+/**
+ * @file AI_gov_ioctl.c
+ * @author Alex Hoffman
+ * @date 11 October 2017
+ * @brief IOctl interface for the AI_governor.
  *
- *  Created on: Aug 31, 2017
- *      Author: alxhoff
+ * Defines the functionality of the AI governor's IOctl interface
+ *
+ * @section IOctl IO Control
+ * 
  */
 
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/fs.h>
 #include <linux/cpumask.h>
 #include <linux/kernel.h>
 
+/* Governor includes. */
 #include "AI_gov_ioctl.h"
 #include "test_flags.h"
 #include "AI_gov_kernel_write.h"
@@ -16,38 +24,86 @@
 #include "AI_gov_phases.h"
 #include "AI_gov_sysfs.h"
 
-signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var);
-unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var);
-signed int AI_gov_ioctl_clear_phase(void);
-char *device_node(struct device *dev, umode_t *mode);
-
+/**
+* @defgroup IOctl_devices IOctl structures
+*
+* IOctl requires a dev, char dev and a class to be initialized.
+*/
+/** 
+* @brief IOctl dev_t to hold the char device major and minor numbers
+*
+* @ingroup IOctl_devices
+*/
 static dev_t dev;
+/** 
+* @brief IOctl char device
+*
+* @ingroup IOctl_devices
+*/
 static struct cdev c_dev;
+/** 
+* @brief IOctl char device class
+*
+* @ingroup IOctl_devices
+*/
 static struct class *cl;
 
-const unsigned AI_baseminor = 0, AI_minorCount = 1;
+/**
+* @defgroup IOctl_maj_min IOctl structures
+*
+* IOctl char device minor numbers
+*/
+/** 
+* @brief IOctl char device default minor number
+*
+* Calling alloc_chrdev_region char dev allocation function with a zero
+* minor number will get the kernel to dynamically allocate the device
+* a minor number
+*
+* @ingroup IOctl_maj_min
+*/
+const unsigned AI_baseminor = 0;
+/** 
+* @brief IOctl char device count
+*
+* Specifies that only one IOctl device is to be allocated
+*
+* @ingroup IOctl_maj_min
+*/
+const unsigned AI_minorCount = 1;
 
-static uint8_t initialized = 0;
+/** 
+* @brief Governor IOctl initialisation flag
+*
+* Makes sure that the governor's IOctl is only created and initialised once
+*/
+static uint8_t ioctl_initialized = 0;
 
+/**
+* @struct AI_governor_fops
+* @brief IOcontrol file operation details
+*/
 struct file_operations AI_governor_fops =
 {
 	.owner = THIS_MODULE,
 	.open = AI_gov_open,
 	.release = AI_gov_close,
-//#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
-//	.ioctl = AI_gov_ioctl
-//#else
-        .unlocked_ioctl = AI_gov_ioctl
-//#endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+	.ioctl = AI_gov_ioctl
+#else
+    .unlocked_ioctl = AI_gov_ioctl
+#endif
 };
 
-//#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
-//int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
-//#else
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+int AI_gov_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
+#else
 long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
-//#endif
+#endif
 {
 	switch(cmd){
+		/// - GOVERNOR_GET_PHASE:
+		/// Copies the current phase to user space, in integer representation
 	case GOVERNOR_GET_PHASE:{
 		unsigned long g;
 		g = AI_gov->phase;
@@ -55,6 +111,9 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 			return -EACCES;
 	}
 		break;
+		/// - GOVERNOR_SET_PHASE:
+		/// Copies an integer representation of a phase that a user space
+		/// application wishes to set as the current phase
 	case GOVERNOR_SET_PHASE:{
 		unsigned long g;
 		enum PHASE_ENUM phase;
@@ -64,10 +123,16 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		AI_gov_sysfs_load_profile(phase);
 	}
 		break;
+		/// - GOVERNOR_CLR_PHASE_VARIABLE:
+		/// Clears all attributes of the current phase
 	case GOVERNOR_CLR_PHASE_VARIABLES:{
 		AI_gov_ioctl_clear_phase();
 	}
 		break;
+		/// - GOVERNOR_SET_PHASE_VARIABLE
+		/// Sets the value to the variable with a specified index,
+		///	both of which must be specified in a AI_gov_ioctl_phase_variable
+		/// struct which must be sent from an app in userspace.
 	case GOVERNOR_SET_PHASE_VARIABLE:{
 		struct AI_gov_ioctl_phase_variable g;
 		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
@@ -76,6 +141,12 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		AI_gov_ioctl_set_variable(g);
 	}
 		break;
+		/// - GOVERNOR_GET_PHASE_VARIABLE:
+		/// Returns to userspace an AI_gov_ioctl_phase_variable struct 
+		/// which will contain the variable value that was requested 
+		/// using a AI_gov_ioctl_phase_variable struct populated with the 
+		/// variable index of the variable required from the current profile
+		/// attriubutes. 
 	case GOVERNOR_GET_PHASE_VARIABLE:{
 		struct AI_gov_ioctl_phase_variable g;
 		if(copy_from_user(&g, (struct AI_gov_ioctl_phase_variable*)arg,
@@ -94,34 +165,26 @@ long AI_gov_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 	return 0;
 }
 
-int AI_gov_ioctl_init(void)
+unsigned int AI_gov_ioctl_init(void)
 {
 	int ret = 0;
 	struct device *dev_ret;
 
-	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] IOctl STARTING INIT \n");
-
-	if (initialized > 0) {
+	if (ioctl_initialized > 0) {
 		return ret;
 	}
 
 	//register char dev numbers, call with zero to get dynamic number allocated
-	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, "AI_governor_ioctl")) < 0){
+	if((ret = alloc_chrdev_region(&dev, AI_baseminor, AI_minorCount, 
+			"AI_governor_ioctl")) < 0){
 		KERNEL_ERROR_MSG(
 				"[IOCTL] AI_Governor: Error allocating char device region. "
 				"Aborting!\n");
 		return ret;
 	}
 
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] IOctl char dev allocated \n");
-
 	//init cdev struct with file operations
 	cdev_init(&c_dev, &AI_governor_fops);
-
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] IOctl char dev init'd with file ops \n");
 
 	//add char device to system
 	if((ret = cdev_add(&c_dev, dev, AI_minorCount)) < 0){
@@ -130,9 +193,6 @@ int AI_gov_ioctl_init(void)
 		return ret;
 	}
 
-	KERNEL_DEBUG_MSG(
-					"[GOVERNOR] IOctl char dev added \n");
-
 	if (IS_ERR(cl = class_create(THIS_MODULE, "AI_governor_ioctl")))
 	{
 		cdev_del(&c_dev);
@@ -140,15 +200,11 @@ int AI_gov_ioctl_init(void)
 		KERNEL_ERROR_MSG(
 				"[IOCTL] AI_Governor: Error initializing char device."
 				" Aborting!\n");
-
 		return PTR_ERR(cl);
 	}
 
-	//permissions again
+	//override class permissions
 	cl->devnode = device_node;
-
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] IOctl class permissions set \n");
 
 	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "AI_governor_ioctl")))
 	{
@@ -158,28 +214,20 @@ int AI_gov_ioctl_init(void)
 		KERNEL_ERROR_MSG(
 						"[IOCTL] AI_Governor: Error initializing char device."
 						" Aborting!\n");
-
 		return PTR_ERR(dev_ret);
 	}
 
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] IOctl dev device created \n");
+	ioctl_initialized = 1;
 
-	initialized = 1;
-
-	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Char device initialized! \n");
 	KERNEL_VERBOSE_MSG("[IOCTL] AI_Governor: Device name: %s\n",
 			dev_name(dev_ret));
-
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] IOctl FINISHED INIT \n");
 
 	return 0;
 }
 
 int AI_gov_ioctl_exit(void)
 {
-	initialized = 0;
+	ioctl_initialized = 0;
 	device_destroy(cl, dev);
 	class_destroy(cl);
 cdev_del(&c_dev);
@@ -282,6 +330,7 @@ unsigned int AI_gov_ioctl_get_variable(struct AI_gov_ioctl_phase_variable* var)
 			}
 			break;
 		default:
+			return -1;
 			break;
 		}
 
@@ -394,6 +443,7 @@ signed int AI_gov_ioctl_set_variable(struct AI_gov_ioctl_phase_variable var)
 			}
 			break;
 		default:
+			return -1;
 			break;
 		}
 
@@ -435,14 +485,13 @@ signed int AI_gov_ioctl_clear_phase(void)
 		GET_ATTRIBUTES(AI_exit)->deinitialized = 0;
 		break;
 	default:
+		return -1;
 		break;
 	}
 
 	return 0;
 }
 
-
-//permissions change
 char *device_node(struct device *dev, umode_t *mode)
 {
 	if(!mode)

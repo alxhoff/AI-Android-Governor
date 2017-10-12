@@ -126,15 +126,13 @@ struct phase_AI_framerate_attributes{
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
 
 struct phase_AI_ondemand_attributes{
-	int freq_down_diff;
-	int freq_up_thresh;
-	int samp_down_fact;
-	int max_samp_down_fact;
-	int micro_freq_down_diff;
-	int micro_freq_up_thresh;
-	int micro_freq_min_smp_rate;
-	int min_freq_up_thresh;
-	int max_freq_up_thresh;
+	int sampling_rate;
+	int io_is_busy;
+	int up_threshold;
+	int sampling_down_factor;
+	int ignore_nice_load;
+	int powersave_bias;
+	int sampling_rate_min;
 };
 
 //PRIORITY

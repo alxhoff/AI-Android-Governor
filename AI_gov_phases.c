@@ -5,8 +5,11 @@
 *      Author: alxhoff
 */
 
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/slab.h>
 
+/* Governor includes. */
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
 #include "AI_gov_phases.h"
@@ -154,6 +157,26 @@ unsigned int exit_AI_framerate_phase(void)
 }
 
 unsigned int run_AI_framerate_phase(void)
+{
+	return 0;
+}
+
+//ONDEMAND
+unsigned int enter_AI_ondemand_phase(void)
+{
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Entered FRAMERATE phase");
+	return 0;
+}
+
+unsigned int exit_AI_ondemand_phase(void)
+{
+	KERNEL_DEBUG_MSG(
+			"[GOVERNOR] Exited FRAMERATE phase");
+	return 0;
+}
+
+unsigned int run_AI_ondemand_phase(void)
 {
 	return 0;
 }
