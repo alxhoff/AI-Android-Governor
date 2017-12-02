@@ -68,6 +68,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Contains userspace accessable attributes for each phase.  
+ <a href="structphase__profile.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="AI__gov__phases_8h_source.html">AI_gov_phases.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -91,7 +94,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ae6cf7a65756ec70cd7a50e3367af5eeb"><td class="memItemLeft" align="right" valign="top">unsigned int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structphase__profile.html#ae6cf7a65756ec70cd7a50e3367af5eeb">run</a> )(void)</td></tr>
 <tr class="separator:ae6cf7a65756ec70cd7a50e3367af5eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains userspace accessable attributes for each phase. </p>
+<p>Each phase must have a profile, the profile contrains a void pointer to its attributes struct which contains the attributes unique to itself. The profile will set the attributes that are accessable by userspace, the modification of these profile values will be what gives the governor its application interface. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a53beff5bbbc84cbb5c3e5e1dd48593c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a53beff5bbbc84cbb5c3e5e1dd48593c1">&#9670;&nbsp;</a></span>enter</h2>
 
@@ -103,6 +109,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function called upon entering the phase </p>
 
 </div>
 </div>
@@ -117,6 +124,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function called upon exiting the phase </p>
 
 </div>
 </div>
@@ -131,6 +139,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Profiles kobject used to register the profile with sysfs </p>
 
 </div>
 </div>
@@ -145,6 +154,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Next profile in the linked list </p>
 
 </div>
 </div>
@@ -159,6 +169,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The phase's index, used to find the phase and its profile from the linked list </p>
 
 </div>
 </div>
@@ -173,6 +184,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>String representation of the phase's name </p>
 
 </div>
 </div>
@@ -187,6 +199,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pointer to the phase's attributes struct </p>
 
 </div>
 </div>
@@ -201,6 +214,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function called with each tick of the governor's task </p>
 
 </div>
 </div>
@@ -215,6 +229,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pointer the the phase's sysfs attribute group </p>
 
 </div>
 </div>

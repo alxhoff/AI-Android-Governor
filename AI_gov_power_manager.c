@@ -5,6 +5,8 @@
  *      Author: alxhoff
  */
 
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/kernel.h>
 #include <linux/kernel_stat.h>
 
@@ -25,6 +27,7 @@
 #include <mach/cpufreq.h>
 #endif
 
+/* Governor includes. */
 #include "AI_gov_power_manager.h"
 #include "test_flags.h"
 #include "AI_gov_task_handling.h"

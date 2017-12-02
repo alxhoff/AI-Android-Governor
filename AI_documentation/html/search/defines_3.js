@@ -1,9 +1,13 @@
 var searchData=
 [
-  ['false',['FALSE',['../AI__gov__hardware_8h.html#aa93f0eb578d23995850d61f7d61c55c1',1,'AI_gov_hardware.h']]],
-  ['fast_5freschedule',['FAST_RESCHEDULE',['../AI__gov_8h.html#aa505a89207f058c60ee8c4902b84cf11',1,'AI_gov.h']]],
-  ['first_5fminor',['FIRST_MINOR',['../AI__gov__ioctl_8h.html#a2e6e540af91e509404b73b30afa26926',1,'AI_gov_ioctl.h']]],
-  ['for_5feach_5fphase',['FOR_EACH_PHASE',['../AI__gov__phases_8h.html#a758b42de6c148d545283b185df7bb691',1,'AI_gov_phases.h']]],
-  ['framerate_5fdesired_5fframerate',['FRAMERATE_DESIRED_FRAMERATE',['../AI__gov__phases_8h.html#a2b0a2c74173b88fb47b997385077e0ea',1,'AI_gov_phases.h']]],
-  ['framerate_5fhistory_5flength',['FRAMERATE_HISTORY_LENGTH',['../AI__gov__phases_8h.html#a94b51f0f175147023f02be6ece8d249b',1,'AI_gov_phases.h']]]
+  ['generate_5fenum',['GENERATE_ENUM',['../AI__gov__phases_8h.html#aed8760364c7992625d06c93d12b2496d',1,'AI_gov_phases.h']]],
+  ['generate_5fprofiles',['GENERATE_PROFILES',['../AI__gov__phases_8c.html#acf8b7ca7bb3f1da4f137828f93cb1623',1,'AI_gov_phases.c']]],
+  ['generate_5fstring',['GENERATE_STRING',['../AI__gov__phases_8h.html#adf58d994c35f18ec84b628d8321f52e5',1,'AI_gov_phases.h']]],
+  ['get_5fattributes',['GET_ATTRIBUTES',['../AI__gov__phases_8h.html#a7d6f5b44bf5625cd6fac5b8e995090a9',1,'AI_gov_phases.h']]],
+  ['get_5fattributes_5fw_5fprofile',['GET_ATTRIBUTES_W_PROFILE',['../AI__gov__phases_8h.html#aafea78a2f65d8080109ddbdb6581f1c3',1,'AI_gov_phases.h']]],
+  ['governor_5fclr_5fphase_5fvariables',['GOVERNOR_CLR_PHASE_VARIABLES',['../AI__gov__ioctl_8h.html#a0fe1871b1c2b022daac1c92b325d95a8',1,'AI_gov_ioctl.h']]],
+  ['governor_5fget_5fphase',['GOVERNOR_GET_PHASE',['../AI__gov__ioctl_8h.html#ab9e2b4e3e4169165754fe9448c0da824',1,'AI_gov_ioctl.h']]],
+  ['governor_5fget_5fphase_5fvariable',['GOVERNOR_GET_PHASE_VARIABLE',['../AI__gov__ioctl_8h.html#ab4874b556475a61e76e09fa983e8bacc',1,'AI_gov_ioctl.h']]],
+  ['governor_5fset_5fphase',['GOVERNOR_SET_PHASE',['../AI__gov__ioctl_8h.html#af9f25c7b387298e4fa74a80e04e68148',1,'AI_gov_ioctl.h']]],
+  ['governor_5fset_5fphase_5fvariable',['GOVERNOR_SET_PHASE_VARIABLE',['../AI__gov__ioctl_8h.html#aa7be1bd3a0f3905e94357250bab39cc3',1,'AI_gov_ioctl.h']]]
 ];

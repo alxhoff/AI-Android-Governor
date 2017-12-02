@@ -1,27 +1,5 @@
 var searchData=
 [
-  ['samp_5fdown_5ffact',['samp_down_fact',['../structphase__AI__ondemand__attributes.html#a927e43a38a3351a8b1e51c7a9b0e7c57',1,'phase_AI_ondemand_attributes']]],
-  ['sched_5fai_5fgroupleader',['sched_AI_groupLeader',['../AI__gov__sched_8c.html#abc3903ee5abab254623a921dc60bdb52',1,'sched_AI_groupLeader(struct task_struct *task):&#160;AI_gov_sched.c'],['../AI__gov__sched_8h.html#abc3903ee5abab254623a921dc60bdb52',1,'sched_AI_groupLeader(struct task_struct *task):&#160;AI_gov_sched.c']]],
-  ['show_5fgov_5fpol_5fsys',['show_gov_pol_sys',['../AI__gov__sysfs_8c.html#af6d93ac30cc39f342f406aed7fc3136d',1,'AI_gov_sysfs.c']]],
-  ['show_5fgov_5fsys_5fhardware',['show_gov_sys_hardware',['../AI__gov__sysfs_8c.html#a99e0a2a262dba2b472cd31db7f098686',1,'AI_gov_sysfs.c']]],
-  ['show_5fphase_5fstate',['show_phase_state',['../AI__gov__sysfs_8c.html#acfefa9c7a940aac67e542c6d5e38bc54',1,'AI_gov_sysfs.c']]],
-  ['show_5fprev_5fphase',['show_prev_phase',['../AI__gov__sysfs_8c.html#a23c2ebb694ec3b1e488e23cf7eb03b15',1,'AI_gov_sysfs.c']]],
-  ['show_5fstore_5fgov_5fhardware',['show_store_gov_hardware',['../AI__gov__sysfs_8c.html#a2777259473934867ec95108745de9bfc',1,'show_store_gov_hardware():&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ae6c4f32a5d12ef9046b095834ecc7795',1,'show_store_gov_hardware(is_big_little):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#abf51c244229ad6997f73b7e7aba10912',1,'show_store_gov_hardware(cpu_count):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a0158cdaed98b75d9e6385b030eb4bdcf',1,'show_store_gov_hardware(little_freq):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a2e588e6503f534e78051d0a418752363',1,'show_store_gov_hardware(big_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a53c7fa4bebef02512a6ba3d63edf2601',1,'show_store_gov_hardware(big_freq):&#160;AI_gov_sysfs.c']]],
-  ['show_5fstore_5fgov_5fpol_5fsys',['show_store_gov_pol_sys',['../AI__gov__sysfs_8c.html#ad14fbd1d43fc2b5d10e731ccf0ecd1a7',1,'show_store_gov_pol_sys():&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ac6889ed959484e7c141275b5992707e0',1,'show_store_gov_pol_sys(timer_rate):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a42f7503889960826667adbb27728ef7a',1,'show_store_gov_pol_sys(io_is_busy):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ae9aa5e2fdd62a9b3ef5adea9542ea357',1,'show_store_gov_pol_sys(phase_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a4dea98914726159c3381809dc8643399',1,'show_store_gov_pol_sys(prev_phase):&#160;AI_gov_sysfs.c']]],
-  ['speedchange_5ftask',['speedchange_task',['../structcpufreq__AI__gov__tunables.html#a2640e41db04f80501bf4dfe6c0385f24',1,'cpufreq_AI_gov_tunables']]],
-  ['stats',['stats',['../structAI__gov__cur__HW.html#ac0844e41c539599fcf5b85a5638f285f',1,'AI_gov_cur_HW']]],
-  ['store_5fgov_5fpol_5fsys',['store_gov_pol_sys',['../AI__gov__sysfs_8c.html#a3fc38ed21fd3820366203125800f2c9d',1,'AI_gov_sysfs.c']]],
-  ['store_5fgov_5fsys_5fhardware',['store_gov_sys_hardware',['../AI__gov__sysfs_8c.html#a01e10bc99168231907533271bcff43d1',1,'AI_gov_sysfs.c']]],
-  ['store_5fphase_5fstate',['store_phase_state',['../AI__gov__sysfs_8c.html#a261b26f8c59caffa4cfd73dcc47741b4',1,'AI_gov_sysfs.c']]],
-  ['store_5fprev_5fphase',['store_prev_phase',['../AI__gov__sysfs_8c.html#a194fd1806c8dc73efcf5e0ca8e082946',1,'AI_gov_sysfs.c']]],
-  ['sysfs_5fai_5fexit_5fattribs',['SYSFS_AI_exit_ATTRIBS',['../AI__gov__phases_8h.html#a4d9477c773ba5f22fe2355ed48ab5276',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fframerate_5fattribs',['SYSFS_AI_framerate_ATTRIBS',['../AI__gov__phases_8h.html#a081f30ac6549e4ea9c45c9b37849849f',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5finit_5fattribs',['SYSFS_AI_init_ATTRIBS',['../AI__gov__phases_8h.html#ac8d2c69a96b1110b2a84d9989e6ac890',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fondemand_5fattribs',['SYSFS_AI_ondemand_ATTRIBS',['../AI__gov__phases_8h.html#ac46c6acb492c013e3a484aca4b53f5ab',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fperformance_5fattribs',['SYSFS_AI_performance_ATTRIBS',['../AI__gov__phases_8h.html#aec2dd8d06cbfc43cb056b1d9657bebaf',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fpowersave_5fattribs',['SYSFS_AI_powersave_ATTRIBS',['../AI__gov__phases_8h.html#aeb59d25e3c5c1bdaae809f8668675a0c',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fpriority_5fattribs',['SYSFS_AI_priority_ATTRIBS',['../AI__gov__phases_8h.html#ad9f86b9d176151028e5eaa4bc9ff0f84',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5fresponse_5fattribs',['SYSFS_AI_response_ATTRIBS',['../AI__gov__phases_8h.html#a971760a5656c4eb275a661bd95a9f5f4',1,'AI_gov_phases.h']]],
-  ['sysfs_5fai_5ftime_5fattribs',['SYSFS_AI_time_ATTRIBS',['../AI__gov__phases_8h.html#a28216f1efe25676be61a0b585d8db84d',1,'AI_gov_phases.h']]],
-  ['sysfs_5fattr_5fgrp',['sysfs_attr_grp',['../structphase__profile.html#a75fa703877db612110bead3a231685ee',1,'phase_profile']]]
+  ['variable_5findex',['variable_index',['../structAI__gov__ioctl__phase__variable.html#a126c0069e00ca72b7b9ec758c702df2b',1,'AI_gov_ioctl_phase_variable']]],
+  ['variable_5fvalue',['variable_value',['../structAI__gov__ioctl__phase__variable.html#a6414166476d3b31d73f08c744cbfbf78',1,'AI_gov_ioctl_phase_variable']]]
 ];

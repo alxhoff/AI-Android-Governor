@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['tuned_5fparameters_5fai',['tuned_parameters_AI',['../AI__gov_8c.html#a7035c7c859e98a1d1e5e634d785532b6',1,'tuned_parameters_AI():&#160;AI_gov.c'],['../AI__gov_8h.html#a7035c7c859e98a1d1e5e634d785532b6',1,'tuned_parameters_AI():&#160;AI_gov.c']]]
+  ['maximum_5fpriority',['maximum_priority',['../structphase__AI__priority__attributes.html#a5efa1d1cba224f32272e1883f8e27384',1,'phase_AI_priority_attributes']]],
+  ['minimum_5fpriority',['minimum_priority',['../structphase__AI__priority__attributes.html#adc44b3832777cbe2198eaf47e716418d',1,'phase_AI_priority_attributes']]]
 ];

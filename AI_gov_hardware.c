@@ -1,17 +1,20 @@
-/*
- * AI_gov_hardware.c
- *
- *  Created on: Sep 7, 2017
- *      Author: alxhoff
+/**
+ * @file AI_gov_hardware.c
+ * @author Alex Hoffman
+ * @date 11 Oct 2017
+ * @brief Handles the governor's hardware functionality
  */
 
+
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/slab.h>
 
+/* Governor includes. */
 #include "AI_gov_hardware.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_types.h"
 #include "AI_gov_kernel_write.h"
-
 
 signed int AI_gov_init(struct AI_gov_info** in)
 {

@@ -10,8 +10,13 @@
 
 #include "AI_gov_phases.h"
 
-
-
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct AI_gov_freq_table{
 	uint32_t LITTLE_MIN;
 	uint32_t LITTLE_MAX;
@@ -26,6 +31,13 @@ struct AI_gov_freq_table{
 	#endif
 };
 
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct AI_gov_cur_HW {
 	bool is_big_little;
 
@@ -47,7 +59,13 @@ struct AI_gov_cur_HW {
 	void* stats;
 };
 
-
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct AI_gov_profile{
 	unsigned long min_freq;
 	unsigned long max_freq;
@@ -58,6 +76,13 @@ struct AI_gov_profile{
 	unsigned int current_frame_rate;
 };
 
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct AI_gov_info{
 	struct AI_gov_cur_HW* hardware;
 
@@ -80,6 +105,13 @@ struct AI_gov_info{
 	struct completion*	kobj_unregister;
 };
 
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct cpufreq_AI_governor_cpuinfo {
 	struct timer_list cpu_timer;
 	struct timer_list cpu_slack_timer;
@@ -99,6 +131,13 @@ struct cpufreq_AI_governor_cpuinfo {
 
 };
 
+/**
+* @struct
+* @brief
+*
+*
+*
+*/
 struct cpufreq_AI_gov_tunables {
 	int usage_count;
 	spinlock_t target_loads_lock;

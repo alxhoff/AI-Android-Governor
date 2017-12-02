@@ -11,6 +11,10 @@
 #include "AI_gov.h"
 #include <asm/cputime.h>
 
+/**
+* @enum
+* @brief
+*/
 enum AI_CORE {
 	LC0 = 0,
 	LC1 = 1,
@@ -24,6 +28,10 @@ enum AI_CORE {
 #endif
 };
 
+/**
+* @enum
+* @brief
+*/
 enum AI_CPU{
 	CPU_NONE 		= 0x00,
 	LITTLE 			= 0x0F,
@@ -42,6 +50,10 @@ enum AI_CPU{
 
 #define NUM_CORES 8
 
+/**
+* @enum
+* @brief
+*/
 enum FREQUENCIES {
 	LITTLE_MIN = 1000000,
 	LITTLE_MAX = 1400000,
@@ -63,6 +75,10 @@ enum FREQUENCIES {
 	BIG_20 = 2000000
 };
 
+/**
+* @enum
+* @brief
+*/
 enum {
 	HARDWARE_TYPE_ETHERNET = 1, //< type id for ethernet net_devices
 	HARDWARE_TYPE_WIFI = -1

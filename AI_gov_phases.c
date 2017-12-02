@@ -16,8 +16,18 @@
 #include "AI_gov_sysfs.h"
 #include "AI_gov_kernel_write.h"
 
+//governor ports
+#include "AI_ondemand_port.h"
+
+/**
+* @brief Creates string literal for a given input
+*/
 #define PHASE_NAME(NAME)	#NAME
 
+/**
+* @brief Creates profile functions as well as generating init function 
+* to initialize the profile
+*/
 #define init_phase_struct(SET_PHASE)	\
 	unsigned int enter_##SET_PHASE##_phase(void); \
 	unsigned int exit_##SET_PHASE##_phase(void); \
@@ -49,13 +59,19 @@
 		return init_phase_profile; \
 	}\
 
-
+/**
+* @brief Calls init function for a given phase as well as adding the phase profile
+* to the governor.
+*/
 #define INIT_PROFILE(PHASE) \
 		init_profile = init_##PHASE##_profile(); \
 		KERNEL_DEBUG_MSG("[GOVERNOR] profile initialized named: %s \n", \
 				init_profile->phase_name); \
 		AI_phases_add_profile(init_profile);
 
+/**
+* @brief Invokes profile generation for each phase
+*/
 #define GENERATE_PROFILES \
 			struct phase_profile* init_profile; \
 			FOR_EACH_PHASE(INIT_PROFILE)
@@ -121,7 +137,25 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 
 	return 0;
 }
-//INIT
+
+/** @defgroup phase_functions Phase functions
+*
+* Each phase must have three functions, an enter, exit and run
+* function. The functions must have the format: XXX_AI_#phase#_phase(void)
+* where XXX denotes enter, exit or run. The enter function is called upon
+* entering the phase, exit is called upon leaving the phase while run is 
+* executed with each tick of the governor's task.
+* @{
+*/
+
+/**
+* @brief
+*
+* 
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_init_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -129,6 +163,14 @@ unsigned int enter_AI_init_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_init_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -136,12 +178,27 @@ unsigned int exit_AI_init_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_init_phase(void)
 {
 	return 0;
 }
 
-//FRAMERATE
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_framerate_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -149,6 +206,14 @@ unsigned int enter_AI_framerate_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_framerate_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -156,32 +221,70 @@ unsigned int exit_AI_framerate_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_framerate_phase(void)
 {
 	return 0;
 }
 
-//ONDEMAND
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_ondemand_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered FRAMERATE phase");
+			"[GOVERNOR] Entered ONDEMAND phase");
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_ondemand_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited FRAMERATE phase");
+			"[GOVERNOR] Exited ONDEMAND phase");
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_ondemand_phase(void)
 {
 	return 0;
 }
 
-//PRIORITY
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_priority_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -189,6 +292,14 @@ unsigned int enter_AI_priority_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_priority_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -201,7 +312,14 @@ unsigned int run_AI_priority_phase(void)
 	return 0;
 }
 
-////TIME
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_time_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -209,6 +327,14 @@ unsigned int enter_AI_time_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_time_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -216,12 +342,27 @@ unsigned int exit_AI_time_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_time_phase(void)
 {
 	return 0;
 }
 
-////POWERSAVE
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_powersave_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -229,6 +370,14 @@ unsigned int enter_AI_powersave_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_powersave_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -236,9 +385,19 @@ unsigned int exit_AI_powersave_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_powersave_phase(void)
 {
 	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] Running POWERSAVE phase");
 	pr_debug("setting to %u kHz because of powersave \n",
 								AI_gov->cpu_freq_policy->min);
 	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
@@ -246,7 +405,14 @@ unsigned int run_AI_powersave_phase(void)
 	return 0;
 }
 
-////PRIORITY
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_performance_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -254,6 +420,14 @@ unsigned int enter_AI_performance_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_performance_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -261,9 +435,19 @@ unsigned int exit_AI_performance_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_performance_phase(void)
 {
 	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
+	KERNEL_DEBUG_MSG(
+				"[GOVERNOR] Run PERFORMANCE phase");
 	pr_debug("setting to %u kHz because of performance \n",
 										AI_gov->cpu_freq_policy->max);
 	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
@@ -271,7 +455,14 @@ unsigned int run_AI_performance_phase(void)
 	return 0;
 }
 
-////RESPONSE
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_response_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -279,6 +470,14 @@ unsigned int enter_AI_response_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_response_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -286,12 +485,27 @@ unsigned int exit_AI_response_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_response_phase(void)
 {
 	return 0;
 }
 
-////EXIT
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int enter_AI_exit_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -299,6 +513,14 @@ unsigned int enter_AI_exit_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int exit_AI_exit_phase(void)
 {
 	KERNEL_DEBUG_MSG(
@@ -306,10 +528,19 @@ unsigned int exit_AI_exit_phase(void)
 	return 0;
 }
 
+/**
+* @brief
+*
+*
+*
+* @return 0 on success
+* @ingroup phase_functions
+*/
 unsigned int run_AI_exit_phase(void)
 {
 	return 0;
 }
+/** @} */ // end of phase_functions
 
 struct phase_profile* AI_phases_get_name(char* name)
 {
@@ -344,6 +575,14 @@ struct phase_profile* AI_phases_get_name(char* name)
 	return head;
 }
 
+/**
+* @brief Gets the last phase profile from the profile linked list
+*
+* Retrieves a pointer to the last phase profile in the linked list
+* of phase profiles stored within AI_gov_info
+*
+* @return pointer to last phase profile, NULL on error
+*/
 struct phase_profile* AI_phases_get_last(void)
 {
 	struct phase_profile* head = AI_gov->profile_head;
@@ -394,6 +633,8 @@ unsigned char AI_phases_set_defaults(void)
 	if(GET_ATTRIBUTES_W_PROFILE(AI_framerate, set_defaults)->timestamp_history
 			== NULL) return -ENOMEM;
 
+	//ondemand
+
 	//priority
 	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_priority]);
 	GET_ATTRIBUTES_W_PROFILE(AI_priority, set_defaults)->maximum_priority
@@ -413,6 +654,8 @@ unsigned char AI_phases_set_defaults(void)
 			= DEFAULT_USER_IMPORTANCE;
 
 	//exit
+	set_defaults = AI_phases_get_name(PHASE_STRINGS[AI_exit]);
+	GET_ATTRIBUTES_W_PROFILE(AI_exit, set_defaults)->deinitialized = 0;
 
 	return 0;
 }

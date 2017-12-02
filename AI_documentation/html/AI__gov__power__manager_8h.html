@@ -75,6 +75,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a42684454edeeefe4ebcd9ddac277fd92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__power__manager_8h.html#a42684454edeeefe4ebcd9ddac277fd92">AI_pm_init_wma_buffers</a> (void)</td></tr>
 <tr class="separator:a42684454edeeefe4ebcd9ddac277fd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a419afdcc651f9ba7899c6da2ea18ea74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__power__manager_8h.html#a419afdcc651f9ba7899c6da2ea18ea74">AI_coordinator</a> (void)</td></tr>
+<tr class="memdesc:a419afdcc651f9ba7899c6da2ea18ea74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Co-ordinates the governor's backend logic.  <a href="#a419afdcc651f9ba7899c6da2ea18ea74">More...</a><br /></td></tr>
 <tr class="separator:a419afdcc651f9ba7899c6da2ea18ea74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -94,6 +95,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Co-ordinates the governor's backend logic. </p>
+<p>The governor's task calls this task to recalculate (co-ordinate) the backend logic of the governor's current phase. It does this by calculating the system's current workload and calling the current profile's run function.</p>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a42684454edeeefe4ebcd9ddac277fd92"></a>
@@ -111,6 +116,12 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

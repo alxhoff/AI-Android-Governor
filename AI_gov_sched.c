@@ -22,6 +22,10 @@
 #include "AI_gov_hardware.h"
 #include "AI_gov_kernel_write.h"
 
+/**
+* @struct
+* @brief
+*/
 static struct AI_cores {
 	uint8_t LC0 :1;
 	uint8_t LC1 :1;
@@ -42,6 +46,10 @@ static struct AI_cores {
 #define CRITICAL_WORKLOAD_MARGIN_LITTLE 90
 #define CRITICAL_WORKLOAD_MARGIN_BIG 90
 
+/**
+* @struct
+* @brief
+*/
 struct cpu_load
 {
 	unsigned int frequency;

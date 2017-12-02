@@ -66,20 +66,27 @@ $(function() {
 <div class="title">/home/alxhoff/odroid_4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/AI_gov_hardware.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Handles the governor's hardware functionality.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;linux/slab.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="AI__gov__hardware_8h_source.html">AI_gov_hardware.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="AI__gov__phases_8h_source.html">AI_gov_phases.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="AI__gov__types_8h_source.html">AI_gov_types.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="AI__gov__kernel__write_8h_source.html">AI_gov_kernel_write.h</a>&quot;</code><br />
+<code>#include &quot;AI_gov_types.h&quot;</code><br />
+<code>#include &quot;AI_gov_kernel_write.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad282940880584f7a8034a26ebd0dd2c6"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__hardware_8c.html#ad282940880584f7a8034a26ebd0dd2c6">AI_gov_init</a> (struct <a class="el" href="structAI__gov__info.html">AI_gov_info</a> **in)</td></tr>
+<tr class="memitem:ad282940880584f7a8034a26ebd0dd2c6"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__hardware_8c.html#ad282940880584f7a8034a26ebd0dd2c6">AI_gov_init</a> (struct AI_gov_info **in)</td></tr>
 <tr class="separator:ad282940880584f7a8034a26ebd0dd2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6eefcd2c948a3444bbff7f3e9cee971"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__hardware_8c.html#ac6eefcd2c948a3444bbff7f3e9cee971">AI_gov_change_freq_table</a> (struct <a class="el" href="structAI__gov__cur__HW.html">AI_gov_cur_HW</a> *hardware, struct <a class="el" href="structAI__gov__freq__table.html">AI_gov_freq_table</a> *freq_table)</td></tr>
+<tr class="memitem:ac6eefcd2c948a3444bbff7f3e9cee971"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AI__gov__hardware_8c.html#ac6eefcd2c948a3444bbff7f3e9cee971">AI_gov_change_freq_table</a> (struct AI_gov_cur_HW *hardware, struct AI_gov_freq_table *freq_table)</td></tr>
 <tr class="separator:ac6eefcd2c948a3444bbff7f3e9cee971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Handles the governor's hardware functionality. </p>
+<dl class="section author"><dt>Author</dt><dd>Alex Hoffman </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>11 Oct 2017 </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="ac6eefcd2c948a3444bbff7f3e9cee971"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6eefcd2c948a3444bbff7f3e9cee971">&#9670;&nbsp;</a></span>AI_gov_change_freq_table()</h2>
 
@@ -89,13 +96,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">signed int AI_gov_change_freq_table </td>
           <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structAI__gov__cur__HW.html">AI_gov_cur_HW</a> *&#160;</td>
+          <td class="paramtype">struct AI_gov_cur_HW *&#160;</td>
           <td class="paramname"><em>hardware</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">struct <a class="el" href="structAI__gov__freq__table.html">AI_gov_freq_table</a> *&#160;</td>
+          <td class="paramtype">struct AI_gov_freq_table *&#160;</td>
           <td class="paramname"><em>freq_table</em>&#160;</td>
         </tr>
         <tr>
@@ -117,12 +124,18 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">signed int AI_gov_init </td>
           <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structAI__gov__info.html">AI_gov_info</a> **&#160;</td>
+          <td class="paramtype">struct AI_gov_info **&#160;</td>
           <td class="paramname"><em>in</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

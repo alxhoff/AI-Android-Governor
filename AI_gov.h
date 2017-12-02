@@ -4,8 +4,8 @@
  * @author Alex Hoffman
  * @date 11 October 2017
  * @brief Main routines for the AI governor.
- *
- * The AI governor enters and exits use throughn the routines outlines within
+ * @section About
+ * The AI governor enters and exits use through the routines outlines within
  * the file. All backend logic is initialized from this file, timers, tasks etc.
  * @mainpage Application Interface (AI) CPUfreq Governor
  * @section intro_sec Introduction
@@ -17,9 +17,12 @@
 #ifndef AI_GOV_H_
 #define AI_GOV_H_
 
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/timer.h>
 #include <linux/rwsem.h>
 
+/* Governor includes. */
 #include "AI_gov_types.h"
 
 /**

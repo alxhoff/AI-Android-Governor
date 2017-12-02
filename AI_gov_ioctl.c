@@ -3,10 +3,6 @@
  * @author Alex Hoffman
  * @date 11 October 2017
  * @brief IOctl interface for the AI_governor.
- *
- * Defines the functionality of the AI governor's IOctl interface
- *
- * @section IOctl IO Control
  * 
  */
 

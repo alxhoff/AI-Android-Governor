@@ -12,11 +12,17 @@ Main routines for the AI governor.
 \begin{DoxyCompactItemize}
 \item 
 \#define \hyperlink{AI__gov_8h_ab73faf6e60c3d2f1ae55158d5f4696e7}{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}(P\+H\+A\+SE)
-\item 
+\begin{DoxyCompactList}\small\item\em Removes the kobject from sysfs for a specific phase profile. \end{DoxyCompactList}\item 
 \#define \hyperlink{AI__gov_8h_a2676c8b65bc70137399d1621578e8f81}{T\+A\+S\+K\+\_\+\+N\+A\+M\+E\+\_\+\+L\+EN}~15
-\item 
+\begin{DoxyCompactList}\small\item\em Sets the permissable task name length. \end{DoxyCompactList}\item 
 \#define \hyperlink{AI__gov_8h_aa505a89207f058c60ee8c4902b84cf11}{F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE}~(2 $\ast$ U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+M\+S\+EC)
-\end{DoxyCompactItemize}
+\item 
+\#define \hyperlink{AI__gov_8h_a5959f00bd7033c23c1a3c72fcb3fc9a4}{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}~(1000)
+\begin{DoxyCompactList}\small\item\em Sysfs owner. \end{DoxyCompactList}\item 
+\#define \hyperlink{AI__gov_8h_a6011f9944c2ff47a49418d1350e4fa93}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}~(20 $\ast$ U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+M\+S\+EC)
+\begin{DoxyCompactList}\small\item\em Default timer period. \end{DoxyCompactList}\item 
+\#define \hyperlink{AI__gov_8h_a34e7d2fcba8c2d8945797a95f0d6950c}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}~90
+\begin{DoxyCompactList}\small\item\em Governor\textquotesingle{}s default target workload. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,11 +41,42 @@ Main routines for the AI governor.
 Alex Hoffman 
 \end{DoxyAuthor}
 \begin{DoxyDate}{Date}
-11 October 2017 The AI governor enters and exits use throughn the routines outlines within the file. All backend logic is initialized from this file, timers, tasks etc. 
+11 October 2017 
 \end{DoxyDate}
-
+\hypertarget{AI__gov__ioctl_8h_About}{}\subsection{About}\label{AI__gov__ioctl_8h_About}
+The AI governor enters and exits use through the routines outlines within the file. All backend logic is initialized from this file, timers, tasks etc. 
 
 \subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{AI__gov_8h_a5959f00bd7033c23c1a3c72fcb3fc9a4}\label{AI__gov_8h_a5959f00bd7033c23c1a3c72fcb3fc9a4}} 
+\index{A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}!A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM@{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}}
+\index{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM@{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM}{AID\_SYSTEM}}
+{\footnotesize\ttfamily \#define A\+I\+D\+\_\+\+S\+Y\+S\+T\+EM~(1000)}
+
+
+
+Sysfs owner. 
+
+\mbox{\Hypertarget{AI__gov_8h_a34e7d2fcba8c2d8945797a95f0d6950c}\label{AI__gov_8h_a34e7d2fcba8c2d8945797a95f0d6950c}} 
+\index{A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}!D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
+\subsubsection{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD}{DEFAULT\_TARGET\_LOAD}}
+{\footnotesize\ttfamily \#define D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+A\+R\+G\+E\+T\+\_\+\+L\+O\+AD~90}
+
+
+
+Governor\textquotesingle{}s default target workload. 
+
+\mbox{\Hypertarget{AI__gov_8h_a6011f9944c2ff47a49418d1350e4fa93}\label{AI__gov_8h_a6011f9944c2ff47a49418d1350e4fa93}} 
+\index{A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}!D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
+\subsubsection{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE}{DEFAULT\_TIMER\_RATE}}
+{\footnotesize\ttfamily \#define D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+A\+TE~(20 $\ast$ U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+M\+S\+EC)}
+
+
+
+Default timer period. 
+
 \mbox{\Hypertarget{AI__gov_8h_ab73faf6e60c3d2f1ae55158d5f4696e7}\label{AI__gov_8h_ab73faf6e60c3d2f1ae55158d5f4696e7}} 
 \index{A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}!D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT@{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}}
 \index{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT@{D\+E\+I\+N\+I\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+K\+O\+B\+J\+E\+CT}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
@@ -48,10 +85,14 @@ Alex Hoffman
 
 {\bfseries Value\+:}
 \begin{DoxyCode}
-temp\_phase = AI\_phases\_get\_name(#PHASE); \(\backslash\)
+temp\_phase = \hyperlink{AI__gov__phases_8c_a1dbde0e214b9beaba120040a0474f2cf}{AI\_phases\_get\_name}(#PHASE); \(\backslash\)
                 kobject\_del(temp\_phase->kobj); \(\backslash\)
 \end{DoxyCode}
-\mbox{\Hypertarget{AI__gov_8h_aa505a89207f058c60ee8c4902b84cf11}\label{AI__gov_8h_aa505a89207f058c60ee8c4902b84cf11}} 
+
+
+Removes the kobject from sysfs for a specific phase profile. 
+
+This macro must have access to a phase\+\_\+profile$\ast$ called temp\+\_\+phase that it will use to get the appropriate kobject for the specified phase which it will then deinit and remove for the sysfs heirarchy. \mbox{\Hypertarget{AI__gov_8h_aa505a89207f058c60ee8c4902b84cf11}\label{AI__gov_8h_aa505a89207f058c60ee8c4902b84cf11}} 
 \index{A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}!F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE@{F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE}}
 \index{F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE@{F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
 \subsubsection{\texorpdfstring{F\+A\+S\+T\+\_\+\+R\+E\+S\+C\+H\+E\+D\+U\+LE}{FAST\_RESCHEDULE}}
@@ -62,6 +103,10 @@ temp\_phase = AI\_phases\_get\_name(#PHASE); \(\backslash\)
 \index{T\+A\+S\+K\+\_\+\+N\+A\+M\+E\+\_\+\+L\+EN@{T\+A\+S\+K\+\_\+\+N\+A\+M\+E\+\_\+\+L\+EN}!A\+I\+\_\+gov.\+h@{A\+I\+\_\+gov.\+h}}
 \subsubsection{\texorpdfstring{T\+A\+S\+K\+\_\+\+N\+A\+M\+E\+\_\+\+L\+EN}{TASK\_NAME\_LEN}}
 {\footnotesize\ttfamily \#define T\+A\+S\+K\+\_\+\+N\+A\+M\+E\+\_\+\+L\+EN~15}
+
+
+
+Sets the permissable task name length. 
 
 
 

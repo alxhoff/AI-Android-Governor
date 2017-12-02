@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['next',['next',['../structphase__profile.html#a7ba32c8fdbf80efc580c6df57d0ec433',1,'phase_profile']]],
-  ['ntarget_5floads',['ntarget_loads',['../structcpufreq__AI__gov__tunables.html#a0190cac58bd1c734d3afa553612fc5a1',1,'cpufreq_AI_gov_tunables']]],
-  ['num_5ffreq_5fsteps_5fbig',['num_freq_steps_BIG',['../structAI__gov__freq__table.html#ab36ee7c453a8b227bca4a29181ff57fc',1,'AI_gov_freq_table']]],
-  ['num_5ffreq_5fsteps_5flittle',['num_freq_steps_LITTLE',['../structAI__gov__freq__table.html#af0f2819b54a5be653ed1ac4347b47f87',1,'AI_gov_freq_table']]]
+  ['time_5fat_5fcompletion',['time_at_completion',['../structphase__AI__time__attributes.html#a6cceb788e34974005d150701d5f3771e',1,'phase_AI_time_attributes']]],
+  ['time_5ftill_5fcompletion',['time_till_completion',['../structphase__AI__time__attributes.html#acab81a528eec61df42a542d70ea8fabb',1,'phase_AI_time_attributes']]],
+  ['timestamp_5fhistory',['timestamp_history',['../structphase__AI__framerate__attributes.html#a58634b71780cf24ed0d27e701530fe8f',1,'phase_AI_framerate_attributes']]],
+  ['tuned_5fparameters_5fai',['tuned_parameters_AI',['../AI__gov_8c.html#a7035c7c859e98a1d1e5e634d785532b6',1,'tuned_parameters_AI():&#160;AI_gov.c'],['../AI__gov_8h.html#a7035c7c859e98a1d1e5e634d785532b6',1,'tuned_parameters_AI():&#160;AI_gov.c']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['load_5fphase_5fmargin',['LOAD_PHASE_MARGIN',['../AI__gov__sched_8c.html#a6cc08741323c1c1f2e841919982ebeb3',1,'AI_gov_sched.c']]]
+  ['phase_5fname',['PHASE_NAME',['../AI__gov__phases_8c.html#af20cfbe8129371b3c30db84396c4ba77',1,'AI_gov_phases.c']]]
 ];

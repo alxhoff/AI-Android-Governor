@@ -1,5 +1,10 @@
 \hypertarget{AI__gov__hardware_8h}{}\section{/home/alxhoff/odroid\+\_\+4.4.4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+hardware.h File Reference}
 \label{AI__gov__hardware_8h}\index{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+hardware.\+h@{/home/alxhoff/odroid\+\_\+4.\+4.\+4/kernel/samsung/exynos5422/drivers/cpufreq/\+A\+I\+\_\+gov\+\_\+hardware.\+h}}
+
+
+Handles the governor\textquotesingle{}s hardware functionality.  
+
+
 {\ttfamily \#include $<$linux/types.\+h$>$}\newline
 {\ttfamily \#include \char`\"{}test\+\_\+flags.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
@@ -13,9 +18,21 @@
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-signed int \hyperlink{AI__gov__hardware_8h_ad282940880584f7a8034a26ebd0dd2c6}{A\+I\+\_\+gov\+\_\+init} (struct \hyperlink{structAI__gov__info}{A\+I\+\_\+gov\+\_\+info} $\ast$$\ast$in)
+signed int \hyperlink{AI__gov__hardware_8h_ad282940880584f7a8034a26ebd0dd2c6}{A\+I\+\_\+gov\+\_\+init} (struct A\+I\+\_\+gov\+\_\+info $\ast$$\ast$in)
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Handles the governor\textquotesingle{}s hardware functionality. 
+
+\begin{DoxyAuthor}{Author}
+Alex Hoffman 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11 October 2017 
+\end{DoxyDate}
+\hypertarget{AI__gov__ioctl_8h_About}{}\subsection{About}\label{AI__gov__ioctl_8h_About}
+The hardware file handles all of the governors hardware management, or will in the future. The governor\textquotesingle{}s init is also in here as it will have a lot of hardare functions at a later date. 
 
 \subsection{Macro Definition Documentation}
 \mbox{\Hypertarget{AI__gov__hardware_8h_aa93f0eb578d23995850d61f7d61c55c1}\label{AI__gov__hardware_8h_aa93f0eb578d23995850d61f7d61c55c1}} 
@@ -37,5 +54,10 @@ signed int \hyperlink{AI__gov__hardware_8h_ad282940880584f7a8034a26ebd0dd2c6}{A\
 \index{A\+I\+\_\+gov\+\_\+hardware.\+h@{A\+I\+\_\+gov\+\_\+hardware.\+h}!A\+I\+\_\+gov\+\_\+init@{A\+I\+\_\+gov\+\_\+init}}
 \index{A\+I\+\_\+gov\+\_\+init@{A\+I\+\_\+gov\+\_\+init}!A\+I\+\_\+gov\+\_\+hardware.\+h@{A\+I\+\_\+gov\+\_\+hardware.\+h}}
 \subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+init()}{AI\_gov\_init()}}
-{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+init (\begin{DoxyParamCaption}\item[{struct \hyperlink{structAI__gov__info}{A\+I\+\_\+gov\+\_\+info} $\ast$$\ast$}]{in }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+init (\begin{DoxyParamCaption}\item[{struct A\+I\+\_\+gov\+\_\+info $\ast$$\ast$}]{in }\end{DoxyParamCaption})}
 
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}

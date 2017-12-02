@@ -1,5 +1,30 @@
 var searchData=
 [
-  ['gov_5fsys_5fpol_5fattr_5frw',['gov_sys_pol_attr_rw',['../AI__gov__sysfs_8c.html#a0a211e10d71adf95a7b18772ccea83cb',1,'gov_sys_pol_attr_rw(timer_rate):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#aab14dbdd4811b56add340d94e07b3b49',1,'gov_sys_pol_attr_rw(io_is_busy):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a394c2aebd0e2304ae3115a06ba6a6f86',1,'gov_sys_pol_attr_rw(phase_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a08151c827812f0e37d7d4dd6426f5e2b',1,'gov_sys_pol_attr_rw(prev_phase):&#160;AI_gov_sysfs.c']]],
-  ['gov_5fsys_5fpol_5fattr_5frw_5fhardware',['gov_sys_pol_attr_rw_hardware',['../AI__gov__sysfs_8c.html#a7a1f43b860e0af77bdc8991817806823',1,'gov_sys_pol_attr_rw_hardware(is_big_little):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ad941789cd9ea862212780ccfcf7707e1',1,'gov_sys_pol_attr_rw_hardware(cpu_count):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a869fc8a87f72b84742f138d05fc8af2f',1,'gov_sys_pol_attr_rw_hardware(little_freq):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#ae99f0384a18b606cb71aff199e7803a5',1,'gov_sys_pol_attr_rw_hardware(big_state):&#160;AI_gov_sysfs.c'],['../AI__gov__sysfs_8c.html#a19b854dcdc320de09a21d392715a6e40',1,'gov_sys_pol_attr_rw_hardware(big_freq):&#160;AI_gov_sysfs.c']]]
+  ['phase_5fai_5fexit_5fenter',['phase_AI_exit_enter',['../AI__gov__phases_8c.html#a3fa905414c31b68c8ed7452e9397e87d',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fexit_5fexit',['phase_AI_exit_exit',['../AI__gov__phases_8c.html#a1e0edf64ab815aace028708a8bc122b5',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fexit_5frun',['phase_AI_exit_run',['../AI__gov__phases_8c.html#a8c20242cf3920115521c2a30a5c4c0ca',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fframerate_5fenter',['phase_AI_framerate_enter',['../AI__gov__phases_8c.html#aa1cf69d36552023344185a2d81c68d11',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fframerate_5fexit',['phase_AI_framerate_exit',['../AI__gov__phases_8c.html#a7d8fca53b8a25a295d0ab7be04492c79',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fframerate_5frun',['phase_AI_framerate_run',['../AI__gov__phases_8c.html#abef43796f460fa4918f96bdb09004a5f',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5finit_5fenter',['phase_AI_init_enter',['../AI__gov__phases_8c.html#acb548504ff1166e9b557d6795c729cea',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5finit_5fexit',['phase_AI_init_exit',['../AI__gov__phases_8c.html#a947259b80b2e31a5f0ec2901b76aee6d',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5finit_5frun',['phase_AI_init_run',['../AI__gov__phases_8c.html#a443da75986610c6bb0570800d788eb09',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fondemand_5fenter',['phase_AI_ondemand_enter',['../AI__gov__phases_8c.html#a1005d2cb26d0e86ca660ec96c9df08e1',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fondemand_5fexit',['phase_AI_ondemand_exit',['../AI__gov__phases_8c.html#afe712a18961bad4d86facb19f26d9fc7',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fondemand_5frun',['phase_AI_ondemand_run',['../AI__gov__phases_8c.html#a485f4c74472c520d7f56791801111a8f',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fperformance_5fenter',['phase_AI_performance_enter',['../AI__gov__phases_8c.html#a1e77bea59f2bdaadbf854c3c012e7ad7',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fperformance_5fexit',['phase_AI_performance_exit',['../AI__gov__phases_8c.html#a962fa7e6a15512db3c026afa4f871e3f',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fperformance_5frun',['phase_AI_performance_run',['../AI__gov__phases_8c.html#ae69ef91e4309e0dd35971b599cf4487b',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpowersave_5fenter',['phase_AI_powersave_enter',['../AI__gov__phases_8c.html#a455ddccb5926cd21b0cf2252e83b319c',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpowersave_5fexit',['phase_AI_powersave_exit',['../AI__gov__phases_8c.html#a7a5db036c35f8a8121964aa7d11a06af',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpowersave_5frun',['phase_AI_powersave_run',['../AI__gov__phases_8c.html#a07d45ed5b18c286dad7d0421331f6b9d',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpriority_5fenter',['phase_AI_priority_enter',['../AI__gov__phases_8c.html#ada555157ff2a3a2ecf5b96b22f68a115',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpriority_5fexit',['phase_AI_priority_exit',['../AI__gov__phases_8c.html#a9c9e8d879b11a7c52ea3816a69d792cc',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fpriority_5frun',['phase_AI_priority_run',['../AI__gov__phases_8c.html#a7859d6dd201418d436de5adda23f34e4',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fresponse_5fenter',['phase_AI_response_enter',['../AI__gov__phases_8c.html#a3cd0d494081e2d4fe37276119f9e53d0',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fresponse_5fexit',['phase_AI_response_exit',['../AI__gov__phases_8c.html#a84921a11e5f7b3e59a088cdd8f8e8314',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5fresponse_5frun',['phase_AI_response_run',['../AI__gov__phases_8c.html#ae5808a24155cdb54b3cf5313ebef96dc',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5ftime_5fenter',['phase_AI_time_enter',['../AI__gov__phases_8c.html#abeac63b0b061acfa5064be5590a138a5',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5ftime_5fexit',['phase_AI_time_exit',['../AI__gov__phases_8c.html#a78293533fab61dd421527d6c3670f208',1,'AI_gov_phases.c']]],
+  ['phase_5fai_5ftime_5frun',['phase_AI_time_run',['../AI__gov__phases_8c.html#ada66e838522be97bf8f3860dc0a3ce1b',1,'AI_gov_phases.c']]]
 ];

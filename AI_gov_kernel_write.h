@@ -10,18 +10,33 @@
 
 #include "test_flags.h"
 
+/**
+* @brief
+*/
 #define KERNEL_DEBUG_MSG(...) \
             do { printk(KERN_INFO __VA_ARGS__); } while (0)
 
+/**
+* @brief
+*/
 #define KERNEL_ERROR_MSG(...) \
             do { printk(KERN_ERR __VA_ARGS__); } while (0)
 
+/**
+* @brief
+*/
 #define KERNEL_LOGGG_MSG(...) \
             do { printk(KERN_ERR __VA_ARGS__); } while (0)
 
+/**
+* @brief
+*/
 #define KERNEL_VERBOSE_MSG(...) \
             do { printk(KERN_INFO __VA_ARGS__); } while (0)
 
+/**
+* @brief
+*/
 #define KERNEL_WARNING_MSG(...) \
             do { printk(KERN_WARNING __VA_ARGS__); } while (0)
 
