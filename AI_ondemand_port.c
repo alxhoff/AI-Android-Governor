@@ -5,8 +5,6 @@
  *      Author: alxhoff
  */
 
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
 #include <linux/cpufreq.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
@@ -37,6 +35,8 @@
 static DEFINE_PER_CPU(struct od_cpu_dbs_info_s, od_cpu_dbs_info);
 
 static struct od_ops od_ops;
+
+struct dbs_data AI_dbs_data;
 
 #ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND
 static struct cpufreq_governor cpufreq_gov_ondemand;
@@ -502,7 +502,7 @@ static struct attribute_group od_attr_group_gov_pol = {
 
 /************************** sysfs end ************************/
 
-static int OD_od_init(struct dbs_data *dbs_data)
+int OD_od_init(struct dbs_data *dbs_data)
 {
 	struct od_dbs_tuners *tuners;
 	u64 idle_time;
@@ -548,7 +548,7 @@ static int OD_od_init(struct dbs_data *dbs_data)
 	return 0;
 }
 
-static void OD_od_exit(struct dbs_data *dbs_data)
+void OD_od_exit(struct dbs_data *dbs_data)
 {
 	kfree(dbs_data->tuners);
 }
@@ -606,24 +606,19 @@ static void OD_od_set_powersave_bias(unsigned int powersave_bias)
 	put_online_cpus();
 }
 
-void OD_od_register_powersave_bias_handler(unsigned int (*f)
-		(struct cpufreq_policy *, unsigned int, unsigned int),
-		unsigned int powersave_bias)
-{
-	od_ops.powersave_bias_target = f;
-	OD_od_set_powersave_bias(powersave_bias);
-}
-EXPORT_SYMBOL_GPL(OD_od_register_powersave_bias_handler);
+//void OD_od_register_powersave_bias_handler(unsigned int (*f)
+//		(struct cpufreq_policy *, unsigned int, unsigned int),
+//		unsigned int powersave_bias)
+//{
+//	od_ops.powersave_bias_target = f;
+//	OD_od_set_powersave_bias(powersave_bias);
+//}
+//EXPORT_SYMBOL_GPL(OD_od_register_powersave_bias_handler);
+//
+//void OD_od_unregister_powersave_bias_handler(void)
+//{
+//	od_ops.powersave_bias_target = OD_generic_powersave_bias_target;
+//	OD_od_set_powersave_bias(0);
+//}
+//EXPORT_SYMBOL_GPL(OD_od_unregister_powersave_bias_handler);
 
-void OD_od_unregister_powersave_bias_handler(void)
-{
-	od_ops.powersave_bias_target = OD_generic_powersave_bias_target;
-	OD_od_set_powersave_bias(0);
-}
-EXPORT_SYMBOL_GPL(OD_od_unregister_powersave_bias_handler);
-
-static int OD_od_cpufreq_governor_dbs(struct cpufreq_policy *policy,
-		unsigned int event)
-{
-	return cpufreq_governor_dbs(policy, &od_dbs_cdata, event);
-}

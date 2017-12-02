@@ -25,6 +25,7 @@
 /* Governor includes. */
 #include "AI_gov_types.h"
 
+extern struct cpufreq_policy *AI_policy;
 /**
 * @brief 
 */

@@ -28,8 +28,8 @@
 */
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
-				PHASE(AI_framerate)	\
 				PHASE(AI_ondemand)	\
+				PHASE(AI_framerate)	\
 				PHASE(AI_priority)	\
 				PHASE(AI_time)	\
 				PHASE(AI_powersave)	\
