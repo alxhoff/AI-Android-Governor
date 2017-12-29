@@ -26,7 +26,8 @@
 #include <linux/types.h>
 #include <linux/cpu.h>
 
-#include "cpufreq_governor.h"
+//#include "cpufreq_governor.h"
+#include "AI_ondemand_port.h"
 
 /* On-demand governor macros */
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)
