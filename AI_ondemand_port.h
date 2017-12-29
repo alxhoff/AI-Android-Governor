@@ -5,28 +5,21 @@
  *      Author: alxhoff
  */
 
-#ifndef AI_ONDEMAND_PORT_H_
-#define AI_ONDEMAND_PORT_H_
+#ifndef _AI_ONDEMAND_PORT_H_
+#define _AI_ONDEMAND_PORT_H_
 
-extern struct dbs_data AI_dbs_data;
+#include "cpufreq_governor.h"
 
-static void OD_ondemand_powersave_bias_init_cpu(int cpu);
-static int OD_should_io_be_busy(void);
-static unsigned int OD_generic_powersave_bias_target(struct cpufreq_policy *policy,
-		unsigned int freq_next, unsigned int relation);
-static void OD_ondemand_powersave_bias_init(void);
-static void OD_dbs_freq_increase(struct cpufreq_policy *p, unsigned int freq);
-static void OD_od_check_cpu(int cpu, unsigned int load_freq);
-static void OD_od_dbs_timer(struct work_struct *work);
-static void OD_update_sampling_rate(struct dbs_data *dbs_data,
-		unsigned int new_rate);
-int OD_od_init(struct dbs_data *dbs_data);
-void OD_od_exit(struct dbs_data *dbs_data);
-static void OD_od_set_powersave_bias(unsigned int powersave_bias);
-void OD_od_register_powersave_bias_handler(unsigned int (*f)
-		(struct cpufreq_policy *, unsigned int, unsigned int),
-		unsigned int powersave_bias);
-void OD_od_unregister_powersave_bias_handler(void);
+extern struct cpufreq_governor cpufreq_gov_ondemand;
+
+int od_cpufreq_governor_dbs(struct cpufreq_policy *policy,
+		unsigned int event);
+
+int od_cpufreq_gov_dbs_init(void);
+void od_cpufreq_gov_dbs_exit(void);
+
+int od_init(struct dbs_data *dbs_data);
+void od_exit(struct dbs_data *dbs_data);
 
 
-#endif /* AI_ONDEMAND_PORT_H_ */
+#endif /* _AI_ONDEMAND_PORT_H_ */

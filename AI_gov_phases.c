@@ -9,6 +9,8 @@
 /* Kernel includes. */
 #include <linux/slab.h>
 
+//#include "cpufreq_governor.h"
+
 /* Governor includes. */
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
@@ -246,11 +248,11 @@ unsigned int run_AI_framerate_phase(void)
 */
 unsigned int enter_AI_ondemand_phase(void)
 {
-	int ret = OD_od_init(AI_policy->governor_data);
-	if(ret) KERNEL_DEBUG_MSG(
-			"[GOVERNOR] ONDEMAND init failed\n");
-	else KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered ONDEMAND phase\n");
+	//register governor
+	cpufreq_register_governor(&cpufreq_gov_ondemand);
+	KERNEL_DEBUG_MSG(
+		"[GOVERNOR] Entered ONDEMAND phase\n");
+
 	return 0;
 }
 
@@ -264,7 +266,7 @@ unsigned int enter_AI_ondemand_phase(void)
 */
 unsigned int exit_AI_ondemand_phase(void)
 {
-	OD_od_exit(AI_policy->governor_data);
+	cpufreq_unregister_governor(&cpufreq_gov_ondemand);
 	KERNEL_DEBUG_MSG(
 			"[GOVERNOR] Exited ONDEMAND phase\n");
 	return 0;
@@ -280,6 +282,7 @@ unsigned int exit_AI_ondemand_phase(void)
 */
 unsigned int run_AI_ondemand_phase(void)
 {
+	//OD_od_check_cpu();
 	KERNEL_DEBUG_MSG(
 				"[GOVERNOR] Running ONDEMAND phase\n");
 	return 0;
