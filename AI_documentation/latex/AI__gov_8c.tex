@@ -1,0 +1,326 @@
+\hypertarget{AI__gov_8c}{}\section{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov.c File Reference}
+\label{AI__gov_8c}\index{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov.\+c@{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov.\+c}}
+
+
+Main routines for the AI governor.  
+
+
+{\ttfamily \#include $<$asm/uaccess.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kobject.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel\+\_\+stat.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpufreq.\+h$>$}\newline
+{\ttfamily \#include $<$linux/init.\+h$>$}\newline
+{\ttfamily \#include $<$linux/module.\+h$>$}\newline
+{\ttfamily \#include $<$linux/mutex.\+h$>$}\newline
+{\ttfamily \#include $<$linux/percpu-\/defs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/slab.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sysfs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/tick.\+h$>$}\newline
+{\ttfamily \#include $<$linux/types.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpu.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpumask.\+h$>$}\newline
+{\ttfamily \#include $<$linux/moduleparam.\+h$>$}\newline
+{\ttfamily \#include $<$linux/rwsem.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sched.\+h$>$}\newline
+{\ttfamily \#include $<$linux/sched/rt.\+h$>$}\newline
+{\ttfamily \#include $<$linux/time.\+h$>$}\newline
+{\ttfamily \#include $<$linux/timer.\+h$>$}\newline
+{\ttfamily \#include $<$linux/workqueue.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kthread.\+h$>$}\newline
+{\ttfamily \#include $<$asm/cputime.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}cpu\+\_\+load\+\_\+metric.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sched.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+ioctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+power\+\_\+manager.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+task\+\_\+handling.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+touch\+\_\+notifier.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sysfs.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+ondemand\+\_\+port.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{AI__gov_8c_a9c0c63364890b395b2165c79ac9f0ce2}{D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU} (struct cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo, cpuinfo)
+\item 
+void \hyperlink{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched} (void)
+\begin{DoxyCompactList}\small\item\em Called to reschedule the main task\textquotesingle{}s time upon expiration. \end{DoxyCompactList}\item 
+void \hyperlink{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer} (unsigned long data)
+\begin{DoxyCompactList}\small\item\em Timer which is called when power management should be re-\/evaluated. \end{DoxyCompactList}\item 
+static void \hyperlink{AI__gov_8c_a6163138e10f804142266d259fef07be9}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start} (struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables $\ast$tunables, int cpu)
+\begin{DoxyCompactList}\small\item\em Start routine for AI governor\textquotesingle{}s main task timer. \end{DoxyCompactList}\item 
+static int \hyperlink{AI__gov_8c_a6c74124fe447e529443b6f415c843219}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task} (void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Main task of the AI governor. \end{DoxyCompactList}\item 
+static void \hyperlink{AI__gov_8c_a0c1b755fd9622facad130b0a89e556a8}{change\+\_\+sysfs\+\_\+owner} (struct cpufreq\+\_\+policy $\ast$policy)
+\item 
+static int \hyperlink{AI__gov_8c_ad784464c5a2c24e221d9bc07b429be7b}{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier} (struct notifier\+\_\+block $\ast$nfb, unsigned long action, void $\ast$hcpu)
+\item 
+static int \hyperlink{AI__gov_8c_a8d093abb031d9e95b27cd941f0521933}{cpufreq\+\_\+governor\+\_\+\+AI} (struct cpufreq\+\_\+policy $\ast$policy, unsigned int event)
+\begin{DoxyCompactList}\small\item\em The main routine of the governor. \end{DoxyCompactList}\item 
+static int \+\_\+\+\_\+init \hyperlink{AI__gov_8c_a39be58ec8b3873adb89a78de37fc6b41}{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init} (void)
+\begin{DoxyCompactList}\small\item\em Called when the governor is loaded into the kernel. \end{DoxyCompactList}\item 
+static void \+\_\+\+\_\+exit \hyperlink{AI__gov_8c_aa1fbad519808879ddffc95d453b80ed3}{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit} (void)
+\begin{DoxyCompactList}\small\item\em Called when the governor is removed from the kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static unsigned int \hyperlink{AI__gov_8c_af4d33865dc30728c8959ffb76c27bd5b}{default\+\_\+target\+\_\+loads\+\_\+\+AI} \mbox{[}$\,$\mbox{]} = \{ 90 \}
+\item 
+static cpumask\+\_\+t \hyperlink{AI__gov_8c_a347a2797c831f566f013d729e739bc21}{speedchange\+\_\+cpumask\+\_\+\+AI}
+\item 
+static spinlock\+\_\+t \hyperlink{AI__gov_8c_af03649f87dc218110848353fe17d6f2f}{speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI}
+\item 
+static struct mutex \hyperlink{AI__gov_8c_a7f23aad72589316ea348c69c3a65addd}{gov\+\_\+lock\+\_\+\+AI}
+\begin{DoxyCompactList}\small\item\em Lock to protect the governor\textquotesingle{}s task. \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}{A\+I\+\_\+shutdown\+Cpu}
+\item 
+struct cpufreq\+\_\+policy $\ast$ \hyperlink{AI__gov_8c_aac29055f5c3d829e3418f57f332af828}{A\+I\+\_\+policy}
+\item 
+struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables $\ast$ \hyperlink{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}{common\+\_\+tunables\+\_\+\+AI}
+\item 
+struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables $\ast$ \hyperlink{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}{tuned\+\_\+parameters\+\_\+\+AI} = N\+U\+LL
+\item 
+struct A\+I\+\_\+gov\+\_\+info $\ast$ \hyperlink{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}{A\+I\+\_\+gov}
+\begin{DoxyCompactList}\small\item\em The main global data struct of the A\+I\+\_\+gov. \end{DoxyCompactList}\item 
+static bool \hyperlink{group__initialisation__flags_ga108454816c9d72eb1b7865c6b8055a4f}{gov\+\_\+started} = 0
+\begin{DoxyCompactList}\small\item\em Governor task initialisation flag. \end{DoxyCompactList}\item 
+bool \hyperlink{group__initialisation__flags_gac119eb310007378a0e5dc060602ce66c}{profiles\+\_\+initd} = false
+\begin{DoxyCompactList}\small\item\em Profile initialisation flag. \end{DoxyCompactList}\item 
+bool \hyperlink{group__initialisation__flags_gabda9d595ebe2d5ff3270e7ee4a731846}{ioctl\+\_\+initd} = false
+\begin{DoxyCompactList}\small\item\em I\+Ocontrol initialisation flag. \end{DoxyCompactList}\item 
+static struct notifier\+\_\+block \hyperlink{AI__gov_8c_a490b6e5c08fa45c61ab5a1b4c2c324c9}{cpufreq\+\_\+notifier\+\_\+block}
+\item 
+static struct cpufreq\+\_\+governor \hyperlink{AI__gov_8c_a7cc4f9bac94fa681b798cd63db7d6b18}{cpufreq\+\_\+gov\+\_\+\+AI}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Main routines for the AI governor. 
+
+\begin{DoxyAuthor}{Author}
+Alex Hoffman 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11 Oct 2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov_8c_a0c1b755fd9622facad130b0a89e556a8}\label{AI__gov_8c_a0c1b755fd9622facad130b0a89e556a8}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!change\+\_\+sysfs\+\_\+owner@{change\+\_\+sysfs\+\_\+owner}}
+\index{change\+\_\+sysfs\+\_\+owner@{change\+\_\+sysfs\+\_\+owner}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{change\+\_\+sysfs\+\_\+owner()}{change\_sysfs\_owner()}}
+{\footnotesize\ttfamily static void change\+\_\+sysfs\+\_\+owner (\begin{DoxyParamCaption}\item[{struct cpufreq\+\_\+policy $\ast$}]{policy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{AI__gov_8c_ad784464c5a2c24e221d9bc07b429be7b}\label{AI__gov_8c_ad784464c5a2c24e221d9bc07b429be7b}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier()}{cpufreq\_AI\_governor\_notifier()}}
+{\footnotesize\ttfamily static int cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+notifier (\begin{DoxyParamCaption}\item[{struct notifier\+\_\+block $\ast$}]{nfb,  }\item[{unsigned long}]{action,  }\item[{void $\ast$}]{hcpu }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{AI__gov_8c_a6c74124fe447e529443b6f415c843219}\label{AI__gov_8c_a6c74124fe447e529443b6f415c843219}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task()}{cpufreq\_AI\_governor\_speedchange\_task()}}
+{\footnotesize\ttfamily static int cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+speedchange\+\_\+task (\begin{DoxyParamCaption}\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Main task of the AI governor. 
+
+Task is responsible for rescheduling itself as well as updating the C\+PU\textquotesingle{}s frequencies and or status in relation to the currently active backend logic. Also invokes the C\+PU frequency values to be recalculated such that they can be applied during the next execution of the task.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ required parameter, not used\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}\label{AI__gov_8c_ac7ff18e45659a37eeaebf592bce781b7}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer()}{cpufreq\_AI\_governor\_timer()}}
+{\footnotesize\ttfamily void cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer (\begin{DoxyParamCaption}\item[{unsigned long}]{data }\end{DoxyParamCaption})}
+
+
+
+Timer which is called when power management should be re-\/evaluated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ required parameter, not used \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}\label{AI__gov_8c_a74a33e69b5fd7d7323cf659283343cff}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched()}{cpufreq\_AI\_governor\_timer\_resched()}}
+{\footnotesize\ttfamily void cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+resched (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Called to reschedule the main task\textquotesingle{}s time upon expiration. 
+
+\mbox{\Hypertarget{AI__gov_8c_a6163138e10f804142266d259fef07be9}\label{AI__gov_8c_a6163138e10f804142266d259fef07be9}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start}}
+\index{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start@{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start()}{cpufreq\_AI\_governor\_timer\_start()}}
+{\footnotesize\ttfamily static void cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+timer\+\_\+start (\begin{DoxyParamCaption}\item[{struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables $\ast$}]{tunables,  }\item[{int}]{cpu }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Start routine for AI governor\textquotesingle{}s main task timer. 
+
+The period that is used to reschedule the main task\textquotesingle{}s timer can be set by modifying the timer\+\_\+rate in the cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables structure passed to the function.
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov_8c_aa1fbad519808879ddffc95d453b80ed3}\label{AI__gov_8c_aa1fbad519808879ddffc95d453b80ed3}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit@{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit}}
+\index{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit@{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit()}{cpufreq\_gov\_AI\_exit()}}
+{\footnotesize\ttfamily static void \+\_\+\+\_\+exit cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+exit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Called when the governor is removed from the kernel. 
+
+\mbox{\Hypertarget{AI__gov_8c_a39be58ec8b3873adb89a78de37fc6b41}\label{AI__gov_8c_a39be58ec8b3873adb89a78de37fc6b41}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init@{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init}}
+\index{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init@{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init()}{cpufreq\_gov\_AI\_init()}}
+{\footnotesize\ttfamily static int \+\_\+\+\_\+init cpufreq\+\_\+gov\+\_\+\+A\+I\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Called when the governor is loaded into the kernel. 
+
+\mbox{\Hypertarget{AI__gov_8c_a8d093abb031d9e95b27cd941f0521933}\label{AI__gov_8c_a8d093abb031d9e95b27cd941f0521933}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+governor\+\_\+\+AI@{cpufreq\+\_\+governor\+\_\+\+AI}}
+\index{cpufreq\+\_\+governor\+\_\+\+AI@{cpufreq\+\_\+governor\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+governor\+\_\+\+A\+I()}{cpufreq\_governor\_AI()}}
+{\footnotesize\ttfamily static int cpufreq\+\_\+governor\+\_\+\+AI (\begin{DoxyParamCaption}\item[{struct cpufreq\+\_\+policy $\ast$}]{policy,  }\item[{unsigned int}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The main routine of the governor. 
+
+The governor enters and exits through the cases within this function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em policy} & \\
+\hline
+{\em event} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+
+\begin{DoxyItemize}
+\item Start\+: Called after the governor has been initialized. Creates task, sets task priority and starts task.
+\item Stop\+: Called when the governor is stopping. Retsponsible for deinitialising the governor\textquotesingle{}s task and removing timers
+\item Init\+: Called when the governor is loaded into the kernel. Initialises governor subsystems and sets up the governor\textquotesingle{}s parameters
+\item Exit\+: Called when the governor is removed from the kernel. Saves governor\textquotesingle{}s parameters for future use. 
+\end{DoxyItemize}\mbox{\Hypertarget{AI__gov_8c_a9c0c63364890b395b2165c79ac9f0ce2}\label{AI__gov_8c_a9c0c63364890b395b2165c79ac9f0ce2}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU@{D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU}}
+\index{D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU@{D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+P\+U()}{DEFINE\_PER\_CPU()}}
+{\footnotesize\ttfamily static D\+E\+F\+I\+N\+E\+\_\+\+P\+E\+R\+\_\+\+C\+PU (\begin{DoxyParamCaption}\item[{struct cpufreq\+\_\+\+A\+I\+\_\+governor\+\_\+cpuinfo}]{,  }\item[{cpuinfo}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}\label{AI__gov_8c_a4eaf8dff28e6d0aa16c537c410702ab7}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+gov@{A\+I\+\_\+gov}}
+\index{A\+I\+\_\+gov@{A\+I\+\_\+gov}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov}{AI\_gov}}
+{\footnotesize\ttfamily struct A\+I\+\_\+gov\+\_\+info$\ast$ A\+I\+\_\+gov}
+
+
+
+The main global data struct of the A\+I\+\_\+gov. 
+
+The global A\+I\+\_\+gov data structure stores all important information relating to the governor, its state and its profiles. It also contans a number of pointers to important system structs. \mbox{\Hypertarget{AI__gov_8c_aac29055f5c3d829e3418f57f332af828}\label{AI__gov_8c_aac29055f5c3d829e3418f57f332af828}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+policy@{A\+I\+\_\+policy}}
+\index{A\+I\+\_\+policy@{A\+I\+\_\+policy}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+policy}{AI\_policy}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+policy$\ast$ A\+I\+\_\+policy}
+
+\mbox{\Hypertarget{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}\label{AI__gov_8c_ac39213c22cf601ef81a2bb1bc9ef243d}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!A\+I\+\_\+shutdown\+Cpu@{A\+I\+\_\+shutdown\+Cpu}}
+\index{A\+I\+\_\+shutdown\+Cpu@{A\+I\+\_\+shutdown\+Cpu}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+shutdown\+Cpu}{AI\_shutdownCpu}}
+{\footnotesize\ttfamily uint8\+\_\+t A\+I\+\_\+shutdown\+Cpu}
+
+\mbox{\Hypertarget{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}\label{AI__gov_8c_ab400a826323d8042be869ddfe2612f5d}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!common\+\_\+tunables\+\_\+\+AI@{common\+\_\+tunables\+\_\+\+AI}}
+\index{common\+\_\+tunables\+\_\+\+AI@{common\+\_\+tunables\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{common\+\_\+tunables\+\_\+\+AI}{common\_tunables\_AI}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables$\ast$ common\+\_\+tunables\+\_\+\+AI}
+
+\mbox{\Hypertarget{AI__gov_8c_a7cc4f9bac94fa681b798cd63db7d6b18}\label{AI__gov_8c_a7cc4f9bac94fa681b798cd63db7d6b18}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+gov\+\_\+\+AI@{cpufreq\+\_\+gov\+\_\+\+AI}}
+\index{cpufreq\+\_\+gov\+\_\+\+AI@{cpufreq\+\_\+gov\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+gov\+\_\+\+AI}{cpufreq\_gov\_AI}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+governor \hyperlink{structcpufreq__gov__AI}{cpufreq\+\_\+gov\+\_\+\+AI}\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+    .name       = \textcolor{stringliteral}{"AI"},  
+    .governor   = \hyperlink{AI__gov_8c_a8d093abb031d9e95b27cd941f0521933}{cpufreq\_governor\_AI},  
+    .owner      = THIS\_MODULE,
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov_8c_a490b6e5c08fa45c61ab5a1b4c2c324c9}\label{AI__gov_8c_a490b6e5c08fa45c61ab5a1b4c2c324c9}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!cpufreq\+\_\+notifier\+\_\+block@{cpufreq\+\_\+notifier\+\_\+block}}
+\index{cpufreq\+\_\+notifier\+\_\+block@{cpufreq\+\_\+notifier\+\_\+block}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{cpufreq\+\_\+notifier\+\_\+block}{cpufreq\_notifier\_block}}
+{\footnotesize\ttfamily struct notifier\+\_\+block cpufreq\+\_\+notifier\+\_\+block\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{ .notifier\_call =
+        \hyperlink{AI__gov_8c_ad784464c5a2c24e221d9bc07b429be7b}{cpufreq\_AI\_governor\_notifier}, \}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov_8c_af4d33865dc30728c8959ffb76c27bd5b}\label{AI__gov_8c_af4d33865dc30728c8959ffb76c27bd5b}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!default\+\_\+target\+\_\+loads\+\_\+\+AI@{default\+\_\+target\+\_\+loads\+\_\+\+AI}}
+\index{default\+\_\+target\+\_\+loads\+\_\+\+AI@{default\+\_\+target\+\_\+loads\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{default\+\_\+target\+\_\+loads\+\_\+\+AI}{default\_target\_loads\_AI}}
+{\footnotesize\ttfamily unsigned int default\+\_\+target\+\_\+loads\+\_\+\+AI\mbox{[}$\,$\mbox{]} = \{ 90 \}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{AI__gov_8c_a7f23aad72589316ea348c69c3a65addd}\label{AI__gov_8c_a7f23aad72589316ea348c69c3a65addd}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!gov\+\_\+lock\+\_\+\+AI@{gov\+\_\+lock\+\_\+\+AI}}
+\index{gov\+\_\+lock\+\_\+\+AI@{gov\+\_\+lock\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{gov\+\_\+lock\+\_\+\+AI}{gov\_lock\_AI}}
+{\footnotesize\ttfamily struct mutex gov\+\_\+lock\+\_\+\+AI\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Lock to protect the governor\textquotesingle{}s task. 
+
+\mbox{\Hypertarget{AI__gov_8c_a347a2797c831f566f013d729e739bc21}\label{AI__gov_8c_a347a2797c831f566f013d729e739bc21}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!speedchange\+\_\+cpumask\+\_\+\+AI@{speedchange\+\_\+cpumask\+\_\+\+AI}}
+\index{speedchange\+\_\+cpumask\+\_\+\+AI@{speedchange\+\_\+cpumask\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{speedchange\+\_\+cpumask\+\_\+\+AI}{speedchange\_cpumask\_AI}}
+{\footnotesize\ttfamily cpumask\+\_\+t speedchange\+\_\+cpumask\+\_\+\+AI\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{AI__gov_8c_af03649f87dc218110848353fe17d6f2f}\label{AI__gov_8c_af03649f87dc218110848353fe17d6f2f}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI@{speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI}}
+\index{speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI@{speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI}{speedchange\_cpumask\_lock\_AI}}
+{\footnotesize\ttfamily spinlock\+\_\+t speedchange\+\_\+cpumask\+\_\+lock\+\_\+\+AI\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}\label{AI__gov_8c_a7035c7c859e98a1d1e5e634d785532b6}} 
+\index{A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}!tuned\+\_\+parameters\+\_\+\+AI@{tuned\+\_\+parameters\+\_\+\+AI}}
+\index{tuned\+\_\+parameters\+\_\+\+AI@{tuned\+\_\+parameters\+\_\+\+AI}!A\+I\+\_\+gov.\+c@{A\+I\+\_\+gov.\+c}}
+\subsubsection{\texorpdfstring{tuned\+\_\+parameters\+\_\+\+AI}{tuned\_parameters\_AI}}
+{\footnotesize\ttfamily struct cpufreq\+\_\+\+A\+I\+\_\+gov\+\_\+tunables$\ast$ tuned\+\_\+parameters\+\_\+\+AI = N\+U\+LL}
+

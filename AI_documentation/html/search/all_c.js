@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['sampling_5fdown_5ffactor',['sampling_down_factor',['../structphase__AI__ondemand__attributes.html#a0c68f95e0d62c70c14959ab1256ee9d5',1,'phase_AI_ondemand_attributes']]],
+  ['sampling_5frate',['sampling_rate',['../structphase__AI__ondemand__attributes.html#a1d9322dcd59af390ae09c3ebfe494494',1,'phase_AI_ondemand_attributes']]],
+  ['sampling_5frate_5fmin',['sampling_rate_min',['../structphase__AI__ondemand__attributes.html#a8085ecab47a9480c26c642d19cc02b2c',1,'phase_AI_ondemand_attributes']]],
+  ['speedchange_5fcpumask_5fai',['speedchange_cpumask_AI',['../AI__gov_8c.html#a347a2797c831f566f013d729e739bc21',1,'AI_gov.c']]],
+  ['speedchange_5fcpumask_5flock_5fai',['speedchange_cpumask_lock_AI',['../AI__gov_8c.html#af03649f87dc218110848353fe17d6f2f',1,'AI_gov.c']]],
+  ['sysfs_5fai_5fexit_5fattribs',['SYSFS_AI_exit_ATTRIBS',['../group__sysfs__attrb__init.html#ga4d9477c773ba5f22fe2355ed48ab5276',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fframerate_5fattribs',['SYSFS_AI_framerate_ATTRIBS',['../group__sysfs__attrb__init.html#ga081f30ac6549e4ea9c45c9b37849849f',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5finit_5fattribs',['SYSFS_AI_init_ATTRIBS',['../group__sysfs__attrb__init.html#gac8d2c69a96b1110b2a84d9989e6ac890',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fondemand_5fattribs',['SYSFS_AI_ondemand_ATTRIBS',['../group__sysfs__attrb__init.html#gac46c6acb492c013e3a484aca4b53f5ab',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fperformance_5fattribs',['SYSFS_AI_performance_ATTRIBS',['../group__sysfs__attrb__init.html#gaec2dd8d06cbfc43cb056b1d9657bebaf',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fpowersave_5fattribs',['SYSFS_AI_powersave_ATTRIBS',['../group__sysfs__attrb__init.html#gaeb59d25e3c5c1bdaae809f8668675a0c',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fpriority_5fattribs',['SYSFS_AI_priority_ATTRIBS',['../group__sysfs__attrb__init.html#gad9f86b9d176151028e5eaa4bc9ff0f84',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5fresponse_5fattribs',['SYSFS_AI_response_ATTRIBS',['../group__sysfs__attrb__init.html#ga971760a5656c4eb275a661bd95a9f5f4',1,'AI_gov_phases.h']]],
+  ['sysfs_5fai_5ftime_5fattribs',['SYSFS_AI_time_ATTRIBS',['../group__sysfs__attrb__init.html#ga28216f1efe25676be61a0b585d8db84d',1,'AI_gov_phases.h']]],
+  ['sysfs_5fattr_5fgrp',['sysfs_attr_grp',['../structphase__profile.html#a75fa703877db612110bead3a231685ee',1,'phase_profile']]],
+  ['sysfs_5fattrb_5finit',['Sysfs_attrb_init',['../group__sysfs__attrb__init.html',1,'']]]
+];

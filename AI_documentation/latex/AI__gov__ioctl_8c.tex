@@ -1,0 +1,260 @@
+\hypertarget{AI__gov__ioctl_8c}{}\section{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+ioctl.c File Reference}
+\label{AI__gov__ioctl_8c}\index{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+ioctl.\+c@{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+
+
+I\+Octl interface for the A\+I\+\_\+governor.  
+
+
+{\ttfamily \#include $<$linux/fs.\+h$>$}\newline
+{\ttfamily \#include $<$linux/cpumask.\+h$>$}\newline
+{\ttfamily \#include $<$linux/kernel.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+ioctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}test\+\_\+flags.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+phases.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+sysfs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+long \hyperlink{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}{A\+I\+\_\+gov\+\_\+ioctl} (struct file $\ast$f, unsigned int cmd, unsigned long arg)
+\begin{DoxyCompactList}\small\item\em Governor\textquotesingle{}s I\+Ocontrol callable commands. \end{DoxyCompactList}\item 
+unsigned int \hyperlink{AI__gov__ioctl_8c_afa4ac5dfd99b8ccfa62d4fa7bf983a5d}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init} (void)
+\begin{DoxyCompactList}\small\item\em Governor\textquotesingle{}s I\+Ocontrol initilisation function. \end{DoxyCompactList}\item 
+int \hyperlink{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit} (void)
+\begin{DoxyCompactList}\small\item\em Governor\textquotesingle{}s I\+Ocontrol deinitialization function. \end{DoxyCompactList}\item 
+int \hyperlink{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}{A\+I\+\_\+gov\+\_\+open} (struct inode $\ast$i, struct file $\ast$f)
+\begin{DoxyCompactList}\small\item\em Required by I\+Octl fops. \end{DoxyCompactList}\item 
+int \hyperlink{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}{A\+I\+\_\+gov\+\_\+close} (struct inode $\ast$i, struct file $\ast$f)
+\begin{DoxyCompactList}\small\item\em Required by I\+Octl fops. \end{DoxyCompactList}\item 
+unsigned int \hyperlink{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable} (struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} $\ast$var)
+\begin{DoxyCompactList}\small\item\em Retrieves a variable specified by a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct. \end{DoxyCompactList}\item 
+signed int \hyperlink{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable} (struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} var)
+\begin{DoxyCompactList}\small\item\em Sets a variable specified by a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct. \end{DoxyCompactList}\item 
+signed int \hyperlink{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase} (void)
+\begin{DoxyCompactList}\small\item\em Clears the profile attributes for the current phase. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{AI__gov__ioctl_8c_a95f32c7fbd7f1f17b2d6720ac3fdbcf3}{device\+\_\+node} (struct device $\ast$\hyperlink{group__IOctl__devices_ga8910285a0352a5c710e65ec9ecbe32a1}{dev}, umode\+\_\+t $\ast$mode)
+\begin{DoxyCompactList}\small\item\em Overwrites a class\textquotesingle{} permissions to 0666. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static dev\+\_\+t \hyperlink{group__IOctl__devices_ga8910285a0352a5c710e65ec9ecbe32a1}{dev}
+\begin{DoxyCompactList}\small\item\em I\+Octl dev\+\_\+t to hold the char device major and minor numbers. \end{DoxyCompactList}\item 
+static struct cdev \hyperlink{group__IOctl__devices_ga68348f2a0fef7b6b04b3967775413977}{c\+\_\+dev}
+\begin{DoxyCompactList}\small\item\em I\+Octl char device. \end{DoxyCompactList}\item 
+static struct class $\ast$ \hyperlink{group__IOctl__devices_ga9baf21cac3b4034ca9c89bce7d82185b}{cl}
+\begin{DoxyCompactList}\small\item\em I\+Octl char device class. \end{DoxyCompactList}\item 
+const unsigned \hyperlink{group__IOctl__maj__min_gadb180b9acab27a834b1d191b2ee1f39f}{A\+I\+\_\+baseminor} = 0
+\begin{DoxyCompactList}\small\item\em I\+Octl char device default minor number. \end{DoxyCompactList}\item 
+const unsigned \hyperlink{group__IOctl__maj__min_ga4a9b77eb24590cec68a0b899808b608f}{A\+I\+\_\+minor\+Count} = 1
+\begin{DoxyCompactList}\small\item\em I\+Octl char device count. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \hyperlink{AI__gov__ioctl_8c_a7dca4bbd0a5e6cb644001ac1b8265331}{ioctl\+\_\+initialized} = 0
+\begin{DoxyCompactList}\small\item\em Governor I\+Octl initialisation flag. \end{DoxyCompactList}\item 
+struct file\+\_\+operations \hyperlink{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}{A\+I\+\_\+governor\+\_\+fops}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+I\+Octl interface for the A\+I\+\_\+governor. 
+
+\begin{DoxyAuthor}{Author}
+Alex Hoffman 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11 October 2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}\label{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}}
+\index{A\+I\+\_\+gov\+\_\+close@{A\+I\+\_\+gov\+\_\+close}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+close()}{AI\_gov\_close()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+close (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+
+
+Required by I\+Octl fops. 
+
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}\label{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}}
+\index{A\+I\+\_\+gov\+\_\+ioctl@{A\+I\+\_\+gov\+\_\+ioctl}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl()}{AI\_gov\_ioctl()}}
+{\footnotesize\ttfamily long A\+I\+\_\+gov\+\_\+ioctl (\begin{DoxyParamCaption}\item[{struct file $\ast$}]{f,  }\item[{unsigned int}]{cmd,  }\item[{unsigned long}]{arg }\end{DoxyParamCaption})}
+
+
+
+Governor\textquotesingle{}s I\+Ocontrol callable commands. 
+
+Contains a switch statement that handles all of the I\+Octl callable commands from userspace
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & \\
+\hline
+{\em cmd} & \\
+\hline
+{\em arg} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+
+\begin{DoxyItemize}
+\item G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+SE\+: Copies the current phase to user space, in integer representation
+\item G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+SE\+: Copies an integer representation of a phase that a user space application wishes to set as the current phase
+\item G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+C\+L\+R\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE\+: Clears all attributes of the current phase
+\item G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+S\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE Sets the value to the variable with a specified index, both of which must be specified in a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct which must be sent from an app in userspace.
+\item G\+O\+V\+E\+R\+N\+O\+R\+\_\+\+G\+E\+T\+\_\+\+P\+H\+A\+S\+E\+\_\+\+V\+A\+R\+I\+A\+B\+LE\+: Returns to userspace an \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct which will contain the variable value that was requested using a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct populated with the variable index of the variable required from the current profile attriubutes. 
+\end{DoxyItemize}\mbox{\Hypertarget{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}\label{AI__gov__ioctl_8c_ad3c05b8f00ba9edfae42b62fa577c3e6}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase()}{AI\_gov\_ioctl\_clear\_phase()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+ioctl\+\_\+clear\+\_\+phase (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Clears the profile attributes for the current phase. 
+
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}\label{AI__gov__ioctl_8c_a2151504be2df435b0ec5fe17fede210f}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit()}{AI\_gov\_ioctl\_exit()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+ioctl\+\_\+exit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Governor\textquotesingle{}s I\+Ocontrol deinitialization function. 
+
+Called when I\+Octl is deinitialized as a result of the governor being unloaded from the kernel.
+
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}\label{AI__gov__ioctl_8c_a9fcb3dd041402500acce86d1c85c2fab}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable()}{AI\_gov\_ioctl\_get\_variable()}}
+{\footnotesize\ttfamily unsigned int A\+I\+\_\+gov\+\_\+ioctl\+\_\+get\+\_\+variable (\begin{DoxyParamCaption}\item[{struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} $\ast$}]{var }\end{DoxyParamCaption})}
+
+
+
+Retrieves a variable specified by a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em var} & A pointer to a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct whos index value specifies the variable index of the variable that is required to be retrieved and loaded into the var struct\textquotesingle{}s variable value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_afa4ac5dfd99b8ccfa62d4fa7bf983a5d}\label{AI__gov__ioctl_8c_afa4ac5dfd99b8ccfa62d4fa7bf983a5d}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+init()}{AI\_gov\_ioctl\_init()}}
+{\footnotesize\ttfamily unsigned int A\+I\+\_\+gov\+\_\+ioctl\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Governor\textquotesingle{}s I\+Ocontrol initilisation function. 
+
+Initialises the character device and class required by I\+Octl. Character device will be mounted as \textquotesingle{}/dev/\+A\+I\+\_\+governor\+\_\+ioctl\textquotesingle{}
+
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}\label{AI__gov__ioctl_8c_a707fbdff9028a1060b0ecf425da4a86c}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable}}
+\index{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable@{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable()}{AI\_gov\_ioctl\_set\_variable()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+ioctl\+\_\+set\+\_\+variable (\begin{DoxyParamCaption}\item[{struct \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable}}]{var }\end{DoxyParamCaption})}
+
+
+
+Sets a variable specified by a \hyperlink{structAI__gov__ioctl__phase__variable}{A\+I\+\_\+gov\+\_\+ioctl\+\_\+phase\+\_\+variable} struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em var} & Specifies the index value of the variable that is required to be set, the value to be set is taken from var\textquotesingle{}s variable value field \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}\label{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}}
+\index{A\+I\+\_\+gov\+\_\+open@{A\+I\+\_\+gov\+\_\+open}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+open()}{AI\_gov\_open()}}
+{\footnotesize\ttfamily int A\+I\+\_\+gov\+\_\+open (\begin{DoxyParamCaption}\item[{struct inode $\ast$}]{i,  }\item[{struct file $\ast$}]{f }\end{DoxyParamCaption})}
+
+
+
+Required by I\+Octl fops. 
+
+\begin{DoxyReturn}{Returns}
+On sucess returns 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a95f32c7fbd7f1f17b2d6720ac3fdbcf3}\label{AI__gov__ioctl_8c_a95f32c7fbd7f1f17b2d6720ac3fdbcf3}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!device\+\_\+node@{device\+\_\+node}}
+\index{device\+\_\+node@{device\+\_\+node}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{device\+\_\+node()}{device\_node()}}
+{\footnotesize\ttfamily char$\ast$ device\+\_\+node (\begin{DoxyParamCaption}\item[{struct device $\ast$}]{dev,  }\item[{umode\+\_\+t $\ast$}]{mode }\end{DoxyParamCaption})}
+
+
+
+Overwrites a class\textquotesingle{} permissions to 0666. 
+
+This function is used to overwrite the default permissions function for a class.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Device whose permissions are to be changed \\
+\hline
+{\em mode} & Permissions value to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}\label{AI__gov__ioctl_8c_a00eeebcf02fb8ae0315ed5663971c38a}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}}
+\index{A\+I\+\_\+governor\+\_\+fops@{A\+I\+\_\+governor\+\_\+fops}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+governor\+\_\+fops}{AI\_governor\_fops}}
+{\footnotesize\ttfamily struct file\+\_\+operations \hyperlink{structAI__governor__fops}{A\+I\+\_\+governor\+\_\+fops}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=
+\{
+    .owner = THIS\_MODULE,
+    .open = \hyperlink{AI__gov__ioctl_8c_aedf9bd2ac1f8c0fd853c3be262c1dc51}{AI\_gov\_open},
+    .release = \hyperlink{AI__gov__ioctl_8c_abce04e2319f708bcfcc4671044b041fb}{AI\_gov\_close},
+
+
+
+    .unlocked\_ioctl = \hyperlink{AI__gov__ioctl_8c_adeadc081a6f7540d6ea0db336a9e0ea1}{AI\_gov\_ioctl}
+
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{AI__gov__ioctl_8c_a7dca4bbd0a5e6cb644001ac1b8265331}\label{AI__gov__ioctl_8c_a7dca4bbd0a5e6cb644001ac1b8265331}} 
+\index{A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}!ioctl\+\_\+initialized@{ioctl\+\_\+initialized}}
+\index{ioctl\+\_\+initialized@{ioctl\+\_\+initialized}!A\+I\+\_\+gov\+\_\+ioctl.\+c@{A\+I\+\_\+gov\+\_\+ioctl.\+c}}
+\subsubsection{\texorpdfstring{ioctl\+\_\+initialized}{ioctl\_initialized}}
+{\footnotesize\ttfamily uint8\+\_\+t ioctl\+\_\+initialized = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Governor I\+Octl initialisation flag. 
+
+Makes sure that the governor\textquotesingle{}s I\+Octl is only created and initialised once 

@@ -1,0 +1,50 @@
+\hypertarget{AI__gov__hardware_8c}{}\section{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+hardware.c File Reference}
+\label{AI__gov__hardware_8c}\index{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+hardware.\+c@{/home/alxhoff/git/\+Git\+Hub/android-\/kernel-\/governor-\/\+A\+P\+I/\+A\+I\+\_\+gov\+\_\+hardware.\+c}}
+
+
+Handles the governor\textquotesingle{}s hardware functionality.  
+
+
+{\ttfamily \#include $<$linux/slab.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+phases.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}A\+I\+\_\+gov\+\_\+kernel\+\_\+write.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+signed int \hyperlink{AI__gov__hardware_8c_ad282940880584f7a8034a26ebd0dd2c6}{A\+I\+\_\+gov\+\_\+init} (struct A\+I\+\_\+gov\+\_\+info $\ast$$\ast$in)
+\item 
+signed int \hyperlink{AI__gov__hardware_8c_ac6eefcd2c948a3444bbff7f3e9cee971}{A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table} (struct A\+I\+\_\+gov\+\_\+cur\+\_\+\+HW $\ast$hardware, struct A\+I\+\_\+gov\+\_\+freq\+\_\+table $\ast$freq\+\_\+table)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles the governor\textquotesingle{}s hardware functionality. 
+
+\begin{DoxyAuthor}{Author}
+Alex Hoffman 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11 Oct 2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{AI__gov__hardware_8c_ac6eefcd2c948a3444bbff7f3e9cee971}\label{AI__gov__hardware_8c_ac6eefcd2c948a3444bbff7f3e9cee971}} 
+\index{A\+I\+\_\+gov\+\_\+hardware.\+c@{A\+I\+\_\+gov\+\_\+hardware.\+c}!A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table@{A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table}}
+\index{A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table@{A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table}!A\+I\+\_\+gov\+\_\+hardware.\+c@{A\+I\+\_\+gov\+\_\+hardware.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table()}{AI\_gov\_change\_freq\_table()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+change\+\_\+freq\+\_\+table (\begin{DoxyParamCaption}\item[{struct A\+I\+\_\+gov\+\_\+cur\+\_\+\+HW $\ast$}]{hardware,  }\item[{struct A\+I\+\_\+gov\+\_\+freq\+\_\+table $\ast$}]{freq\+\_\+table }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{AI__gov__hardware_8c_ad282940880584f7a8034a26ebd0dd2c6}\label{AI__gov__hardware_8c_ad282940880584f7a8034a26ebd0dd2c6}} 
+\index{A\+I\+\_\+gov\+\_\+hardware.\+c@{A\+I\+\_\+gov\+\_\+hardware.\+c}!A\+I\+\_\+gov\+\_\+init@{A\+I\+\_\+gov\+\_\+init}}
+\index{A\+I\+\_\+gov\+\_\+init@{A\+I\+\_\+gov\+\_\+init}!A\+I\+\_\+gov\+\_\+hardware.\+c@{A\+I\+\_\+gov\+\_\+hardware.\+c}}
+\subsubsection{\texorpdfstring{A\+I\+\_\+gov\+\_\+init()}{AI\_gov\_init()}}
+{\footnotesize\ttfamily signed int A\+I\+\_\+gov\+\_\+init (\begin{DoxyParamCaption}\item[{struct A\+I\+\_\+gov\+\_\+info $\ast$$\ast$}]{in }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
