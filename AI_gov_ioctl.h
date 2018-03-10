@@ -1,7 +1,7 @@
 /**
  * @file AI_gov_ioctl.h
  * @author Alex Hoffman
- * @date 11 October 2017
+ * @date 10 March 2018 
  * @brief IOctl interface for the AI_governor.
  * @section About
  * Defines the functionality of the AI governor's IOctl interface

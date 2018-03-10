@@ -1,10 +1,9 @@
 /**
  * @file AI_gov_hardware.c
  * @author Alex Hoffman
- * @date 11 Oct 2017
+ * @date 10 March 2018 
  * @brief Handles the governor's hardware functionality
  */
-
 
 /* -- Includes -- */
 /* Kernel includes. */

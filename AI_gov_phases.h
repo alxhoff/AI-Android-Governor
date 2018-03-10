@@ -1,8 +1,8 @@
-/*
-* AI_gov_phases.h
-*
-*  Created on: Aug 31, 2017
-*      Author: alxhoff
+/**
+ * @file AI_gov_phases.h
+ * @author Alex Hoffman
+ * @date 10 March 2018
+ * @brief Phase specific data structures
 */
 
 #ifndef AI_GOV_PHASES_H_
@@ -28,8 +28,8 @@
 */
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
-				PHASE(AI_framerate)	\
 				PHASE(AI_ondemand)	\
+				PHASE(AI_framerate)	\
 				PHASE(AI_priority)	\
 				PHASE(AI_time)	\
 				PHASE(AI_powersave)	\

@@ -1,7 +1,7 @@
 /**
  * @file AI_gov.c
  * @author Alex Hoffman
- * @date 11 Oct 2017
+ * @date 10 March 2018
  * @brief Main routines for the AI governor.
  */
 
@@ -60,6 +60,7 @@
 #include "AI_touch_notifier.h"
 #include "AI_gov_task_handling.h"
 #include "AI_gov_sysfs.h"
+#include "AI_ondemand_port.h"
 
 static unsigned int default_target_loads_AI[] = { DEFAULT_TARGET_LOAD };
 
@@ -75,6 +76,7 @@ static struct mutex gov_lock_AI;
 
 extern uint8_t AI_shutdownCpu;
 
+struct cpufreq_policy *AI_policy;
 struct cpufreq_AI_gov_tunables *common_tunables_AI;
 struct cpufreq_AI_gov_tunables *tuned_parameters_AI = NULL;
 struct AI_gov_info* AI_gov;
@@ -95,6 +97,7 @@ struct AI_gov_info* AI_gov;
 * @ingroup initialisation_flags
 */
 static bool gov_started = 0;
+
 /** 
 * @brief Profile initialisation flag
 *
@@ -347,7 +350,7 @@ static int cpufreq_governor_AI(struct cpufreq_policy *policy,
 	struct cpufreq_AI_gov_tunables *tunables =  common_tunables_AI;
 	char speedchange_task_name[TASK_NAME_LEN];
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
-
+	AI_policy = policy;
 	//TODO CHECK FOR CPUS
 
 	switch (event) {

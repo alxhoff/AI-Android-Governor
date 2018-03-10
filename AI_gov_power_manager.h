@@ -1,8 +1,8 @@
-/*
- * AI_gov_power_manager.h
- *
- *  Created on: Sep 8, 2017
- *      Author: alxhoff
+/**
+ * @file AI_gov_power_manager.h
+ * @author Alex Hoffman
+ * @date 10 March 2018
+ * @brief Handles the looping power management of the governor
  */
 
 #ifndef AI_GOV_POWER_MANAGER_H_

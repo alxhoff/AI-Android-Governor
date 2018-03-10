@@ -1,8 +1,7 @@
-
 /**
  * @file AI_gov.h
  * @author Alex Hoffman
- * @date 11 October 2017
+ * @date 10 March 2018
  * @brief Main routines for the AI governor.
  * @section About
  * The AI governor enters and exits use through the routines outlines within
@@ -159,6 +158,20 @@
  * are added to a sysfs group for each phase which are in turn attached to
  * each phases' kobject, stored within the phase_profile data structure for
  * each phase.
+ *
+ * @section exec_sec Execution of the AI governor
+ * The overall execution "loop" that the AI governor executes is very similar
+ * to that of the chrome governor. The governor is registered as a kernel module
+ * using the struct cpufreq_gov_AI where the function cpufreq_governor_AI is given
+ * as the managing function. Within cpufreq_governor_AI the modules initilization,
+ * deinitilization, starting and stopping is handled. 
+ * <br><br>
+ * The meat of the governor happens within cpufreq_AI_governor_speedchange_task
+ * where AI_coordiator is called each time the task executes. In AI_coordinator
+ * all task logic can be added. In the most basic case, all that is done is the
+ * current phase profile's run function pointer is called, thus executing the 
+ * run function of the current phase, executing it's background power management
+ * logic. This can be seen in AI_gov_power_manager.c.
  */
 
 #ifndef AI_GOV_H_
@@ -172,6 +185,7 @@
 /* Governor includes. */
 #include "AI_gov_types.h"
 
+extern struct cpufreq_policy *AI_policy;
 /**
 * @brief 
 */

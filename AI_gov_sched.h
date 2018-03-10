@@ -1,8 +1,8 @@
-/*
- * AI_gov_sched.h
- *
- *  Created on: Sep 5, 2017
- *      Author: alxhoff
+/**
+ * @file AI_gov_sched.h
+ * @author Alex Hoffman
+ * @date 10 March 2018
+ * @brief Handles the governor's scheduling
  */
 
 #ifndef AI_GOV_SCHED_H_
