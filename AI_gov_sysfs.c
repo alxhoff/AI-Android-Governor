@@ -1,27 +1,77 @@
-/*
- * AI_gov_sysfs.c
- *
- *  Created on: Sep 20, 2017
- *      Author: alxhoff
+/**
+ * @file AI_gov_sysfs.c
+ * @author Alex Hoffman
+ * @date 11 October 2017
+ * @brief sysfs interface for the AI_governor.
  */
 
+/* -- Includes -- */
+/* Kernel includes. */
 #include <linux/slab.h>
 #include <linux/string.h>
 
+/* Governor includes. */
 #include "AI_gov_sysfs.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_kernel_write.h"
 
-#define GET_CURRENT_PROFILE \
-		AI_phases_get_name(PHASE_STRINGS[AI_gov->phase])
+/**
+* @defgroup sysfs_module Sysfs subsystem
+* @brief All attributes and accessor funcitons to use the
+* sysfs subsystem
+*
+* The governor utilizes sysfs to export usefull attributes
+* and states of the governor from kernel space. While properties
+* of the governor can be changed through sysfs it is designed
+* to be used as a kernel level interface to the governor as well
+* as a debuggin interface. All application interaction should
+* be done through IOcontrol as there are a number of safegards
+* in place through IOcontrol.
+*/
 
-//ACCESSER FUNCTIONS
+/**
+* @defgroup sysfs_top_level Top level Sysfs attributes
+* @ingroup sysfs_module
+*
+* These attributes are the highest level attributes for the
+* governor, they are not profile specific and are always
+* applicable to the current state and functionality of the
+* governor.
+*/
+
+/**
+* @brief Shows the current timer rate
+* @ingroup sysfs_top_level
+*
+* Shows the current timer rate when called by "cat timer_rate"
+* within the governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf The output buffer used to display test to the
+* terminal
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_timer_rate(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
 	return sprintf(buf, "%lu\n", tunables->timer_rate);
 }
 
+/**
+* @brief Stores the current timer rate
+* @ingroup sysfs_top_level
+*
+* Stores the input value into the current timer rate  
+* when set via "echo XX > timer_rate" from within the 
+* governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf Command line input buffer
+* @param count TODO
+* @return count
+*/
 static ssize_t store_timer_rate(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count)
@@ -35,12 +85,39 @@ static ssize_t store_timer_rate(
 	return count;
 }
 
+/**
+* @brief Shows the current io state
+* @ingroup sysfs_top_level
+*
+* Shows the current io state when called by "cat io_is_busy"
+* within the governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf The output buffer used to display test to the
+* terminal
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_io_is_busy(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
 	return sprintf(buf, "%u\n", tunables->io_is_busy);
 }
 
+/**
+* @brief Stores the current io state
+* @ingroup sysfs_top_level
+*
+* Stores the input value into the io state 
+* when set via "echo XX > io_is_busy" from within the 
+* governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf Command line input buffer
+* @param count TODO
+* @return count
+*/
 static ssize_t store_io_is_busy(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
 		size_t count)
@@ -56,6 +133,19 @@ static ssize_t store_io_is_busy(
 	return count;
 }
 
+/**
+* @brief Shows the current phase state
+* @ingroup sysfs_top_level
+*
+* Shows the current timer rate when called by "cat phase_state"
+* within the governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf The output buffer used to display test to the
+* terminal
+* @return On success, the total number of characters written is returned
+*/
 ssize_t show_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables, char *buf)
 {
@@ -91,15 +181,31 @@ ssize_t show_phase_state(
 			break;
 		case AI_exit:
 			return sprintf(buf, "%s\n", "AI_exit");
+			break;
 		default:
 			return sprintf(buf, "%s\n", "INVALID");
 			break;
 		}
 }
 
+/**
+* @brief Stores the current phase state
+* @ingroup sysfs_top_level
+*
+* Stores the input value into the phase state  
+* when set via "echo XX > phase_state" from within the 
+* governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf Command line input buffer
+* @param count TODO
+* @return count
+*/
 ssize_t store_phase_state(
 		struct cpufreq_AI_gov_tunables *tunables,const char *buf,
-		size_t count) {
+		size_t count) 
+{
 
 	if(strcmp(buf, "AI_init\n") == 0){
 		KERNEL_ERROR_MSG(
@@ -146,9 +252,22 @@ ssize_t store_phase_state(
 	return count;
 }
 
+/**
+* @brief Shows the previous phase
+* @ingroup sysfs_top_level
+*
+* Shows the current timer rate when called by "cat prev_phase"
+* within the governor's top level sysfs directory
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf The output buffer used to display test to the
+* terminal
+* @return On success, the total number of characters written is returned
+*/
 ssize_t show_prev_phase(
-		struct cpufreq_AI_gov_tunables *tunables, char *buf) {
-//	enum PHASE_ENUM phase = AI_phases_getPrevBrowsingPhase();
+		struct cpufreq_AI_gov_tunables *tunables, char *buf) 
+{
 	switch (AI_gov->prev_phase) {
 		case AI_init:
 			return sprintf(buf, "%s\n", "AI_init");
@@ -176,20 +295,54 @@ ssize_t show_prev_phase(
 			break;
 		case AI_exit:
 			return sprintf(buf, "%s\n", "AI_exit");
+			break;
 		default:
 			return sprintf(buf, "%s\n", "INVALID");
 			break;
 		}
 }
 
+/** 
+* @brief Stores the previous phase
+* @ingroup sysfs_top_level
+*
+* Stores the input value into the previous phase 
+* when set via "echo XX > pre_phase" from within the 
+* governor's top level sysfs directory.
+*
+* @param tunables Governor tunables struct where the timer 
+* rate is stored
+* @param buf Command line input buffer
+* @param count TODO
+* @return count
+*/
 ssize_t store_prev_phase(
 		struct cpufreq_AI_gov_tunables *tunables, const char *buf,
-		size_t count) {
+		size_t count) 
+{
 
 	return count;
 }
 
-//HARDWARE
+/**
+* @defgroup sysfs_hardware Hardare subdirectory of the sysfs heirarchy
+* @ingroup sysfs_module
+*
+* These attributes represent the systems current hardware values
+* that are of interest to the governor. Stored within the hardware
+* subdirectory in the governors sysfs directory.
+*/
+/**
+* @brief Shows if the system has a BIGlittle CPU architecture
+* @ingroup sysfs_hardware
+*
+* Shows the boolean value that represents if the systems has a
+* BIGlittle CPU architecture.
+*
+* @param hardware The current AI governor's hardware struct
+* @param buf Command line input buffer
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_is_big_little(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -207,6 +360,16 @@ static ssize_t store_is_big_little(
 	return count;
 }
 
+/**
+* @brief Shows the CPU count
+* @ingroup sysfs_hardware
+*
+* Shows the number of CPUs currently registered with the governor
+*
+* @param hardware The current AI governor's hardware struct
+* @param buf Command line input buffer
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_cpu_count(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -224,6 +387,19 @@ static ssize_t store_cpu_count(
 	return count;
 }
 
+/**
+* @brief Shows the frequency of the little CPU
+* @ingroup sysfs_hardware
+*
+* The little CPU is assumed to be present in all systems.
+* A BIGlittle system will have both a BIG CPU and a little CPU
+* while a system such as a desktop computer with a single CPU
+* can be though of as having only the little CPU. 
+*
+* @param hardware The current AI governor's hardware struct
+* @param buf Command line input buffer
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_little_freq(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -244,6 +420,16 @@ static ssize_t store_little_freq(
 
 #ifdef CPU_IS_BIG_LITTLE
 
+/**
+* @brief Shows the current state of the BIG CPU
+* @ingroup sysfs_hardware
+*
+* Show the state of the BIG CPU, if it is active or not.
+*
+* @param hardware The current AI governor's hardware struct
+* @param buf Command line input buffer
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_big_state(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -261,6 +447,16 @@ static ssize_t store_big_state(
 	return count;
 }
 
+/**
+* @brief Shows the freuquency of the BIG CPU.
+* @ingroup sysfs_hardware
+*
+* Only applicable for BIGlittle systems.
+*
+* @param hardware The current AI governor's hardware struct
+* @param buf Command line input buffer
+* @return On success, the total number of characters written is returned
+*/
 static ssize_t show_big_freq(
 		struct AI_gov_cur_HW* hardware, char *buf)
 {
@@ -844,10 +1040,6 @@ INIT_ALL_SYSFS_GROUPS
 #define ATTACH_SYSFS_GROUPS \
 	FOR_EACH_PHASE(ATTACH_SINGLE_SYSFS_GROUP)
 
-struct attribute_group *AI_get_sysfs_attr(void)
-{
-	return &AI_gov_attr_group_gov_sys;
-}
 
 void debug_profile(struct phase_profile* profile)
 {
@@ -864,17 +1056,6 @@ void debug_profile(struct phase_profile* profile)
 				"[PROFILE] next profile: %s \n", profile->next->phase_name);
 }
 
-signed int AI_gov_sysfs_init_profiles(void)
-{
-
-	int ret = 0;
-	struct phase_profile* sysfs_init;
-
-	ATTACH_SYSFS_GROUPS
-
-	return 0;
-}
-
 //must get called after the phase has been updated
 signed int AI_gov_sysfs_actualize_phase(void){
 	//unregisted old kobj
@@ -886,6 +1067,17 @@ signed int AI_gov_sysfs_actualize_phase(void){
 			"profile");
 
 	if(ret) return ret;
+
+	return 0;
+}
+
+signed int AI_gov_sysfs_init_profiles(void)
+{
+
+	int ret = 0;
+	struct phase_profile* sysfs_init;
+
+	ATTACH_SYSFS_GROUPS
 
 	return 0;
 }
@@ -905,6 +1097,7 @@ signed int AI_gov_sysfs_init(void)
 	KERNEL_DEBUG_MSG( "[GOVERNOR] AI_gov_sysfs_init"
 			"AI_governor kobj added \n");
 
+	//TODO put this attr group into AI_gov_info
 	ret = sysfs_create_group(AI_gov->kobj, AI_get_sysfs_attr());
 
 	if (ret) {
@@ -989,6 +1182,11 @@ signed int AI_gov_sysfs_init(void)
 						(void*)AI_gov->current_profile);
 
 	return 0;
+}
+
+struct attribute_group *AI_get_sysfs_attr(void)
+{
+	return &AI_gov_attr_group_gov_sys;
 }
 
 struct kobject *AI_get_gov_parent_kobj(struct cpufreq_policy *policy)

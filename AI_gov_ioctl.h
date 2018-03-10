@@ -5,7 +5,6 @@
  * @brief IOctl interface for the AI_governor.
  * @section About
  * Defines the functionality of the AI governor's IOctl interface
- * 
  */
 
 #ifndef AI_GOV_H
@@ -49,6 +48,7 @@ struct AI_gov_ioctl_phase_variable{
 
 extern struct file_operations AI_governor_fops;
 
+//IOCTL FUNCTION DEFS
 #define GOVERNOR_GET_PHASE _IOR('g', 1, unsigned long)
 #define GOVERNOR_SET_PHASE _IOW('g', 2, unsigned long)
 #define GOVERNOR_CLR_PHASE_VARIABLES _IO('g', 3)

@@ -9,17 +9,12 @@
 /* Kernel includes. */
 #include <linux/slab.h>
 
-//#include "cpufreq_governor.h"
-
 /* Governor includes. */
 #include "AI_gov_ioctl.h"
 #include "AI_gov.h"
 #include "AI_gov_phases.h"
 #include "AI_gov_sysfs.h"
 #include "AI_gov_kernel_write.h"
-
-//governor ports
-#include "AI_ondemand_port.h"
 
 /**
 * @brief Creates string literal for a given input
@@ -78,8 +73,15 @@
 			struct phase_profile* init_profile; \
 			FOR_EACH_PHASE(INIT_PROFILE)
 
+/**
+* @brief Initialised the phase struct for each phase profile speficied in the governor 
+*/
 FOR_EACH_PHASE(init_phase_struct);
 
+/**
+ * @brief String array with string literal representation of each phase profile, strings
+ * are accessable using the PHASE_ENUM values 
+ */
 char* PHASE_STRINGS[] = {
 	FOR_EACH_PHASE(GENERATE_STRING)
 };
@@ -161,7 +163,7 @@ signed int AI_gov_sysfs_load_profile(enum PHASE_ENUM new_phase)
 unsigned int enter_AI_init_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered INIT phase\n");
+			"[GOVERNOR] Entered INIT phase");
 	return 0;
 }
 
@@ -176,7 +178,7 @@ unsigned int enter_AI_init_phase(void)
 unsigned int exit_AI_init_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited INIT phase\n");
+			"[GOVERNOR] Exited INIT phase");
 	return 0;
 }
 
@@ -204,7 +206,7 @@ unsigned int run_AI_init_phase(void)
 unsigned int enter_AI_framerate_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered FRAMERATE phase\n");
+			"[GOVERNOR] Entered FRAMERATE phase");
 	return 0;
 }
 
@@ -219,7 +221,7 @@ unsigned int enter_AI_framerate_phase(void)
 unsigned int exit_AI_framerate_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited FRAMERATE phase\n");
+			"[GOVERNOR] Exited FRAMERATE phase");
 	return 0;
 }
 
@@ -233,8 +235,6 @@ unsigned int exit_AI_framerate_phase(void)
 */
 unsigned int run_AI_framerate_phase(void)
 {
-	KERNEL_DEBUG_MSG(
-					"[GOVERNOR] Running FRAMERATE phase\n");
 	return 0;
 }
 
@@ -248,11 +248,8 @@ unsigned int run_AI_framerate_phase(void)
 */
 unsigned int enter_AI_ondemand_phase(void)
 {
-	//register governor
-	cpufreq_register_governor(&cpufreq_gov_ondemand);
 	KERNEL_DEBUG_MSG(
-		"[GOVERNOR] Entered ONDEMAND phase\n");
-
+			"[GOVERNOR] Entered FRAMERATE phase");
 	return 0;
 }
 
@@ -266,25 +263,13 @@ unsigned int enter_AI_ondemand_phase(void)
 */
 unsigned int exit_AI_ondemand_phase(void)
 {
-	cpufreq_unregister_governor(&cpufreq_gov_ondemand);
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited ONDEMAND phase\n");
+			"[GOVERNOR] Exited FRAMERATE phase");
 	return 0;
 }
 
-/**
-* @brief
-*
-*
-*
-* @return 0 on success
-* @ingroup phase_functions
-*/
 unsigned int run_AI_ondemand_phase(void)
 {
-	//OD_od_check_cpu();
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] Running ONDEMAND phase\n");
 	return 0;
 }
 
@@ -299,7 +284,7 @@ unsigned int run_AI_ondemand_phase(void)
 unsigned int enter_AI_priority_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered PRIORITY phase\n");
+			"[GOVERNOR] Entered PRIORITY phase");
 	return 0;
 }
 
@@ -314,18 +299,10 @@ unsigned int enter_AI_priority_phase(void)
 unsigned int exit_AI_priority_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited PRIORITY phase\n");
+			"[GOVERNOR] Exited PRIORITY phase");
 	return 0;
 }
 
-/**
-* @brief
-*
-*
-*
-* @return 0 on success
-* @ingroup phase_functions
-*/
 unsigned int run_AI_priority_phase(void)
 {
 	return 0;
@@ -342,7 +319,7 @@ unsigned int run_AI_priority_phase(void)
 unsigned int enter_AI_time_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered TIME phase\n");
+			"[GOVERNOR] Entered TIME phase");
 	return 0;
 }
 
@@ -357,7 +334,7 @@ unsigned int enter_AI_time_phase(void)
 unsigned int exit_AI_time_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited TIME phase\n");
+			"[GOVERNOR] Exited TIME phase");
 	return 0;
 }
 
@@ -385,7 +362,7 @@ unsigned int run_AI_time_phase(void)
 unsigned int enter_AI_powersave_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered POWERSAVE phase\n");
+			"[GOVERNOR] Entered POWERSAVE phase");
 	return 0;
 }
 
@@ -400,7 +377,7 @@ unsigned int enter_AI_powersave_phase(void)
 unsigned int exit_AI_powersave_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited POWERSAVE phase\n");
+			"[GOVERNOR] Exited POWERSAVE phase");
 	return 0;
 }
 
@@ -415,8 +392,6 @@ unsigned int exit_AI_powersave_phase(void)
 unsigned int run_AI_powersave_phase(void)
 {
 	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] Running POWERSAVE phase\n");
 	pr_debug("setting to %u kHz because of powersave \n",
 								AI_gov->cpu_freq_policy->min);
 	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->min,
@@ -435,7 +410,7 @@ unsigned int run_AI_powersave_phase(void)
 unsigned int enter_AI_performance_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered PERFORMANCE phase\n");
+			"[GOVERNOR] Entered PERFORMANCE phase");
 	return 0;
 }
 
@@ -450,7 +425,7 @@ unsigned int enter_AI_performance_phase(void)
 unsigned int exit_AI_performance_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited PERFORMANCE phase\n");
+			"[GOVERNOR] Exited PERFORMANCE phase");
 	return 0;
 }
 
@@ -465,8 +440,6 @@ unsigned int exit_AI_performance_phase(void)
 unsigned int run_AI_performance_phase(void)
 {
 	//TODO CHECK CURRENT FREQ AND DETERMINE IF NEEDS TO BE SET
-	KERNEL_DEBUG_MSG(
-				"[GOVERNOR] Run PERFORMANCE phase\n");
 	pr_debug("setting to %u kHz because of performance \n",
 										AI_gov->cpu_freq_policy->max);
 	__cpufreq_driver_target(AI_gov->cpu_freq_policy, AI_gov->cpu_freq_policy->max,
@@ -485,7 +458,7 @@ unsigned int run_AI_performance_phase(void)
 unsigned int enter_AI_response_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered RESPONSE phase\n");
+			"[GOVERNOR] Entered RESPONSE phase");
 	return 0;
 }
 
@@ -500,7 +473,7 @@ unsigned int enter_AI_response_phase(void)
 unsigned int exit_AI_response_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited RESPONSE phase\n");
+			"[GOVERNOR] Exited RESPONSE phase");
 	return 0;
 }
 
@@ -528,7 +501,7 @@ unsigned int run_AI_response_phase(void)
 unsigned int enter_AI_exit_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Entered EXIT phase\n");
+			"[GOVERNOR] Entered EXIT phase");
 	return 0;
 }
 
@@ -543,7 +516,7 @@ unsigned int enter_AI_exit_phase(void)
 unsigned int exit_AI_exit_phase(void)
 {
 	KERNEL_DEBUG_MSG(
-			"[GOVERNOR] Exited EXIT phase\n");
+			"[GOVERNOR] Exited EXIT phase");
 	return 0;
 }
 

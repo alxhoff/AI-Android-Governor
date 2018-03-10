@@ -28,8 +28,8 @@
 */
 #define FOR_EACH_PHASE(PHASE)		\
 				PHASE(AI_init) 		\
-				PHASE(AI_ondemand)	\
 				PHASE(AI_framerate)	\
+				PHASE(AI_ondemand)	\
 				PHASE(AI_priority)	\
 				PHASE(AI_time)	\
 				PHASE(AI_powersave)	\
@@ -223,7 +223,21 @@ struct phase_profile{
 };
 
 /**
+* @defgroup profile_defaults Default value initilisation for phase profiles
+* @brief Values and data types to store and set phase profile attribute
+* defaults
+*
+* Each phase profile must has a stuct declared for it's attributes in the 
+* style of <br> phase_#phase name#_attributes. Within this struct each
+* attribute and it's type can be specified. Default values should also be
+* defined within #defines. The #define default values are set into the 
+* attribute structs in the function AI_phases_set_defaults which is called
+* during initialisation of the governor.
+*/
+
+/**
 * @struct phase_AI_init_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase
 */
 struct phase_AI_init_attributes{
@@ -232,6 +246,7 @@ struct phase_AI_init_attributes{
 
 /**
 * @defgroup AI_framerate_defaults
+* @ingroup profile_defaults
 * @brief Default values for AT_framerate's profile's attributes
 * @{
 */
@@ -248,6 +263,7 @@ struct phase_AI_init_attributes{
 
 /**
 * @struct phase_AI_framerate_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_framerate
 */
 struct phase_AI_framerate_attributes{
@@ -259,6 +275,7 @@ struct phase_AI_framerate_attributes{
 
 /**
 * @defgroup AI_ondemand_defaults
+* @ingroup profile_defaults
 * @brief Default values for AI_ondemand's profile's attributes
 * @{
 */
@@ -302,6 +319,7 @@ struct phase_AI_framerate_attributes{
 
 /**
 * @struct phase_AI_ondemand_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_ondemand
 */
 struct phase_AI_ondemand_attributes{
@@ -316,6 +334,7 @@ struct phase_AI_ondemand_attributes{
 
 /**
 * @defgroup AI_priority_defaults
+* @ingroup profile_defaults
 * @brief Default values for AI_prioority's profile's attributes
 * @{
 */
@@ -338,6 +357,7 @@ struct phase_AI_ondemand_attributes{
 
 /**
 * @struct phase_AI_priority_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_priority
 */
 struct phase_AI_priority_attributes{
@@ -349,6 +369,7 @@ struct phase_AI_priority_attributes{
 
 /**
 * @defgroup AI_time_defaults
+* @ingroup profile_defaults
 * @brief Default values for AI_time's profile's attributes
 * @{
 */
@@ -362,6 +383,7 @@ struct phase_AI_priority_attributes{
 
 /**
 * @struct phase_AI_time_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_time
 */
 struct phase_AI_time_attributes{
@@ -373,6 +395,7 @@ struct phase_AI_time_attributes{
 
 /**
 * @struct phase_AI_powersave_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_powersave
 */struct phase_AI_powersave_attributes{
 	int initialized;
@@ -380,6 +403,7 @@ struct phase_AI_time_attributes{
 
 /**
 * @struct phase_AI_performance_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_performance
 */struct phase_AI_performance_attributes{
 	int initialized;
@@ -387,6 +411,7 @@ struct phase_AI_time_attributes{
 
 /**
 * @defgroup AI_response_defaults
+* @ingroup profile_defaults
 * @brief Default values for AI_response's profile's attributes
 * @{
 */
@@ -399,6 +424,7 @@ struct phase_AI_time_attributes{
 
 /**
 * @struct phase_AI_response_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_response
 */
 struct phase_AI_response_attributes{
@@ -408,6 +434,7 @@ struct phase_AI_response_attributes{
 
 /**
 * @struct phase_AI_exit_attributes
+* @ingroup profile_defaults
 * @brief Attributes struct for the phase AI_exit
 */struct phase_AI_exit_attributes{
 	int deinitialized;
